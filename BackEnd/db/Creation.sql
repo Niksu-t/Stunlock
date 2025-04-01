@@ -1,0 +1,42 @@
+-- Drops database if it exists and afterwards creates it
+
+DROP DATABASE IF EXISTS Stunlock;
+CREATE DATABASE Stunlock;
+
+
+USE Stunlock;
+
+
+-- Creates tables for the database
+CREATE TABLE CareGroup (
+    name VARCHAR(50) NOT NULL,
+    group_id INT AUTO_INCREMENT PRIMARY KEY
+);
+
+
+CREATE TABLE Users (
+    user_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    role VARCHAR(10) DEFAULT 'patient',
+    hoito_tiimi INT,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (hoito_tiimi) REFERENCES CareGroup(group_id)
+);
+
+CREATE TABLE diary_entries(
+    user_id INT NOT NULL,
+    entry_id INT AUTO_INCREMENT PRIMARY KEY,
+    pain_gauge INT NOT NULL,
+    sleep_gauge INT NOT NULL,
+    food_gauge INT NOT NULL,
+    activity_gauge INT NOT NULL,
+    stress_gauge INT NOT NULL,
+    notes TEXT,
+    FOREIGN KEY (user_id) REFERENCES Users(user_id)
+);
+
+-- Add option for no care group
+INSERT INTO CareGroup (name) VALUES
+    ("none");
