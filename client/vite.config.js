@@ -1,5 +1,6 @@
 import {resolve} from 'path';
 import {defineConfig} from 'vite';
+import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
     // Place index in /src. Paths don't need to be edited for deployment.
@@ -9,10 +10,13 @@ export default defineConfig({
 
     build: {
         rollupOptions: {
-        input: {
-            main: resolve(__dirname, 'src/index.html'),
-            dashboard: resolve(__dirname, 'src/dashboard/index.html'),
-        },
+            input: {
+                main: resolve(__dirname, 'src/index.html'),
+                dashboard: resolve(__dirname, 'src/dashboard/index.html'),
+            },
         },
     },
+    plugins: [
+        tailwindcss(),
+    ],
 });
