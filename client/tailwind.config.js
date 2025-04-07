@@ -4,8 +4,10 @@ export default {
   theme: {
     extend: {
       colors: {
+
         // Add your custom color names and values here
         brand: {
+          dark: "#1A1A1A",
           red: "#F76C5E",
           green: "#6DBAA1"
         },

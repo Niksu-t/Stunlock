@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   version="1.1"
+   id="svg2"
+   width="4000"
+   height="4000"
+   viewBox="0 0 4000 4000"
+   sodipodi:docname="Logo-render.ai"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs6">
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath16">
+      <path
+         d="M 0,3000 H 3000 V 0 H 0 Z"
+         id="path14" />
+    </clipPath>
+  </defs>
+  <sodipodi:namedview
+     id="namedview4"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1" />
+  <g
+     id="g8"
+     inkscape:groupmode="layer"
+     inkscape:label="Logo-render"
+     transform="matrix(1.3333333,0,0,-1.3333333,0,4000)">
+    <g
+       id="g10">
+      <g
+         id="g12"
+         clip-path="url(#clipPath16)">
+        <g
+           id="g18"
+           transform="translate(1009.4675,462.9304)">
+          <path
+             d="m 0,0 h -208.893 l 36.352,240.421 c -37.241,22.904 -62.078,64.027 -62.078,110.955 0,71.892 58.28,130.172 130.172,130.172 71.892,0 130.172,-58.28 130.172,-130.172 0,-46.928 -24.836,-88.051 -62.077,-110.955 z m 230.583,597.291 h -750.539 c 0,229.48 186.03,415.509 415.51,415.509 164.8,0 307.19,-95.944 374.365,-235.02 l 62.153,285.187 -269.363,240.037 c -51.797,12.883 -107.657,20.602 -167.156,20.602 -414.019,0 -749.647,-335.628 -749.647,-749.647 0,-414.018 335.628,-749.647 749.647,-749.647 392.383,0 714.34,301.468 746.922,685.418 L 148.619,221.204 Z"
+             style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none"
+             id="path20" />
+        </g>
+        <g
+           id="g22"
+           transform="translate(1901.9598,2712.7576)">
+          <path
+             d="m 0,0 -271.267,-617.811 -671.4,-67.077 503.748,-448.904 -143.681,-659.267 582.6,340.374 582.6,-340.374 -143.681,659.267 503.748,448.904 -671.4,67.077 z m 0,-554.828 67.029,-152.659 52.392,-119.322 129.671,-12.955 165.902,-16.575 -124.475,-110.923 -97.292,-86.699 27.75,-127.329 35.503,-162.903 -143.959,84.105 -112.521,65.739 -112.521,-65.739 -143.959,-84.105 35.503,162.903 27.75,127.329 -97.292,86.699 -124.475,110.923 165.902,16.575 129.671,12.955 52.392,119.322 z"
+             style="fill:#ffffff;fill-opacity:1;fill-rule:nonzero;stroke:none"
+             id="path24" />
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>
