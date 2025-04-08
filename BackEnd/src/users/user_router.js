@@ -2,7 +2,7 @@ import express from "express";
 import { body } from "express-validator";
 
 import { postUser, getUser } from "./user_controller.js";
-import { authenticateToken, authorizeUser } from "../auth/auth_middleware.js";
+import { authenticateToken, authorizeUser } from "../authentication/auth_middleware.js";
 import { validationErrorHandler } from "../utils/error.js";
 
 export const userRouter = express.Router();

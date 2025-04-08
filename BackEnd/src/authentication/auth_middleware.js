@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import "dotenv/config";
 import { customError } from "../utils/error.js";
-import { getEntryById } from "../diary_entries/entry_model.js";
+import { getEntryById } from "../entries/entry_model.js";
 
 export const UserRole = {
   Regular: "regular",

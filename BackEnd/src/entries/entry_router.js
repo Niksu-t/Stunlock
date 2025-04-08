@@ -8,7 +8,7 @@ import {
   postEntry,
   updateEntry,
 } from "./entry_controller.js";
-import { authenticateToken, authorizeEntry } from "../auth/auth_middleware.js";
+import { authenticateToken, authorizeEntry } from "../authentication/auth_middleware.js";
 import { validationErrorHandler } from "../utils/error.js";
 
 export const entryRouter = express.Router();

@@ -7,8 +7,8 @@ import fs from "fs";
 import { fileURLToPath } from "url";
 
 import { userRouter } from "./users/user_router.js";
-import { entryRouter } from "./diary_entries/entry_router.js";
-import { authRouter } from "./auth/auth_router.js";
+import { entryRouter } from "./entries/entry_router.js";
+import { authRouter } from "./authentication/auth_router.js";
 import { errorHandler, notFoundHandler } from "./utils/error.js";
 
 const HOSTNAME = "127.0.0.1";
