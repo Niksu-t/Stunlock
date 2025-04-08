@@ -2,8 +2,6 @@
 
 DROP DATABASE IF EXISTS Stunlock;
 CREATE DATABASE Stunlock;
-
-
 USE Stunlock;
 
 
@@ -29,11 +27,11 @@ CREATE TABLE Users (
 CREATE TABLE diary_entries(
     user_id INT NOT NULL,
     entry_id INT AUTO_INCREMENT PRIMARY KEY,
-    pain_gauge INT NOT NULL,
-    sleep_gauge INT NOT NULL,
-    food_gauge INT NOT NULL,
-    activity_gauge INT NOT NULL,
-    stress_gauge INT NOT NULL,
+    pain_gauge INT DEFAULT 0,
+    sleep_gauge INT DEFAULT 0,
+    food_gauge INT DEFAULT 0,
+    activity_gauge INT DEFAULT 0,
+    stress_gauge INT DEFAULT 0,
     notes TEXT,
     FOREIGN KEY (user_id) REFERENCES Users(user_id)
 );
