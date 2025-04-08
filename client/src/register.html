@@ -8,36 +8,41 @@
 <body>
     <section class="h-dvh bg-white flex items-center flex-col
     md:flex-row">
-        <div class="flex items-center bg-brand-red w-full h-1/12 justify-center
-        md:mt-0 md:w-1/2 md:h-full">
-            <img src="Stunlock-logo-white.svg" height="60" width="60" alt="Stunlock logo"/>
-            <h1 class="text-2xl text-white"><span class="font-bold">stun</span>lock.</h1>
+        <div class="items-center bg-brand-red w-full h-1/12 justify-center flex-col hidden text-white
+        md:mt-0 md:w-1/2 md:h-full md:flex">
+            <div>
+                <div class="flex flex-row items-center">
+                    <img src="Stunlock-logo-white.svg" height="60" width="60" alt="Stunlock logo"/>
+                    <h1 class="text-2xl"><span class="font-bold">stun</span>lock.</h1>
+                </div>
+                <h1>Elämä ilman nivelkipua. Liity nyt!</h1>
+            </div>
         </div>
         <div class="bg-white h-full w-full flex items-center justify-center">
             <div class="bg-white shadow-offset-4 p-10 rounded-2xl login-widget flex-col flex gap-16">
-                <h1 class="text-2xl">Kirjaudu.</h1>
+                <h1 class="text-2xl">Luo tili</h1>
                 <form class="flex flex-col gap-8">
                     <div>
-                        <label for="fname">Sähköposti.</label><br>
+                        <label for="fname">Etunimi.</label><br>
                         <input class="inset-shadow-2xs bg-gray-100 rounded p-2 w-full mt-2" type="text" id="fname" name="fname" value="John">
                     </div>
                     <div>
-                        <label for="lname">Salasana.</label><br>
-                        <input class="inset-shadow-2xs bg-gray-100 rounded p-2 w-full mt-2" type="text" id="lname" name="lname" value="Doe">
+                        <label for="lname">Sukunimi.</label><br>
+                        <input class="inset-shadow-2xs bg-gray-100 rounded p-2 w-full mt-2" type="text" id="lname" name="lname" value="John">
                     </div>
-
                     <div>
-                        <input class="rounded-2xl" type="checkbox" id="remember" name="remember" value="no">
-                        <label for="remember">Muista minut.</label>
+                        <label for="email">Sähköposti.</label><br>
+                        <input class="inset-shadow-2xs bg-gray-100 rounded p-2 w-full mt-2" type="text" id="email" name="email" value="John">
                     </div>
-
-                    <input class="bg-brand-red text-white rounded-4xl p-2 px-4 shadow-offset-4" type="submit" value="Kirjaudu sisään.">
+                    <div>
+                        <label for="password">Salasana.</label><br>
+                        <input class="inset-shadow-2xs bg-gray-100 rounded p-2 w-full mt-2" type="password" id="password" name="password" value="Doe">
+                    </div>
+                    <input class="bg-brand-red text-white rounded-4xl p-2 px-4 shadow-offset-4" type="submit" value="Luo tili.">
                 </form>
 
                 <div class="text-center">
-                    <p>Eikö ole käyttäjää? <a class="text-brand-red underline">Rekisteröidy</a>.</p>
-                    <a class="text-brand-red underline">Unohditko salasanasi?</a>
-
+                    <p>Onko jo käyttäjä? <a href="/login" class="text-brand-red underline">Kirjaudu</a>.</p>
                 </div>
             </div>
         </div>
