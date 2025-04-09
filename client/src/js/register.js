@@ -1,5 +1,14 @@
 import { renderPage } from './register-router';
 import { postRegisterUser } from './fetch-api';
+import { Register } from './views/register-view';
+
+let state = {
+    currentPage: null,
+    fname: "",
+    lname: "",
+    email: "",
+    password: "",
+}
 
 /**
  * Handles form input and sends POST request to server.
@@ -17,9 +26,9 @@ async function loginUser(event) {
     
 }
 
-renderPage("register");
+renderPage(Register, state);
 
-document.getElementById("register-form").addEventListener("submit", loginUser);
+
 
 // SPA router things
 
@@ -31,7 +40,7 @@ window.addEventListener('popstate', () => {
 // Handle client-side navigation
 window.renderPage = function(event, page) {
 event.preventDefault();
-renderPage(page);
+renderPage(page, state);
 };
 
 

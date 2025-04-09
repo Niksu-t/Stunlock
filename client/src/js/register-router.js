@@ -1,17 +1,17 @@
-import Register from "./views/register-view";
-import Careteam from "./views/careteam-view";
+import { Register } from "./views/register-view.js";
+import { Careteam } from "./views/careteam-view.js";
 
 
-export function renderPage(path) {
-    console.log("test")
+export function renderPage(path, state) {
+    // Save current page register state
+    if(state.currentPage) {
+        state.currentPage.OnPageChange(state);
+    }
+
     const app = document.getElementById('app');
     app.innerHTML = '';  // Clear previous content
 
-    if (path === 'register') {
-        app.appendChild(Register());
-    } else if (path === 'careteam') {
-        app.appendChild(Careteam());
-    } else {
-        app.appendChild(Home());
-    }
+    app.appendChild(path.Render());
+    path.AfterRender();
+    state.currentPage = path;
 }

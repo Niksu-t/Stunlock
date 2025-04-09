@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Searchable Dropdown</title>
+  <style>
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .dropdown input {
+      padding: 8px;
+      width: 200px;
+      box-sizing: border-box;
+    }
+
+    .dropdown-content {
+      position: absolute;
+      background-color: #fff;
+      min-width: 200px;
+      max-height: 150px;
+      overflow-y: auto;
+      box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+      z-index: 1;
+      display: none;
+    }
+
+    .dropdown-content div {
+      padding: 8px;
+      cursor: pointer;
+    }
+
+    .dropdown-content div:hover {
+      background-color: #f1f1f1;
+    }
+  </style>
+</head>
+<body>
+
+<div class="dropdown">
+  <input type="text" id="dropdownInput" placeholder="Search...">
+  <div class="dropdown-content" id="dropdownList">
+    <div>Apple</div>
+    <div>Banana</div>
+    <div>Cherry</div>
+    <div>Date</div>
+    <div>Elderberry</div>
+    <div>Fig</div>
+    <div>Grape</div>
+  </div>
+</div>
+
+<script>
+  const input = document.getElementById('dropdownInput');
+  const dropdown = document.getElementById('dropdownList');
+
+  input.addEventListener('focus', () => {
+    dropdown.style.display = 'block';
+  });
+
+  input.addEventListener('input', () => {
+    const filter = input.value.toLowerCase();
+    const items = dropdown.querySelectorAll('div');
+    items.forEach(item => {
+      item.style.display = item.textContent.toLowerCase().includes(filter) ? '' : 'none';
+    });
+  });
+
+  dropdown.addEventListener('click', e => {
+    if (e.target.tagName === 'DIV') {
+      input.value = e.target.textContent;
+      dropdown.style.display = 'none';
+    }
+  });
+
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.dropdown')) {
+      dropdown.style.display = 'none';
+    }
+  });
+</script>
+
+</body>
+</html>
