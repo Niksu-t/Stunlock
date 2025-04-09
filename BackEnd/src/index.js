@@ -10,6 +10,7 @@ import { userRouter } from "./users/user_router.js";
 import { entryRouter } from "./entries/entry_router.js";
 import { authRouter } from "./authentication/auth_router.js";
 import { errorHandler, notFoundHandler } from "./utils/error.js";
+import { teamRouter } from "./caregroup/caregroup_router.js";
 
 const HOSTNAME = "127.0.0.1";
 const APP = express();
@@ -45,6 +46,7 @@ APP.use(express.json())
 APP.use("/api/users", userRouter);
 APP.use("/api/entries", entryRouter);
 APP.use("/api/auth", authRouter);
+APP.use("/api/careteams", teamRouter)
 
 APP.listen(PORT, HOSTNAME, () => {
   console.log(`Server running at http://${HOSTNAME}:${PORT}/`);

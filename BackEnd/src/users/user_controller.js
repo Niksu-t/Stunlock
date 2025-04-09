@@ -1,8 +1,6 @@
 import {
-  selectUserByNameAndPassword,
   getUserById,
   createUser,
-  loginResult,
 } from "./user_model.js";
 import bcrpyt from "bcryptjs";
 
