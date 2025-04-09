@@ -19,9 +19,9 @@ CREATE TABLE Users (
     password VARCHAR(255) NOT NULL,
     email VARCHAR(100) NOT NULL UNIQUE,
     role VARCHAR(10) DEFAULT 'patient',
-    hoito_tiimi INT,
+    care_team INT,
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (hoito_tiimi) REFERENCES CareGroup(group_id)
+    FOREIGN KEY (care_team) REFERENCES CareGroup(group_id)
 );
 
 CREATE TABLE diary_entries(

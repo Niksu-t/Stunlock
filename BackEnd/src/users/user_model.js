@@ -7,9 +7,9 @@ export const getUserById = async (id) => {
     return row[0];
 }
 
-export const createUser = async (username, name,  password, email) => {
-    const query = `INSERT INTO Users (username, name, password, email) VALUES (?, ?, ?, ?)`;
-    const params = [username, name,  password, email]
+export const createUser = async (username, name,  password, email, careteam, role) => {
+    const query = `INSERT INTO Users (username, name, password, email, care_team, role) VALUES (?, ?, ?, ?)`;
+    const params = [username, name,  password, email, careteam,  role]
 
     try {
         const rows = await promisePool.query(query, params);
