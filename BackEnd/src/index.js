@@ -1,10 +1,7 @@
 import express from "express";
 import "cookie-parser";
-import path from "path";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import fs from "fs";
-import { fileURLToPath } from "url";
 
 import { userRouter } from "./users/user_router.js";
 import { entryRouter } from "./entries/entry_router.js";
@@ -16,20 +13,8 @@ const HOSTNAME = "127.0.0.1";
 const APP = express();
 const PORT = 3000;
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 APP.use(express.static("dist"));
-
-// Add pages when they are created for now empty
-const pages = [];
-
-// Redirect pretty URLs to correct HTML files
-pages.forEach((page) => {
-  APP.get(`/${page}`, (req, res) => {
-    res.sendFile(path.join(__dirname, "../dist/src/pages", `${page}.html`));
-  });
-});
 
 // For documentation of server
 APP.use("/docs", express.static("docs"));
