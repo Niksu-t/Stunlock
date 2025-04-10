@@ -47,7 +47,7 @@ export const postTeam = async (req, res) => {
 };
 
 export const delTeam = async (req, res) => {
-  console.log("Deleting team with id of: " req.params.id);
+  console.log("Deleting team with id of: ", req.params.id);
 
   const team = await delCareTeam();
 
