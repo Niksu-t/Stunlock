@@ -22,7 +22,7 @@ export const addCareTeam = async (team) => {
   try {
     const rows = await promisePool.query(query, params);
     console.log("Affected rows: ", rows);
-    return { message: "Care team added" };
+    return 1;
   } catch (err) {
     console.log("Error: ", err);
     return 0;
@@ -38,7 +38,7 @@ export const delCareTeam = async (id) => {
   try {
     const rows = promisePool.query(query, params);
     console.log("Team deleted with: ", id);
-    return { message: "Care team deleted" };
+    return 1;
   } catch (err) {
     console.log("Error: ", err);
     return 0;
@@ -55,7 +55,7 @@ export const updateCareTeam = async (name, id) => {
   try {
     const rows = promisePool.query(query, params);
     console.log("Team updated");
-    return { message: "Care team updated" };
+    return 1;
   } catch (err) {
     console.log("Error: ", err);
     return 0;
