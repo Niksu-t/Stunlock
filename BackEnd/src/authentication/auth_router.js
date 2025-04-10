@@ -1,7 +1,7 @@
 import express from "express";
 import { body } from "express-validator";
 
-import { postLogin, getMe, refreshToken } from "./auth_controller.js";
+import { postLogin, getMe, refreshToken, authenticateKubios } from "./auth_controller.js";
 import { authenticateToken } from "./auth_middleware.js";
 import { validationErrorHandler } from "../utils/error.js";
 
@@ -12,3 +12,5 @@ authRouter.route("/login").post(postLogin);
 authRouter.route("/me").get(authenticateToken, getMe);
 
 authRouter.route("/refresh").post(refreshToken);
+
+authRouter.route("/kubios").get(authenticateKubios);
