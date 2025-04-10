@@ -8,4 +8,4 @@ import { getAllTeams } from "./caregroup_controller.js";
 
 export const teamRouter = express.Router();
 
-teamRouter.get(getAllTeams);
+teamRouter.route("/").get(getAllTeams);
