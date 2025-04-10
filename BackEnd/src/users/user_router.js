@@ -15,11 +15,11 @@ userRouter.route("/:id").get(authenticateToken, authorizeUser, getUser);
 userRouter
   .route("/")
   .post(
-    body("username", "Name must be 3-20 characters long and alphanumeric")
+    body("fname", "Name must be 2-25 characters long and alphanumeric")
       .trim()
-      .isLength({ min: 3, max: 25 })
+      .isLength({ min: 2, max: 25 })
       .isAlphanumeric(),
-    body("name", "Name must be 3-50 characters long")
+    body("lname", "Name must be 2-50 characters long")
       .trim()
       .isLength({ min: 2, max: 50 })
       .isAlphanumeric(),

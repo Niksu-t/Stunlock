@@ -12,5 +12,3 @@ authRouter.route("/login").post(postLogin);
 authRouter.route("/me").get(authenticateToken, getMe);
 
 authRouter.route("/refresh").post(refreshToken);
-
-authRouter.route("/kubios").get(authenticateKubios);

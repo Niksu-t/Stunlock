@@ -9,24 +9,39 @@ export const getUserById = async (id) => {
 };
 
 export const createUser = async (
-  username,
-  name,
+  fname,
+  lname,
   password,
   email,
   careteam,
   role
 ) => {
-  const query = `INSERT INTO Users (username, name, password, email, care_team, role) VALUES (?, ?, ?, ?)`;
-  const params = [username, name, password, email, careteam, role];
+  const query = `INSERT INTO Users (fname, lname, password, email, care_team, role) VALUES (?, ?, ?, ?, ?, ?)`;
+  const params = [fname, lname, password, email, careteam, role];
 
   try {
     const rows = await promisePool.query(query, params);
 
-    return rows[0].insertId;
-  } catch {
-    return 0;
+    return RegisterResult.Success;
+
+  } catch(error) {
+    // Handle register errors
+    switch(error.code) {
+      // Duplicate email error
+      case "ER_DUP_ENTRY":
+        return RegisterResult.Duplicate;
+    }
+
+    // Default error
+    return RegisterResult.Error;
   }
 };
+
+export const RegisterResult = {
+  Success: "Register successfull",
+  Duplicate: "Email already in use",
+  Error: "Internal server error",
+}
 
 export const loginResult = {
   Success: "Success",

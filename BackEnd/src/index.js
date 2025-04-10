@@ -28,10 +28,10 @@ APP.use(express.json())
   )
   .use(cookieParser());
 
-APP.use("/api/users", userRouter);
-APP.use("/api/entries", entryRouter);
-APP.use("/api/auth", authRouter);
-APP.use("/api/careteams", teamRouter)
+APP.use("/users", userRouter);
+APP.use("/entries", entryRouter);
+APP.use("/auth", authRouter);
+APP.use("/careteams", teamRouter)
 
 APP.listen(PORT, HOSTNAME, () => {
   console.log(`Server running at http://${HOSTNAME}:${PORT}/`);

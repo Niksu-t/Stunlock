@@ -2,6 +2,24 @@
  * Sends a POST request to the backend to create a new user.
  * @returns The request response
  */
-export async function postRegisterUser(fname, lname, email, password) {
+export async function postRegisterUser(fname, lname, email, password, kubios_email, kubios_password) {
     console.log(fname, lname, email, password);
+    const response = await fetch("/users/", {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            fname,
+            lname,
+            email,
+            password,
+            kubios_email,
+            kubios_password
+        })
+    })
+    .then((response) => {
+        if(!response.ok) {
+            throw new Error("Connection error")
+        }
+        return response.json();
+    })
 }

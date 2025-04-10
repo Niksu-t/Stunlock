@@ -22,4 +22,10 @@ export default defineConfig({
     plugins: [
         tailwindcss(),
     ],
+    server: {
+        proxy: {
+            '/auth': 'http://localhost:3000/',
+            '/users': "http://localhost:3000/"
+        }
+    }
 });

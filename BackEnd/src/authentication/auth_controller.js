@@ -107,15 +107,15 @@ export const getMe = async (req, res) => {
   }
 };
 
-export const authenticateKubios = async (req, res) => {
+export const authenticateKubios = async (email, password) => {
   const csrf = v4();
   const headers = new Headers();
   headers.append('Cookie', `XSRF-TOKEN=${csrf}`);
   headers.append("User-Agent", process.env.KUBIOS_USER_AGENT);
 
   const params = new URLSearchParams({
-    username: process.env.TEST_USERNAME,
-    password: process.env.TEST_PASSWORD,
+    username: email,
+    password: password,
     client_id: process.env.CLIENT_ID,
     redirect_uri: process.env.REDIRECT_URI,
     response_type: 'token',
@@ -130,14 +130,15 @@ export const authenticateKubios = async (req, res) => {
     redirect: 'manual',
     body: params,
   };
+
   let response;
+
   try {
     response = await fetch(process.env.AUTH_URL, options);
   } catch (err) {
     console.error('Kubios login error', err);
     throw customError('Login with Kubios failed', 500);
   }
-  console.log(response);
 
   const location = response.headers.raw().location[0];
   // console.log(location);
@@ -148,25 +149,8 @@ export const authenticateKubios = async (req, res) => {
       401,
     );
   }
-  // If login success, Kubios response location header
-  // contains id_token, access_token and expires_in
+
   const regex = /id_token=(.*)&access_token=(.*)&expires_in=(.*)/;
   const match = location.match(regex);
   const idToken = match[1];
-  console.log(idToken)
-
-  const headers2 = new Headers();
-  headers2.append('User-Agent', process.env.USER_AGENT);
-  headers2.append('Authorization', idToken);
-  const response2 = await fetch(process.env.KUBIOS_API_URI + '/user/self', {
-    method: 'GET',
-    headers: headers2,
-  });
-  const responseJson = await response2.json();
-  console.log(responseJson)
-  if (responseJson.status === 'ok') {
-    return responseJson.user;
-  } else {
-    throw customError('Kubios user info failed', 500);
-  }  
 }
