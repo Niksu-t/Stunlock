@@ -2,7 +2,7 @@
 
 Stunlock is a proprietary (perhaps source-available upon release) web application developed in part of a university course.
 
-Stunlock is a web application consisting of a client built with Vite.js, and a backend built with Express.js. The backend handles all heavier loads, user information, data, business logic etc. The application is hosted on a Linux VM with Apache2 acting as the web server.  
+Stunlock is a web application consisting of a [client](/client/) built with Vite.js, and a [backend](/BackEnd/) built with Express.js. The backend handles all heavier loads, user information, data, business logic etc. The application is hosted on a Ubuntu virtual machine with Apache2 serving as a reverse proxy.  
  
 ## BackEnd Arcitecture
 
