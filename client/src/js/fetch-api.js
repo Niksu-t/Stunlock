@@ -23,3 +23,20 @@ export async function postRegisterUser(fname, lname, email, password, kubios_ema
         return response.json();
     })
 }
+
+export async function postLoginUser(email, password) {
+    const response = await fetch("api/auth/login", {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            email,
+            password,
+        })
+    })
+    .then((response) => {
+        if(!response.ok) {
+            throw new Error("Connection error")
+        }
+        return response.json();
+    })
+}

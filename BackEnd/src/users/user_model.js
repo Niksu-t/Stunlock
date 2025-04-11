@@ -97,17 +97,17 @@ export const selectUserByEmail = async (email) => {
       return 0
     }
     delete row[0].password;
-    return row[0];
+    return row[0][0];
   } catch (err) {
     console.log("Error: ", err);
     return 0
   }
 };
 
-export const getUserHash = async (username) => {
-  const query = `SELECT password FROM Users WHERE username = ?`;
+export const getUserHash = async (email) => {
+  const query = `SELECT password FROM Users WHERE email = ?`;
 
-  const params = [username];
+  const params = [email];
 
   try {
     const [rows] = await promisePool.query(query, params);

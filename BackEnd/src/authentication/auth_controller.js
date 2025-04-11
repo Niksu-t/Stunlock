@@ -7,6 +7,7 @@ import {v4} from 'uuid';
 import {
   selectUserByNameAndPassword,
   getUserHash,
+  selectUserByEmail,
 } from "../users/user_model.js";
 import { customError } from "../utils/error.js";
 
@@ -21,8 +22,8 @@ import { customError } from "../utils/error.js";
 export const postLogin = async (req, res, next) => {
   console.log("postLogin", req.body);
 
-  if (req.body.username && req.body.password) {
-    const hash = await getUserHash(req.body.username);
+  if (req.body.email && req.body.password) {
+    const hash = await getUserHash(req.body.email);
 
     if (!hash) {
       return next(customError("User not found", 404));
@@ -34,8 +35,9 @@ export const postLogin = async (req, res, next) => {
       return next(customError("Incorrect password", 401));
     }
 
-    const user = await selectUserByNameAndPassword(req.body.username, hash);
+    const user = await selectUserByEmail(req.body.email);
     if (user) {
+      console.log(user);
       const token = jwt.sign(user, process.env.JWT_SECRET, {
         expiresIn: "24h",
       });
@@ -52,10 +54,18 @@ export const postLogin = async (req, res, next) => {
         partitioned: true,
       });
 
+      res.cookie("auth_token", token, {
+        httpOnly: true,
+        sameSite: "None",
+        secure: true,
+        maxAge: 24 * 60 * 60 * 1000,
+        partitioned: true,
+      })
+
       return res
         .status(200)
         .contentType("application/json")
-        .json({ ...user, token });
+        .json({ ...user});
     }
   }
   return next(customError("Internal serverl error", 500));
