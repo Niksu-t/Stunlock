@@ -15,3 +15,6 @@ BackEnd
  ┃ ┃ ┣ entries
  ┃ ┃ ┗ users
  ┃ ┗ middleware
+
+## Workflow
+See [WORKFLOW.md](WORKFLOW.md). 

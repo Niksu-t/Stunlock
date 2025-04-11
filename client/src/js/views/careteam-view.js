@@ -15,15 +15,15 @@ export const Careteam = {
                 <div class="relative w-64">
                     <label for="dropdown">Hoitotiimi.</label><br>
 
-                    <input type="text" id="dropdownInput" placeholder="Hae..." class="w-full insset-shadow-2xs bg-gray-100 rounded p-2 w-full mt-2" />
+                    <input type="text" id="dropdownInput" placeholder="Hae..." class="insset-shadow-2xs bg-gray-100 rounded p-2 w-full mt-2" />
                     <div id="dropdownList" class="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-48 overflow-y-auto hidden"></div>
                 </div>
                 <div class="flex flex-row gap-2">
-                    <button id="nav-register" class="bg-brand-red text-white rounded-4xl p-2 px-4 shadow-offset-4 cursor-pointer">Takaisin</button>
-                    <button id="nav-link-api" class="bg-brand-red text-white rounded-4xl p-2 px-4 shadow-offset-4 cursor-pointer">Jatka</button>
+                    <button id="nav-register" class="bg-brand-red text-white rounded-4xl p-2 px-4 shadow-offset-4 cursor-pointer">Takaisin.</button>
+                    <button id="nav-link-api" class="bg-brand-red text-white rounded-4xl p-2 px-4 shadow-offset-4 cursor-pointer">Jatka.</button>
                 </div>
             </form>
-            <button class="cursor-pointer text-end text-gray-500">Ohita</button>
+            <button class="cursor-pointer text-end text-gray-500">Ohita.</button>
             
         `;
 
