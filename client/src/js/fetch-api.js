@@ -4,7 +4,7 @@
  */
 export async function postRegisterUser(fname, lname, email, password, kubios_email, kubios_password) {
     console.log(fname, lname, email, password);
-    const response = await fetch("/users/", {
+    const response = await fetch("api/users/", {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
