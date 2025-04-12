@@ -18,7 +18,7 @@ userRouter
     body("fname", "Name must be 2-25 characters long and alphanumeric")
       .trim()
       .isLength({ min: 2, max: 25 })
-      .isAlphanumeric(),
+      .matches(/^[a-zA-Z0-9-]+$/),
     body("lname", "Name must be 2-50 characters long")
       .trim()
       .isLength({ min: 2, max: 50 })

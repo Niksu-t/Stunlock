@@ -11,7 +11,7 @@ export function renderPage(path, state) {
     const app = document.getElementById('app');
     app.innerHTML = '';  // Clear previous content
 
-    app.appendChild(path.Render());
+    app.appendChild(path.Render(state));
     path.AfterRender();
     state.currentPage = path;
 }

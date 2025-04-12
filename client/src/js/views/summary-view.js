@@ -1,7 +1,8 @@
 import { Kubios } from "./kubios-view";
+import { registerUser } from "../register";
 
 export const Summary = {
-    Render() {
+    Render(state) {
         const div = document.createElement('div');
         div.classList = "flex-col flex gap-8"
 
@@ -29,6 +30,9 @@ export const Summary = {
         nav_link_api.addEventListener("click", (e) => {
             renderPage(e, Kubios)
         });
+
+        document.getElementById("register")
+            .addEventListener("click", registerUser);
 
         const register = document.getElementById('register');
 

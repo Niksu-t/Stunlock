@@ -2,7 +2,7 @@ import { Careteam } from "./careteam-view";
 import { Summary } from "./summary-view";
 
 export const Kubios = {
-    Render() {
+    Render(state) {
         const div = document.createElement('div');
         div.classList = "flex-col flex gap-8"
 

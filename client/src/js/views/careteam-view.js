@@ -2,7 +2,7 @@ import { Register } from "./register-view";
 import { Kubios } from "./kubios-view";
 
 export const Careteam = {
-    Render() {
+    Render(state) {
         const div = document.createElement('div');
         div.classList = "flex-col flex gap-8"
 

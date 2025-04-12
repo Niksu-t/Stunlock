@@ -13,15 +13,19 @@ let state = {
 /**
  * Handles form input and sends POST request to server.
  */
-async function registerUser(event) {
+export async function registerUser(event) {
     event.preventDefault();
 
     const response = await postRegisterUser(
-        document.getElementById("fname").value.trim(),
-        document.getElementById("lname").value.trim(),
-        document.getElementById("email").value.trim(),
-        document.getElementById("password").value.trim()
+        state.fname,
+        state.lname,
+        state.email,
+        state.password
     )
+
+    if(response) {
+        //window.location.href = "/dashboard";
+    }
 }
 
 renderPage(Register, state);

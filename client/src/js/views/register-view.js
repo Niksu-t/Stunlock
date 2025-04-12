@@ -1,7 +1,7 @@
 import { Careteam } from "./careteam-view";
 
 export const Register = {
-    Render() {
+    Render(state) {
         const div = document.createElement('div');
         div.classList = "flex-col flex gap-8"
     
@@ -13,19 +13,19 @@ export const Register = {
             <div class="flex flex-col gap-8">
                 <div>
                     <label for="fname">Etunimi.</label><br>
-                    <input class="insset-shadow-2xs bg-gray-100 rounded p-2 w-full mt-2" type="text" id="fname" name="fname" value="John">
+                    <input class="insset-shadow-2xs bg-gray-100 rounded p-2 w-full mt-2" type="text" id="fname" name="fname" value="${state.fname}">
                 </div>
                 <div>
                     <label for="lname">Sukunimi.</label><br>
-                    <input class="inset-shadow-2xs bg-gray-100 rounded p-2 w-full mt-2" type="text" id="lname" name="lname" value="John">
+                    <input class="inset-shadow-2xs bg-gray-100 rounded p-2 w-full mt-2" type="text" id="lname" name="lname" value="${state.lname}">
                 </div>
                 <div>
                     <label for="email">Sähköposti.</label><br>
-                    <input class="inset-shadow-2xs bg-gray-100 rounded p-2 w-full mt-2" type="text" id="email" name="email" value="John">
+                    <input class="inset-shadow-2xs bg-gray-100 rounded p-2 w-full mt-2" type="text" id="email" name="email" value="${state.email}">
                 </div>
                 <div>
                     <label for="password">Salasana.</label><br>
-                    <input class="inset-shadow-2xs bg-gray-100 rounded p-2 w-full mt-2" type="password" id="password" name="password" value="Doe">
+                    <input class="inset-shadow-2xs bg-gray-100 rounded p-2 w-full mt-2" type="password" id="password" name="password" value="${state.password}">
                 </div>
             </div>
             <div class="flex flex-row gap-2">
