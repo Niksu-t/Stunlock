@@ -1,4 +1,5 @@
 import { Register } from "./register-view";
+import { Kubios } from "./kubios-view";
 
 export const Careteam = {
     Render() {
@@ -11,19 +12,17 @@ export const Careteam = {
                 <h1 class="text-2xl">Luo tili</h1>
             </div>
             <p>Voit asettaa hoitotiimin myös myöhemmin.</p>
-            <form id="register-form" class="flex flex-col gap-8">
                 <div class="relative w-64">
                     <label for="dropdown">Hoitotiimi.</label><br>
 
-                    <input type="text" id="dropdownInput" placeholder="Hae..." class="insset-shadow-2xs bg-gray-100 rounded p-2 w-full mt-2" />
+                    <input type="text" id="careteam" placeholder="Hae..." class="insset-shadow-2xs bg-gray-100 rounded p-2 w-full mt-2" />
                     <div id="dropdownList" class="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-48 overflow-y-auto hidden"></div>
                 </div>
-                <div class="flex flex-row gap-2">
-                    <button id="nav-register" class="bg-brand-red text-white rounded-4xl p-2 px-4 shadow-offset-4 cursor-pointer">Takaisin.</button>
-                    <button id="nav-link-api" class="bg-brand-red text-white rounded-4xl p-2 px-4 shadow-offset-4 cursor-pointer">Jatka.</button>
-                </div>
-            </form>
-            <button class="cursor-pointer text-end text-gray-500">Ohita.</button>
+            <div class="flex flex-row gap-2">
+                <button id="nav-register" class="bg-brand-red text-white rounded-4xl p-2 px-4 shadow-offset-4 cursor-pointer">Takaisin.</button>
+                <button id="nav-link-api" class="bg-brand-red text-white rounded-4xl p-2 px-4 shadow-offset-4 cursor-pointer">Jatka.</button>
+            </div>
+            <button id="skip" class="cursor-pointer text-end text-gray-500">Ohita.</button>
             
         `;
 
@@ -34,17 +33,29 @@ export const Careteam = {
         // Setup navigation buttons
         const nav_register = document.getElementById('nav-register');
         const nav_link_api = document.getElementById('nav-link-api');
+        const skip = document.getElementById('skip');
+
 
         nav_register.addEventListener("click", (e) => {
+            e.preventDefault();
+
             renderPage(e, Register)
         });
         nav_link_api.addEventListener("click", (e) => {
-            renderPage(e, LinkApi)
+            e.preventDefault();
+
+            renderPage(e, Kubios)
         });
 
+        skip.addEventListener("click", (e) => {
+            e.preventDefault();
+
+            renderPage(e, Kubios)
+        })
 
 
-        const input = document.getElementById('dropdownInput');
+
+        const input = document.getElementById('careteam');
         const dropdown = document.getElementById('dropdownList');
 
         const items = ["Apple", "Banana", "Cherry"]
@@ -58,7 +69,7 @@ export const Careteam = {
         });
     
         input.addEventListener('focus', () => {
-        dropdown.classList.remove('hidden');
+            dropdown.classList.remove('hidden');
         });
     
         input.addEventListener('input', () => {
@@ -84,6 +95,6 @@ export const Careteam = {
     },
 
     OnPageChange() {
-
+        console.log()
     }
 };

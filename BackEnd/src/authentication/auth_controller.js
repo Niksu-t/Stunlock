@@ -46,13 +46,15 @@ export const postLogin = async (req, res, next) => {
         expiresIn: "30d",
       });
 
-      res.cookie("jwt", refreshToken, {
-        httpOnly: true,
-        sameSite: "None",
-        secure: true,
-        maxAge: 30 * 24 * 60 * 60 * 1000,
-        partitioned: true,
-      });
+      if(req.body.remember_me) {
+        res.cookie("jwt", refreshToken, {
+          httpOnly: true,
+          sameSite: "None",
+          secure: true,
+          maxAge: 30 * 24 * 60 * 60 * 1000,
+          partitioned: true,
+        });
+      }
 
       res.cookie("auth_token", token, {
         httpOnly: true,

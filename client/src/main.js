@@ -3,4 +3,3 @@ import './style.css'
 
 // TODO: Move to register and login page.
 //postRegisterUser("lars", "thurin", "pledplers5@gmail.com", "24172704")
-postLoginUser("pledplers5@gmail.com", "24172704");

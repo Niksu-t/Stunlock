@@ -13,7 +13,7 @@ let state = {
 /**
  * Handles form input and sends POST request to server.
  */
-async function loginUser(event) {
+async function registerUser(event) {
     event.preventDefault();
 
     const response = await postRegisterUser(
@@ -22,8 +22,6 @@ async function loginUser(event) {
         document.getElementById("email").value.trim(),
         document.getElementById("password").value.trim()
     )
-
-    
 }
 
 renderPage(Register, state);
