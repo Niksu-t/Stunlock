@@ -20,35 +20,55 @@ const __dirname = path.dirname(__filename);
 
 app.use(express.static('dist'));
 
-const pages = ['login', 'register', "dashboard"];
+const non_protected_routes = ['login', 'register'];
 
-// Redirect pretty URLs to correct HTML files
-pages.forEach(page => {
+non_protected_routes.forEach(page => {
   app.get(`/${page}`, async (req, res) => {
-    /*
-    console.log(req.cookies?.auth_token)
-    let headers = {
-      Authorization: `Bearer ${req.cookies?.auth_token}`
+    console.log(`Request received for: ${page}`)
+
+    res.set('Cache-Control', 'no-store');
+
+    res.sendFile(path.join(__dirname, '/dist', `${page}.html`));
+  });
+});
+
+const login_protected_routes = ["dashboard"];
+
+login_protected_routes.forEach(page => {
+  app.get(`/${page}`, async (req, res) => {
+    console.log(`Protected request received for: ${page}`)
+    res.set('Cache-Control', 'no-store');
+
+    let auth_success = false;
+
+    if(req.cookies?.auth_token) {
+      console.log("test")
+      let headers = {
+        Authorization: `Bearer ${req.cookies?.auth_token}`
+      }
+      
+      const options = {
+        headers: headers,
+        credentials: "include"
+      }
+  
+      const data = await fetch("http://localhost:3001/api/auth/me", options)
+        .then((response) => {
+          if(response.ok)
+            return response.json();
+        })
+
+      if(data) {
+        auth_success = true
+      }
     }
     
-
-    const options = {
-      headers: headers,
-      credentials: "include"
+    if(auth_success) {
+      return res.sendFile(path.join(__dirname, '/dist', `${page}.html`));
     }
-
-    const data = await fetch("http://localhost:3001/api/auth/me", options)
-        .then((response) => {
-            if(!response.ok) {
-                throw new Error("Connection error")
-            }
-            else {
-              return response.json();
-            }
-        })
-    console.log(data.user);
-    */
-    res.sendFile(path.join(__dirname, '/dist', `${page}.html`));
+    else {
+      return res.redirect(301, '/login')
+    }
   });
 });
 
