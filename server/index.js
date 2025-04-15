@@ -42,10 +42,9 @@ login_protected_routes.forEach(page => {
     let auth_success = false;
 
     if(req.cookies?.auth_token) {
-      console.log("test")
       let headers = {
-        Authorization: `Bearer ${req.cookies?.auth_token}`
-      }
+        Cookie: `auth_token=${req.cookies.auth_token}`
+      };
       
       const options = {
         headers: headers,

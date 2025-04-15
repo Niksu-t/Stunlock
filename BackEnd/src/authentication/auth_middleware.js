@@ -13,13 +13,10 @@ export const UserRole = {
  */
 export const authenticateToken = (req, res, next) => {
   console.log("authenticateToken request");
-  const authHeader = req.headers["authorization"];
-  const token = authHeader && authHeader.split(" ")[1];
-  if (token == undefined) {
-    return res.sendStatus(401);
-  }
+  const accessToken = req.cookies?.auth_token;
+
   try {
-    req.user = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = jwt.verify(accessToken, process.env.JWT_SECRET);
     next();
   } catch (err) {
     next(customError("Invalid token", 403));

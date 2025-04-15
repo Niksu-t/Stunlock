@@ -45,3 +45,14 @@ export async function postLoginUser(email, password, remember_me) {
     
     return response;
 }
+
+export async function getMe() {
+    const response = await fetch("api/auth/me")
+    .then((response) => {
+        if(response.ok) {
+            return response.json();
+        }
+    })
+    
+    return response;
+}
