@@ -3,9 +3,133 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Vite Vanilla</title>
 </head>
 <body>
-    Test
+    <nav class="flex items-center w-full  px-10 top-0">
+        <div class="flex items-center max-w-96 w-96 gap-10">
+            <img src="Stunlock-logo.svg" height="60" width="60" alt="Stunlock logo" />
+            <h1 class="text-brand-red text-2xl font-light"><span class="font-bold">stun</span>lock.</h1>
+        </div>
+        <div class="hidden flex-row w-full justify-center gap-14 
+        md:flex">
+            <a class="text-brand-red font-semibold" href="/dashboard">Työpöytä.</a>
+            <a href="/dashboard">Tilastot</a>
+        </div>
+        
+        <div class="flex ml-auto w-96 justify-end">
+            <a href="/login" class="bg-brand-red text-white rounded-4xl p-2 px-4">Kirjaudu.</a>
+        </div>
+    </nav>
+    <img src="./green-wave.svg"/>
+
+    <section class="bg-brand-green text-white pt-10 flex flex-col justify-center gap-5 relative
+    md:flex-row">
+        <div class="flex gap-5 flex-col h-fit p-5
+        md:flex-row md:sticky md:top-0">
+            <div class="flex-col flex gap-6">
+                <div class="flex flex-col gap-6">
+                    <h1 class="font-semibold text-4xl">Tervetuloa, !</h1>
+                </div>
+                <div class="flex flex-row items-center bg-brand-red rounded-4xl p-1 px-6 shadow-offset-4 w-fit" id="diary-button">
+                    <p class="text-xl font-semibold cursor-pointer inline-block">Täytä päiväkirja.</p>
+                    <img src="arrow-white.svg" class="w-10 cursor-pointer inline-block rotate-180 fill-white"/>
+                </div>
+            </div>
+            <div id="diary-entry" class="bg-white overflow-hidden transition-all duration-300 w-0 rounded-2xl text-brand-dark shadow-offset-4 h-0">
+                <div class="p-5 flex flex-col">
+                    <div class="flex flex-row items-center">
+                        <img src="https://www.svgrepo.com/show/521481/arrow-prev-small.svg" class="w-10 cursor-pointer"/>
+                        <h1 class="text-brand-dark text-xl rounded-4xl p-1 px-4 max-w-fit shadow-offset-4">Päiväkirja.</h1>
+                    </div>
+                    <h1>test</h1>
+                    <h1>test</h1>
+                    <h1>test</h1>
+                    <h1>test</h1>
+                    <h1>test</h1>
+                    <h1>test</h1>
+                </div>
+            </div>
+        </div>
+        
+        <div class="flex flex-col relative p-5">
+            <div class="max-w-7xl">
+                <div class="max-w-7xl">
+                    <h1 class="text-3xl font-semibold">Tämä viikko.</h1>
+                    <div class="flex flex-col text-brand-dark max-w-7xl bg-white p-8 gap-1 rounded-2xl shadow-offset-4 mt-5">
+                        <div class="flex-col flex items-center gap-10
+                        md:flex-row">
+                            <div class="flex flex-col gap-2">
+                                <p>12% perustason yläpuolella.</p>
+                                <h1 class="text-brand-green text-6xl font-semibold">56<span class="text-xl">ms</span></h1>
+                                <h1>RMSSD keskiarvo.</h1>
+                            </div>
+                            <img class="max-w-96" src="image.png">
+                        </div>
+                        <p class="bg-brand-red text-white rounded-4xl p-1 px-4 max-w-fit shadow-offset-4">Ilmoita tulehdustilasta.</p>
+                    </div>
+                </div>
+                <div class="max-w-7xl pt-10">
+                    <h1 class="text-3xl font-semibold">Tämä kuukausi.</h1>
+                    <div class="flex flex-col text-brand-dark max-w-7xl bg-white p-8 gap-1 rounded-2xl shadow-offset-4 mt-5">
+                        <div class="flex-col flex items-center gap-10
+                        md:flex-row">
+                            <div class="flex flex-col gap-2">
+                                <p>12% perustason yläpuolella.</p>
+                                <h1 class="text-brand-green text-6xl font-semibold">56<span class="text-xl">ms</span></h1>
+                                <h1>RMSSD keskiarvo.</h1>
+                            </div>
+                            <img class="max-w-96" src="image.png">
+                        </div>
+                        <p class="bg-brand-red text-white rounded-4xl p-1 px-4 max-w-fit shadow-offset-4">Ilmoita tulehdustilasta.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <img src="./white-wave-green-bg.svg"/>
+    <footer class="z-20 relative bg-white text-brand-dark pb-28 pt-24 flex flex-col items-center">
+        <div>
+            <div class="flex flex-col gap-16
+            md:flex-row md:gap-32">
+                <div class="flex flex-row items-center">
+                    <img src="Stunlock-logo.svg" height="60" width="60" alt="Stunlock logo"/>
+                    <h1 class="text-2xl"><span class="font-bold">stun</span>lock.</h1>
+                </div>
+                <div class="flex flex-col gap-16
+                md:flex-row md:gap-32">
+                    <div class="flex gap-32">
+                        <div class="flex flex-col gap-3">
+                            <h1 class="text-brand-red">Tuote.</h1>
+                            <h1>Koti.</h1>
+                        </div>
+                    </div>
+                    <div class="flex gap-32">
+                        <div class="flex flex-col gap-3">
+                            <h1 class="text-brand-red">Resurssit.</h1>
+                            <h1>Apua</h1>
+                            <h1>Ota yhteyttä.</h1>
+                        </div>
+                        <div class="flex flex-col gap-3">
+                            <h1 class="text-brand-red">Yhtiö.</h1>
+                            <h1>Meistä.</h1>
+                            <h1>Brändi.</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-brand-green h-0.5 mt-10 w-full"></div>
+            <div class="flex gap-3 flex-col mt-10
+            md:flex-row">
+                <a href="/login" class="bg-brand-red text-white rounded-4xl shadow-offset-4 p-2 px-4 w-fit h-fit">Kirjaudu.</a>
+                <a href="/register" class="bg-brand-red text-white rounded-4xl shadow-offset-4 p-2 px-4 w-fit h-fit">Rekisteröidy.</a>
+            </div>
+        </div>
+    </footer>
+
+
+    <script type="module" src="main.js"></script>
+    <script type="module" src="js/dashboard.js"></script>
 </body>
 </html>
