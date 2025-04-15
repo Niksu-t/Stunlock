@@ -3,7 +3,7 @@ import { resultSelf } from "./kubios_model.js";
 export const getAllResults = async (req, res) => {
   console.log("Kubios token: ", req.authorization);
 
-  const token = req.authorization;
+  const token = req.headers["authorization"];
 
   try {
     const result = await resultSelf(token);
