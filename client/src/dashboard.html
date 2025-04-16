@@ -6,18 +6,22 @@
     <title>Vite Vanilla</title>
 </head>
 <body>
-    <nav class="flex items-center w-full  px-10 top-0">
+    
+    <nav class="flex items-center w-full px-10">
         <div class="flex items-center max-w-96 w-96 gap-10">
             <img src="Stunlock-logo.svg" height="60" width="60" alt="Stunlock logo" />
-            <h1 class="text-brand-red text-2xl font-light"><span class="font-bold">stun</span>lock.</h1>
+            <h1 class="text-brand-red text-2xl font-light invisible
+            md:visible"><span class="font-bold">stun</span>lock.</h1>
         </div>
         <div class="hidden flex-row w-full justify-center gap-14 
         md:flex">
-            <a class="text-brand-red font-semibold" href="/dashboard">Työpöytä.</a>
-            <a href="/dashboard">Tilastot</a>
+            <a class="text-brand-red" href="/">Koti.</a>
+            <a href="/dashboard">Meistä.</a>
+            <a href="/dashboard">Ota yhteyttä.</a>
         </div>
         
-        <div class="flex ml-auto w-96 justify-end">
+        
+        <div class="flex ml-auto w-96 justify-end" id="header-right">
             <a href="/login" class="bg-brand-red text-white rounded-4xl p-2 px-4">Kirjaudu.</a>
         </div>
     </nav>
@@ -31,7 +35,7 @@
                 <div class="flex flex-col gap-6">
                     <h1 class="font-semibold text-4xl">Tervetuloa, !</h1>
                 </div>
-                <div class="flex flex-row items-center bg-brand-red rounded-4xl p-1 px-6 shadow-offset-4 w-fit" id="diary-button">
+                <div class="flex flex-row items-center bg-brand-red rounded-4xl p-1 px-6 shadow-offset-4 w-fit" id="diary-toggle">
                     <p class="text-xl font-semibold cursor-pointer inline-block">Täytä päiväkirja.</p>
                     <img src="arrow-white.svg" class="w-10 cursor-pointer inline-block rotate-180 fill-white"/>
                 </div>

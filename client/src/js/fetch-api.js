@@ -56,3 +56,59 @@ export async function getMe() {
     
     return response;
 }
+
+export async function getDiary() {
+    const response = await fetch("api/entries/")
+    .then((response) => {
+        if(response.ok) {
+            return response.json();
+        }
+    })
+    
+    return response;
+}
+
+export async function postDiary(stress, pain, stiffness, sleep, notes, entry_date) {
+    const response = await fetch("api/entries/", {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            stress,
+            pain,
+            stiffness,
+            sleep,
+            notes,
+            entry_date
+        })
+    })
+    .then((response) => {
+        if(!response.ok) {
+            throw new Error("Connection error")
+        }
+        return response.json();
+    })
+    
+    return response;
+}
+
+export async function updateDiary(id, stress, pain, stiffness, sleep, notes) {
+    const response = await fetch(`api/entries/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            stress,
+            pain,
+            stiffness,
+            sleep,
+            notes
+        })
+    })
+    .then((response) => {
+        if(!response.ok) {
+            throw new Error("Connection error")
+        }
+        return response.json();
+    })
+    
+    return response;
+}

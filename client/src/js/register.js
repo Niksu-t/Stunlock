@@ -24,7 +24,7 @@ export async function registerUser(event) {
     )
 
     if(response) {
-        //window.location.href = "/dashboard";
+        window.location.href = "/dashboard";
     }
 }
 

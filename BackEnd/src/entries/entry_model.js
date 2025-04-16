@@ -27,9 +27,9 @@ export const deleteEntryById = async (entry_id, new_entry) => {
     }
 }
 
-export const updateEntryById = async (entry_id, new_entry) => {
-    const query = `UPDATE diary_entries SET pain_gauge = ?, sleep_gauge = ?, food_gauge = ?, activity_gauge = ?, stress_gauge = ?, notes = ? WHERE entry_id = ${entry_id}`;
-    const params = [new_entry.pain,new_entry.sleep, new_entry.food, new_entry.activity, new_entry.stress, new_entry.notes];
+export const updateEntryById = async (entry_id, body) => {
+    const query = `UPDATE diary_entries SET stress_gauge = ?, pain_gauge = ?, stiffness_gauge = ?, sleep_gauge = ?, notes = ? WHERE entry_id = ${entry_id}`;
+    const params = [body.stress, body.pain, body.stiffness, body.sleep, body.notes];
 
     try {
         const rows = await promisePool.query(query, params);
@@ -48,18 +48,24 @@ export const getAllEntries = async (user_id) => {
     return rows;
 }
 
-export const insertEntry = async (user, request_body) => {
-    const query = `INSERT INTO diary_entries (user_id, entry_date, pain_gauge, sleep_gauge, food_gauge, activity_gauge, stress_gauge, notes) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+export const insertEntry = async (user, body) => {
+    const query = `INSERT INTO diary_entries (user_id, entry_date, stress_gauge, pain_gauge, stiffness_gauge, sleep_gauge, notes) VALUES (?, ?, ?, ?, ?, ?, ?)`;
 
-    const entry_date = new Date().toJSON().slice(0, 10);
-    const params = [user.user_id, entry_date, request_body.pain, request_body.sleep, request_body.food, request_body.activity, request_body.stress, request_body.notes]
+    let entry_date = new Date().toISOString().slice(0, 10);
+
+    if(body.entry_date)
+        entry_date = body.entry_date;
+
+    console.log(entry_date);
+    const params = [user.user_id, entry_date, body.stress, body.pain, body.stiffness, body.sleep, body.notes]
 
     try {
         const rows = await promisePool.query(query, params);
 
         return rows[0].insertId;
     }
-    catch {
+    catch(e) {
+        console.log(e)
         return 0;
     }
 }

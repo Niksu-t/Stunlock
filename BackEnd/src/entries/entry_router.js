@@ -23,19 +23,11 @@ entryRouter
   .put(
     authenticateToken,
     authorizeEntry,
-    body("pain").trim().notEmpty().isInt({ min: 1, max: 10 }),
-    body("sleep").trim().notEmpty().isInt({ min: 1, max: 10 }),
-    body("food").trim().notEmpty().isInt({ min: 1, max: 10 }),
-    body("activity").trim().notEmpty().isInt({ min: 1, max: 10 }),
-    body("stress").trim().notEmpty().isInt({ min: 1, max: 10 }),
+    body("stress").trim().notEmpty().isInt({ min: 0, max: 10 }),
+    body("pain").trim().notEmpty().isInt({ min: 0, max: 10 }),
+    body("stiffness").trim().notEmpty().isInt({ min: 0, max: 10 }),
+    body("sleep").trim().notEmpty().isInt({ min: 0, max: 10 }),
     body("notes").isLength({ min: 0, max: 1500 }).escape(),
-    body("notes")
-      .trim()
-      .escape()
-      .custom((value, { req }) => {
-        console.log("custom validator", value);
-        return !(req.body.mood === value);
-      }),
     validationErrorHandler,
     updateEntry
   );
@@ -47,19 +39,11 @@ entryRouter
 
   .post(
     authenticateToken,
-    body("pain").trim().notEmpty().isInt({ min: 1, max: 10 }),
-    body("sleep").trim().notEmpty().isInt({ min: 1, max: 10 }),
-    body("food").trim().notEmpty().isInt({ min: 1, max: 10 }),
-    body("activity").trim().notEmpty().isInt({ min: 1, max: 10 }),
-    body("stress").trim().notEmpty().isInt({ min: 1, max: 10 }),
+    body("stress").trim().notEmpty().isInt({ min: 0, max: 10 }),
+    body("pain").trim().notEmpty().isInt({ min: 0, max: 10 }),
+    body("stiffness").trim().notEmpty().isInt({ min: 0, max: 10 }),
+    body("sleep").trim().notEmpty().isInt({ min: 0, max: 10 }),
     body("notes").isLength({ min: 0, max: 1500 }).escape(),
-    body("notes")
-      .trim()
-      .escape()
-      .custom((value, { req }) => {
-        console.log("custom validator", value);
-        return !(req.body.mood === value);
-      }),
     validationErrorHandler,
     postEntry
   );

@@ -25,13 +25,13 @@ CREATE TABLE Users (
 );
 
 CREATE TABLE diary_entries(
-    user_id INT NOT NULL,
     entry_id INT AUTO_INCREMENT PRIMARY KEY,
-    pain_gauge INT DEFAULT 0,
-    sleep_gauge INT DEFAULT 0,
-    food_gauge INT DEFAULT 0,
-    activity_gauge INT DEFAULT 0,
+    user_id INT NOT NULL,
+    entry_date DATE NOT NULL,
     stress_gauge INT DEFAULT 0,
+    pain_gauge INT DEFAULT 0,
+    stiffness_gauge INT DEFAULT 0,
+    sleep_gauge INT DEFAULT 0,
     notes TEXT,
     FOREIGN KEY (user_id) REFERENCES Users(user_id)
 );
