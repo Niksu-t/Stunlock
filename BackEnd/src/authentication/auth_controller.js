@@ -166,3 +166,13 @@ export const authenticateKubios = async (email, password) => {
   const match = location.match(regex);
   const idToken = match[1];
 }
+
+export const logOut = async (req, res) => {
+  
+  console.log("Loggin user out");
+
+  res.clearCookie("auth_token");
+
+  console.log("Log out successfull");
+
+};
