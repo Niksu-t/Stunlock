@@ -13,11 +13,11 @@ export const createUser = async (
   lname,
   password,
   email,
-  careteam,
-  role
+  kubios_email,
+  kubios_uuid
 ) => {
-  const query = `INSERT INTO Users (fname, lname, password, email, care_team, role) VALUES (?, ?, ?, ?, ?, ?)`;
-  const params = [fname, lname, password, email, careteam, role];
+  const query = `INSERT INTO Users (fname, lname, password, email, kubios_email, kubios_uuid) VALUES (?, ?, ?, ?, ?, ?)`;
+  const params = [fname, lname, password, email, kubios_email, kubios_uuid];
 
   try {
     const rows = await promisePool.query(query, params);

@@ -1,4 +1,4 @@
-import { authenticateKubios } from "../authentication/auth_controller.js";
+import { linkKubios } from "../authentication/auth_controller.js";
 import {
   getUserById,
   createUser,
@@ -34,11 +34,7 @@ export const postUser = async (req, res) => {
   console.log("postUsers request: ", req.body);
 
   if (req.body.fname && req.body.lname && req.body.password && req.body.email) {
-    if(req.body.kubios_password) {
-      // Kubios login test, successfull. Not implemented anywhere
-      // TODO: Add Kubios user id and id_token to database if login is succesfull
-      const kubios_user = await authenticateKubios(req.body.kubios_email, req.body.kubios_password);
-    }
+    const kubios_user = await linkKubios(req.body.kubios_email, req.body.kubios_password);
 
     const hash_salt = await bcrpyt.genSalt(10);
     const hashed_password = await bcrpyt.hash(req.body.password, hash_salt);
@@ -47,7 +43,9 @@ export const postUser = async (req, res) => {
       req.body.fname,
       req.body.lname,
       hashed_password,
-      req.body.email
+      req.body.email,
+      kubios_user.email,
+      kubios_user.uuid
     );
 
     // Handle registration result

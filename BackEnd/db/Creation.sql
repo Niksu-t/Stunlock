@@ -18,6 +18,8 @@ CREATE TABLE Users (
     lname VARCHAR(50) NOT NULL,
     password VARCHAR(255) NOT NULL,
     email VARCHAR(100) NOT NULL UNIQUE,
+    kubios_email VARCHAR(100),
+    kubios_uuid VARCHAR(100),
     role VARCHAR(10) DEFAULT 'patient',
     care_team INT,
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,

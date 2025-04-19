@@ -8,6 +8,8 @@ let state = {
     lname: "",
     email: "",
     password: "",
+    kubios_email: "",
+    kubios_password: ""
 }
 
 /**
@@ -20,7 +22,9 @@ export async function registerUser(event) {
         state.fname,
         state.lname,
         state.email,
-        state.password
+        state.password,
+        state.kubios_email,
+        state.kubios_password
     )
 
     if(response) {

@@ -119,7 +119,10 @@ export const getMe = async (req, res) => {
   }
 };
 
-export const authenticateKubios = async (email, password) => {
+export const linkKubios = async (email, password) => {
+  if(!email || !password)
+    return;
+
   const csrf = v4();
   const headers = new Headers();
   headers.append('Cookie', `XSRF-TOKEN=${csrf}`);
@@ -165,6 +168,23 @@ export const authenticateKubios = async (email, password) => {
   const regex = /id_token=(.*)&access_token=(.*)&expires_in=(.*)/;
   const match = location.match(regex);
   const idToken = match[1];
+
+  const headers2 = new Headers();
+  headers2.append('User-Agent', process.env.USER_AGENT);
+  headers2.append('Authorization', idToken);
+
+  const response2 = await fetch(process.env.KUBIOS_API_URI + '/user/self', {
+    method: 'GET',
+    headers: headers2,
+  });
+
+  const responseJson = await response2.json();
+  
+  return {
+    id_token: idToken,
+    email: responseJson.user.email,
+    uuid: responseJson.user.sub
+  }
 }
 
 export const logOut = async (req, res) => {

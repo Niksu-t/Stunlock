@@ -52,7 +52,8 @@ export const Kubios = {
         });
     },
 
-    OnPageChange() {
-
+    OnPageChange(state) {
+        state.kubios_email = document.getElementById("email").value.trim();
+        state.kubios_password = document.getElementById("password").value.trim();
     }
 };
