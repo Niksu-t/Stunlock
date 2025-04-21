@@ -1,4 +1,4 @@
-import { postLoginUser, postRegisterUser, getMe } from './js/fetch-api'
+import { postLoginUser, postRegisterUser, getMe, getAllKubiosResults } from './js/fetch-api'
 import './style.css'
 
 // TODO: Move to register and login page.
@@ -8,6 +8,8 @@ async function onPageLoad(e) {
     const response = await getMe();
 
     if(response.user) {
+        localStorage.setItem("user_fname", response.user.fname);
+
         const headerRight = document.getElementById("header-right")
 
         // Logged in header

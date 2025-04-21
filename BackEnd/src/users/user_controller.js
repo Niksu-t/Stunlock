@@ -50,10 +50,18 @@ export const postUser = async (req, res) => {
 
     // Handle registration result
     if (register_result == RegisterResult.Success) {
+      let return_json = {
+        message: `Resource successfully added.`
+      };
+
+      if(kubios_user) {
+        return_json.kubios_token = kubios_user.id_token;
+      }
+
       return res
         .status(201)
         .contentType("application/json")
-        .json({ message: `Resource successfully added.` });
+        .json(return_json);
     } else {
       return res
         .status(500)

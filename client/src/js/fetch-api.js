@@ -112,3 +112,26 @@ export async function updateDiary(id, stress, pain, stiffness, sleep, notes) {
     
     return response;
 }
+
+export async function getAllKubiosResults(token) {
+    let headers = {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`
+    }
+
+    const options = {
+        method: 'GET',
+        headers: headers,
+        credentials: "include",
+    }
+
+    const data = await fetch(`api/kubios/`, options)
+        .then((response) => {
+            if(!response.ok) {
+                throw new Error("Connection error")
+            }
+            return response.json();
+        })
+
+    return data;
+}

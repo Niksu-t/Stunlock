@@ -27,6 +27,11 @@ export async function registerUser(event) {
         state.kubios_password
     )
 
+    if(response.kubios_token) {
+        localStorage.setItem("kubios_token", response.kubios_token);
+
+    }
+
     if(response) {
         window.location.href = "/dashboard";
     }

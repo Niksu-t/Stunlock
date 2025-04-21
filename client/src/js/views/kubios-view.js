@@ -15,11 +15,11 @@ export const Kubios = {
             <div class="flex flex-col gap-8">
                 <div>
                     <label for="email">Kubios sähköposti.</label><br>
-                    <input class="inset-shadow-2xs bg-gray-100 rounded p-2 w-full mt-2" type="text" id="email" name="email" value="John">
+                    <input class="inset-shadow-2xs bg-gray-100 rounded p-2 w-full mt-2" type="text" id="email" name="email" value="${state.kubios_email}">
                 </div>
                 <div>
                     <label for="password">Kubios salasana.</label><br>
-                    <input class="inset-shadow-2xs bg-gray-100 rounded p-2 w-full mt-2" type="password" id="password" name="password" value="Doe">
+                    <input class="inset-shadow-2xs bg-gray-100 rounded p-2 w-full mt-2" type="password" id="password" name="password" value="${state.kubios_password}">
                 </div>
             </div>
             <div class="flex flex-row gap-2">

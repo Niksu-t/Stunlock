@@ -1,4 +1,4 @@
-import { postDiary, getDiary, updateDiary } from "./fetch-api";
+import { postDiary, getDiary, updateDiary, getAllKubiosResults } from "./fetch-api";
 import dayjs from 'dayjs';
 
 let open = false;
@@ -13,7 +13,9 @@ function openImportDiaryEntry(entry) {
     }
 }
 
-function toggleDiary() {
+async function toggleDiary() {
+    console.log(await getAllKubiosResults(localStorage.getItem("kubios_token")))
+
     const panel = document.getElementById("diary-entry");
     open = !open;
 
@@ -74,6 +76,13 @@ async function postOrUpdateEntry(e) {
             today
         )
     }
+}
+
+function onPageLoad(e) {
+    const welcome_text = document.getElementById("welcome-text");
+    welcome_text.innerHTML = `${localStorage.getItem("user_fname")}`;
+
+    generateThisWeekEntries(e)
 }
 
 function generateThisWeekEntries(e) {
@@ -160,4 +169,4 @@ function getWeekDays() {
 //document.getElementById("submit-diary").addEventListener("click", postOrUpdateEntry);
 
 document.getElementById("diary-toggle").addEventListener("click", toggleDiary);
-addEventListener('load', generateThisWeekEntries)
+addEventListener('load', onPageLoad)
