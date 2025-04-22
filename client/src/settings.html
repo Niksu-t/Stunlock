@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vite Vanilla</title>
+</head>
+<body>
+
+    <nav class="flex items-center w-full px-10">
+        <div class="flex items-center max-w-96 w-96 gap-10">
+            <img src="Stunlock-logo.svg" height="60" width="60" alt="Stunlock logo" />
+            <h1 class="text-brand-red text-2xl font-light invisible
+            md:visible"><span class="font-bold">stun</span>lock.</h1>
+        </div>
+        <div class="hidden flex-row w-full justify-center gap-14 
+        md:flex">
+            <a class="text-brand-red" href="/">Koti.</a>
+            <a href="/dashboard">Meistä.</a>
+            <a href="/dashboard">Ota yhteyttä.</a>
+        </div>
+        
+        
+        <div class="flex ml-auto w-96 justify-end" id="header-right">
+            <a href="/login" class="bg-brand-red text-white rounded-4xl p-2 px-4">Kirjaudu.</a>
+        </div>
+    </nav>
+
+    <section class="flex flex-col p-10 mx-auto gap-5 relative max-w-4xl">
+        <div class="flex flex-col gap-6">
+            <h1 class="font-semibold text-xl">Tilini</h1>
+            <div class="bg-brand-red rounded-2xl shadow-offset-4 p-4 text-white max-w-xl">
+                <h1 class="text-sm">Etunimi</h1>
+                <h1 class="text-xl font-semibold" id="fname">Etunimesi</h1>
+                <h1 class="text-sm mt-4">Sukunimi</h1>
+                <h1 class="text-xl font-semibold" id="lname">Sukunimesi</h1>
+                <h1 class="text-sm mt-4">Sähköposti</h1>
+                <h1 class="text-xl font-semibold" id="email">Sähköpostisi</h1>
+
+                <button class="bg-brand-dark rounded-2xl w-fit shadow-offset-4 p-2 px-5 mt-6 cursor-pointer mr-2">Muokkaa</button>
+                <button class="bg-brand-red rounded-2xl w-fit shadow-offset-4 p-2 px-5 mt-6 cursor-pointer">Poista tili</button>
+
+            </div>
+            <label class="inline-flex items-center cursor-pointer">
+                <input type="checkbox" value="" class="sr-only peer">
+                <div class="relative w-11 h-6 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brand-red "></div>
+                <span class="ms-3 font-medium">Muistuta päiväkirjamerkinnän täyttämisestä.</span>
+            </label>
+        </div>
+
+        <h1 class="font-semibold text-xl">Hoitotiimi</h1>
+
+        <div class="flex flex-col gap-6">
+            <h1 class="font-semibold text-xl">Liitännät</h1>
+            <div class="bg-white rounded-2xl shadow-offset-4 max-w-xl overflow-hidden">
+                <div class="bg-brand-red gap-4 text-white px-4 p-2">
+                    <div class="flex flex-row gap-4 items-center">
+                        <h1 class="font-bold">Istunto päättynyt!</h1>
+                        <button class="bg-brand-dark text-white rounded-2xl w-fit shadow-offset-4 p-1 px-3 ml-auto cursor-pointer" id="login-again">Kirjaudu uudelleen</button>
+                    </div>
+                    <div id="kubios-login" class="overflow-hidden transition-all duration-300 h-0">
+                        <form class="flex flex-col gap-8" id="kubios-login-form">
+                            <div>
+                                <label class="text-white" for="password">Salasana.</label><br>
+                                <input class="text-brand-dark inset-shadow-2xs bg-white rounded p-2 w-full mt-2" type="password" id="password" name="password" value="">
+                            </div>        
+                            <input class="bg-white text-brand-dark rounded-4xl p-2 px-4 shadow-offset-4 w-fit cursor-pointer" type="submit" value="Kirjaudu sisään.">
+                        </form>
+                    </div>
+                </div>
+                
+                <div class="p-4 flex flex-col gap-3">
+                    <h1 class="text-xl font-semibold">Kubios</h1>
+                    <h1 class="font-semibold" id="kubios-email">Sähköpostisi</h1>
+                    <div class="flex flex-row gap-3">
+                        <button class="bg-brand-dark text-white rounded-2xl w-fit shadow-offset-4 p-2 px-5 cursor-pointer">Poista</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+    
+    <footer class="z-20 relative bg-white text-brand-dark pb-28 pt-24 flex flex-col items-center">
+        <div>
+            <div class="flex flex-col gap-16
+            xl:flex-row xl:gap-32">
+                <div class="flex flex-row items-center">
+                    <img src="Stunlock-logo.svg" height="60" width="60" alt="Stunlock logo"/>
+                    <h1 class="text-2xl"><span class="font-bold">stun</span>lock.</h1>
+                </div>
+                <div class="flex flex-col gap-16
+                xl:flex-row xl:gap-32">
+                    <div class="flex gap-32">
+                        <div class="flex flex-col gap-3">
+                            <h1 class="text-brand-red">Tuote.</h1>
+                            <h1>Koti.</h1>
+                        </div>
+                    </div>
+                    <div class="flex gap-32">
+                        <div class="flex flex-col gap-3">
+                            <h1 class="text-brand-red">Resurssit.</h1>
+                            <h1>Apua</h1>
+                            <h1>Ota yhteyttä.</h1>
+                        </div>
+                        <div class="flex flex-col gap-3">
+                            <h1 class="text-brand-red">Yhtiö.</h1>
+                            <h1>Meistä.</h1>
+                            <h1>Brändi.</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-brand-dark h-0.5 mt-10 w-full"></div>
+            <div class="flex gap-3 flex-col mt-10
+            xl:flex-row">
+                <a href="/login" class="bg-brand-red text-white rounded-4xl shadow-offset-4 p-2 px-4 w-fit h-fit">Kirjaudu.</a>
+                <a href="/register" class="bg-brand-red text-white rounded-4xl shadow-offset-4 p-2 px-4 w-fit h-fit">Rekisteröidy.</a>
+            </div>
+        </div>
+    </footer>
+
+
+    <script type="module" src="main.js"></script>
+    <script type="module" src="js/settings.js"></script>
+</body>
+</html>

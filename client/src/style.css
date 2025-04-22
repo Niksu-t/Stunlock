@@ -14,13 +14,12 @@ body {
   color: #2E3338;
 }
 
-input[type="text"] {
-
+input[type="text"], input[type="password"] {
   outline: none;
   transition: border-color 0.3s, box-shadow 0.3s;
 }
 
-input[type="text"]:focus {
+input[type="text"]:focus, input[type="password"]:focus {
   border-color: var(--brand-red);
   box-shadow: 0 0 0 2px var(--brand-red); /* Optional glow */
 }

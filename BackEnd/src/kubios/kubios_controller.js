@@ -1,4 +1,10 @@
+import "dotenv/config";
+import fetch from 'node-fetch';
+import {v4} from 'uuid';
+
 import { resultSelf } from "./kubios_model.js";
+import { customError } from "../utils/error.js";
+
 
 function isOnWeeksAgo(dateStr, num_of_weeks = 0) {
   const now = new Date();
@@ -49,3 +55,61 @@ export const getAllResults = async (req, res) => {
   }
 };
 
+export const postLoginKubios = async (req, res, next) => {
+  const csrf = v4();
+  const headers = new Headers();
+  headers.append('Cookie', `XSRF-TOKEN=${csrf}`);
+  headers.append("User-Agent", process.env.KUBIOS_USER_AGENT);
+
+  console.log(req.user);
+
+  const params = new URLSearchParams({
+    username: req.user.kubios_email,
+    password: req.body.password,
+    client_id: process.env.CLIENT_ID,
+    redirect_uri: process.env.REDIRECT_URI,
+    response_type: 'token',
+    scope: "openid",
+    access_type: 'offline',
+    _csrf: csrf,
+  });
+
+  const options = {
+    method: 'POST',
+    headers: headers,
+    redirect: 'manual',
+    body: params,
+  };
+
+  let response;
+
+  try {
+    response = await fetch(process.env.AUTH_URL, options);
+  } catch (err) {
+    console.error('Kubios login error', err);
+    return next(customError(
+      'Login with Kubios failed', 
+      500
+    ));
+  }
+
+  const location = response.headers.raw().location[0];
+  // console.log(location);
+  // If login fails, location contains 'login?null'
+  if (location.includes('login?null')) {
+    return next(customError(
+      'Login with Kubios failed due bad username/password',
+      401,
+    ));
+  }
+
+  const regex = /id_token=(.*)&access_token=(.*)&expires_in=(.*)/;
+  const match = location.match(regex);
+  const idToken = match[1];
+
+  return res
+    .status(200)
+    .contentType("application/json")
+    .json({ token: idToken });
+
+} 

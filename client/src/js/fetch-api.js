@@ -135,3 +135,21 @@ export async function getAllKubiosResults(token) {
 
     return data;
 }
+
+export async function postLoginKubios(password) {
+    const response = await fetch("api/kubios/login", {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            password
+        })
+    })
+    .then((response) => {
+        if(!response.ok) {
+            throw new Error("Connection error")
+        }
+        return response.json();
+    })
+    
+    return response;
+}

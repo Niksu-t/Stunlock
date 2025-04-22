@@ -29,7 +29,6 @@ export async function registerUser(event) {
 
     if(response.kubios_token) {
         localStorage.setItem("kubios_token", response.kubios_token);
-
     }
 
     if(response) {
