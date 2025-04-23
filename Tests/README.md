@@ -1,12 +1,42 @@
-# User Tests
+# Tests
 
 Tests are ran automatically by the CI/CD pipeline. Tests are user acceptance tests built with the Robot framework.
 
 # How to run
 
-TODO: venv, requirements etc
+Ideally, create a Python virtual enviornment (venv)
 
-## Register and Login
+```shell
+py -m venv .venv
+```
+
+Activate virtual enviornment and install dependencies:
+
+```shell
+pip install -r requirements.txt
+```
+
+Run tests:
+
+```shell
+robot login.robot
+```
+
+Optionally, use the ```-d``` option to set an output directory.
+
+# List of tests
+
+### Register with Kubios and Careteam
+
+Test registers new user with Kubios user and Careteam
+
+1. Agent clicks on "Liity nyt."
+2. Agent fills in related fields and presses "Jatka.".
+3. Agent chooses Kuopion Yliopistollinen sairaala as care team and presses "Jatka.".
+4. Agent links Kubios-account and presses "Luo käyttäjä.".
+5. Agent waits to be redirected to user dashboard.
+
+### Register without Kubios and Careteam
 
 Test registers new user and logs in as said user.
 
@@ -15,6 +45,10 @@ Test registers new user and logs in as said user.
 3. Agent chooses Kuopion Yliopistollinen sairaala as care team and presses "Jatka.".
 4. Agent links Kubios-account and presses "Luo käyttäjä.".
 5. Agent waits to be redirected to user dashboard.
+
+### Login
+
+Test logs in
 
 ### Diary entry
 
