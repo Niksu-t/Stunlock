@@ -36,3 +36,40 @@ input[type="text"]:focus, input[type="password"]:focus {
   background-repeat: repeat;
   background-size: auto; /* or contain / cover depending on need */
 }
+
+input[type="range"] {
+  /*removing defalt look*/
+  -webkit-appearance: none;
+  appearance: none;
+
+  /*custom look*/
+  cursor: pointer;
+  border-radius: 5px;
+
+  background: #EAEAEA;
+  height: 15px;
+  
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    /* removing default appearance */
+    -webkit-appearance: none;
+    appearance: none;
+    height: 25px;
+    width: 5px;
+    border-radius: 10%;
+    background-color:#E67464;
+    border: none;
+}
+
+input[type="checkbox"].pain {
+  appearance: none;
+  -webkit-appearance: none;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  font-size: 2rem;
+  padding: 0.1rem;
+  border: 0.25rem solid #E67464;
+  border-radius: 0.5rem;
+}
