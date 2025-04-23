@@ -27,10 +27,10 @@
     </nav>
     <img src="./green-wave.svg"/>
 
-    <section class="bg-brand-green text-white pt-10 flex flex-col justify-center gap-5 relative
+    <section class="bg-brand-green text-white pt-10 flex flex-col gap-5 relative text-nowrap overflow-hidden
     xl:flex-row">
-        <div class="flex gap-5 flex-col h-fit p-5
-        xl:flex-row xl:sticky xl:top-0">
+        <div class="flex gap-5 flex-col h-fit p-5 mx-0
+        xl:flex-row xl:sticky xl:top-0 xl:mx-16">
             <div class="flex-col flex gap-8">
                 <div class="flex flex-col gap-1">
                     <h1 class="font-semibold text-2xl">Tervetuloa työpöydällesi,</h1>
@@ -41,20 +41,119 @@
                     <img src="arrow-white.svg" class="w-10 cursor-pointer inline-block rotate-180 fill-white"/>
                 </div>
             </div>
-            <div id="diary-entry" class="bg-white overflow-hidden transition-all duration-300 w-0 rounded-2xl text-brand-dark shadow-offset-4 h-0">
+            <div id="diary-entry" class="bg-white overflow-hidden transition-all duration-300 w-0 h-0 rounded-2xl text-brand-dark shadow-offset-4 max-w-full ">
                 <div class="p-5 flex flex-col">
                     <div class="flex flex-row items-center">
                         <img src="https://www.svgrepo.com/show/521481/arrow-prev-small.svg" class="w-10 cursor-pointer"/>
                         <h1 class="text-brand-dark text-xl rounded-4xl p-1 px-4 max-w-fit shadow-offset-4">Päiväkirja.</h1>
                     </div>
-                    <div id="diary-content">
-                        <h1>test</h1>
-                        <h1>test</h1>
-                        <h1>test</h1>
-                        <h1>test</h1>
-                        <h1>test</h1>
-                        <h1>test</h1>
-                    </div>
+                    <form id="diaryentry">
+    
+    
+                        <input type="date"/>
+                        <br/>
+                        <br/>
+                         <div class="flex flex-row">
+                            <div class="w-1/3">
+                                <h4 class="text-xl font-bold">Kipukohdat.</h4>
+                                <br>
+                                <p class="text-xs">Valitse alueet, joissa tunnet kipua.</p>
+                            </div>
+                            <!--pain areas-->
+                            <div class="w-2/3 relative inline-block">
+                                <img src="skeleton.jpg" alt="skeleton" min-height="400px" >
+                                
+                                <div class="absolute top-14 left-28">
+                                    <input checked id="neck" type="checkbox" value="spine cervical" class="w-4 h-4 pain">
+                                </div>
+                                <div class="absolute top-8 left-32">
+                                    <input checked id="jaw" type="checkbox" value="temporomandibular joint" class="w-4 h-4 pain">
+                                </div>
+                                <div class="absolute top-18 left-37">
+                                    <input checked id="shoulder" type="checkbox" value="shoulder" class="w-4 h-4 pain">
+                                </div>
+                                <div class="absolute top-28 left-28">
+                                    <input checked id="spine" type="checkbox" value="spine thoracic" class="w-4 h-4 pain">
+                                </div>
+                                <div class="absolute top-40 left-28">
+                                    <input checked id="lowerback" type="checkbox" value="spine lumbar" class="w-4 h-4 pain">
+                                </div>
+                                <div class="absolute top-32 left-17">
+                                    <input checked id="elbow" type="checkbox" value="wlbow" class="w-4 h-4 pain">
+                                </div>
+                                <div class="absolute top-50 left-21">
+                                    <input checked id="hips" type="checkbox" value="hips" class="w-4 h-4 pain">
+                                </div>
+                                <div class="absolute top-49 left-43">
+                                    <input checked id="hand" type="checkbox" value="hands" class="w-4 h-4 pain">
+                                </div>
+                                <div class="absolute top-70 left-33">
+                                    <input checked id="knees" type="checkbox" value="" class="w-4 h-4 pain">
+                                </div>
+                                <div class="absolute top-90 left-24">
+                                    <input checked id="ankle" type="checkbox" value="knees" class="w-4 h-4 pain">
+                                </div>
+                                <div class="absolute top-94 left-34">
+                                    <input checked id="feet" type="checkbox" value="feet" class="w-4 h-4 pain">
+                                </div>
+                            </div>
+                            <!--/pain areas-->
+                        </div>
+                        <div class="pt-10 flex flex-col gap-12">
+                            <div class="flex flex-row">
+                                <!--sleep slider-->
+                                <label class="float-left w-1/3" for="stress">Stressi.</label>
+                                <div class="w-2/3 flex flex-col gap-1">
+                                    <input class="float-left w-full" type="range" id="stress" name="stress" min="0" max="10">
+                                    <div class="flex flex-row w-full text-gray-500 justify-between select-none">
+                                        <span>0</span>
+                                        <span>5</span>
+                                        <span>10</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex flex-row">
+                                <label class="float-left w-1/3" for="pain">Kipu.</label>
+                                <div class="w-2/3 flex flex-col gap-1">
+                                    <input class="float-left w-full" type="range" id="pain" name="pain" min="0" max="10">
+                                    <div class="flex flex-row w-full text-gray-500 justify-between select-none">
+                                        <span>0</span>
+                                        <span>5</span>
+                                        <span>10</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex flex-row">
+                                <label class="float-left w-1/3" for="stiffness">Jäykkyys</label>
+                                <div class="w-2/3 flex flex-col gap-1">
+                                    <input class="float-left w-full" type="range" id="stiffness" name="stiffness" min="0" max="10">
+                                    <div class="flex flex-row w-full text-gray-500 justify-between select-none">
+                                        <span>0</span>
+                                        <span>5</span>
+                                        <span>10</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex flex-row">
+                                <!--sleep slider-->
+                                <label class="float-left w-1/3" for="sleep">Uni.</label>
+                                <div class="w-2/3 flex flex-col gap-1">
+                                    <input class="float-left w-full" type="range" id="sleep" name="sleep" min="0" max="10">
+                                    <div class="flex flex-row w-full text-gray-500 justify-between select-none">
+                                        <span>0</span>
+                                        <span>5</span>
+                                        <span>10</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex flex-col gap-3">
+                                <!--notes-->
+                                <label for="notes">Muistiinpanot.</label>
+                                <textarea class="w-full min-h-[80px] py-2 resize-none p-4 bg-transparent placeholder:text-slate-400 text-slate-600 text-sm border border-slate-200 rounded-md transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow" placeholder="Miten päiväsi on mennyt?" type="text" id="notes" name="notes"></textarea>
+                                <input class="bg-brand-red text-white rounded-4xl p-2 px-4 shadow-offset-4" type="submit" value="Tallenna">
+                            </div>
+                        </div>                
+                     </form>
                 </div>
             </div>
         </div>
@@ -69,10 +168,14 @@
                         xl:flex-row">
                             <div class="flex flex-col gap-2">
                                 <p>12% perustason yläpuolella.</p>
-                                <h1 class="text-brand-green text-6xl font-semibold">56<span class="text-xl">ms</span></h1>
+                                <h1 class="text-brand-green text-6xl font-semibold"><span id="weekly-avg">56</span><span class="text-xl">ms</span></h1>
                                 <h1>RMSSD keskiarvo.</h1>
                             </div>
-                            <img class="w-96" src="image.png">
+                            <div class="w-full h-52 max-w-[400px] relative
+                            md:w-[400px] md:h-[300px] md:max-w-none
+                            2xl:w-[700px] 2xl:h-[300px] 2xl:max-w-none">
+                                <canvas id="weekdayChart"></canvas>
+                            </div>
                         </div>
                         <div class="flex flex-col-reverse gap-10 items-center
                         xl:flex-row">
@@ -87,7 +190,7 @@
                         xl:flex-row">
                             <div class="flex flex-col gap-2">
                                 <p>12% perustason yläpuolella.</p>
-                                <h1 class="text-brand-green text-6xl font-semibold">56<span class="text-xl">ms</span></h1>
+                                <h1 class="text-brand-green text-6xl font-semibold"><span class="text-xl">ms</span></h1>
                                 <h1>RMSSD keskiarvo.</h1>
                             </div>
                             <img class="max-w-96" src="image.png">

@@ -4,7 +4,9 @@ import './style.css'
 // TODO: Move to register and login page.
 //postRegisterUser("lars", "thurin", "pledplers5@gmail.com", "24172704")
 
-async function onPageLoad(e) {
+export async function init() {
+    const event = new CustomEvent('userdata');
+
     const response = await getMe();
 
     if(response.user) {
@@ -34,6 +36,8 @@ async function onPageLoad(e) {
 
             document.getElementById("user-menu").addEventListener("click", toggleUserMenu);
         }
+
+        window.dispatchEvent(event);
     }
 }
 
@@ -55,4 +59,4 @@ async function toggleUserMenu() {
     
 }
 
-addEventListener("load", onPageLoad);
+init();

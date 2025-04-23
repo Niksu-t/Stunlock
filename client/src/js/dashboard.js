@@ -1,5 +1,32 @@
-import { postDiary, getDiary, updateDiary, getAllKubiosResults } from "./fetch-api";
+import Chart from 'chart.js/auto';
+import annotationPlugin from 'chartjs-plugin-annotation';
 import dayjs from 'dayjs';
+
+import { postDiary, getDiary, updateDiary, getAllKubiosResults } from "./fetch-api";
+
+let state = {
+    average_percentage: 0,
+    average_rmssd: 0,
+}
+
+function getThisWeeksWeekdays() {
+    const now = new Date();
+    const day = now.getDay();
+    const diffToMonday = day === 0 ? -6 : 1 - day;
+  
+    const monday = new Date(now);
+    monday.setDate(now.getDate() + diffToMonday);
+  
+    const weekdays = [];
+  
+    for (let i = 0; i < 7; i++) {
+      const date = new Date(monday);
+      date.setDate(monday.getDate() + i);
+      weekdays.push(date.toISOString().slice(0, 10)); // 'YYYY-MM-DD'
+    }
+  
+    return weekdays;
+}
 
 let open = false;
 
@@ -14,19 +41,17 @@ function openImportDiaryEntry(entry) {
 }
 
 async function toggleDiary() {
-    console.log(await getAllKubiosResults(localStorage.getItem("kubios_token")))
-
     const panel = document.getElementById("diary-entry");
     open = !open;
 
     requestAnimationFrame(() => {
         if(open) {
-            panel.classList.add("w-92")
-            panel.classList.add("h-92")
+            panel.classList.add("w-xl")
+            panel.classList.add("h-[800px]")
         }
         else {
-            panel.classList.remove("w-92")
-            panel.classList.remove("h-92")
+            panel.classList.remove("w-xl")
+            panel.classList.remove("h-[800px]")
         }
     });
 }
@@ -78,16 +103,105 @@ async function postOrUpdateEntry(e) {
     }
 }
 
-function onPageLoad(e) {
+async function onPageLoad(e) {
     const welcome_text = document.getElementById("welcome-text");
+
     welcome_text.innerHTML = `${localStorage.getItem("user_fname")}`;
 
     generateThisWeekEntries(e)
+    await generateThisWeekGraph();
+
+    document.getElementById("weekly-avg").innerHTML = state.average_rmssd.toFixed(1);
+}
+
+async function generateThisWeekGraph() {
+    const data = await getAllKubiosResults(localStorage.getItem("kubios_token"));
+    let chart_data = [];
+
+    const weekdays = getThisWeeksWeekdays();
+
+    const ctx = document.getElementById('weekdayChart');
+
+    let i = 0;
+    weekdays.forEach(date => {
+        if(data.Data[i]) {
+            if(date == data.Data[i].date) {
+                chart_data.push(data.Data[i].rmssd_ms);
+                i++;
+            }
+        }
+    });
+
+    console.log(chart_data);
+
+    const sum = (total, number) => total + number;
+    const average = chart_data.reduce(sum) / chart_data.length;
+
+    state.average_rmssd = average;
+
+
+    const annotation = {
+        type: 'line',
+        borderColor: 'rgba(109, 186, 161, 1)',
+        borderDash: [6, 6],
+        borderDashOffset: 0,
+        borderWidth: 3,
+        label: {
+          enabled: true,
+          content: null,
+          position: 'end'
+        },
+        scaleID: 'y',
+        value: average
+      };
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+        labels: ['ma', 'ti', 'ke', 'to', 'pe', 'la', 'su'],
+        datasets: [{
+            label: 'RMSSD',
+            data: chart_data,
+            backgroundColor: 'rgba(247, 108, 94, 1)',
+            fill: true,
+            tension: 0.3,
+            pointRadius: 5,
+            pointHoverRadius: 7
+        }]
+        },
+        options: {
+            maintainAspectRatio: false,
+
+            plugins: {
+                legend: {
+                display: false
+                },
+                tooltip: {
+                mode: 'index',
+                intersect: false
+                },
+
+                annotation: {
+                    annotations: {
+                      annotation
+                    }
+                  }
+            },
+
+            scales: {
+                x: {
+                    grid: {
+                        display: false
+                    }
+                }
+            }
+        }
+    });
 }
 
 function generateThisWeekEntries(e) {
     const weekDays = getWeekDays();
-    const today = new Date().getDay();
+    let today = new Date().getDay();
 
     // Convert to managable index
     if(today == 0)
@@ -167,6 +281,7 @@ function getWeekDays() {
 
 // TODO: Add entry widget
 //document.getElementById("submit-diary").addEventListener("click", postOrUpdateEntry);
+Chart.register(annotationPlugin);
 
 document.getElementById("diary-toggle").addEventListener("click", toggleDiary);
-addEventListener('load', onPageLoad)
+addEventListener('userdata', onPageLoad)

@@ -43,8 +43,7 @@ export const getAllResults = async (req, res) => {
       .map(item => ({ 
         date: item.daily_result,
         rmssd_ms: item.result.rmssd_ms 
-      }));;
-
+    }));;
 
     console.log("This week:", week_result);
 
