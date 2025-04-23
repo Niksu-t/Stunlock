@@ -4,7 +4,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import NodeCache from "node-cache"
 
-export const tempCache = new NodeCache({ stdTTL: 3600, checkperiod: 3600 });
+export const tempCache = new NodeCache({ stdTTL: 3600, checkperiod: 900 });
 
 import { userRouter } from "./users/user_router.js";
 import { entryRouter } from "./entries/entry_router.js";
