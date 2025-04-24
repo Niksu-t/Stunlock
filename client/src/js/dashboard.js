@@ -46,12 +46,14 @@ async function toggleDiary() {
 
     requestAnimationFrame(() => {
         if(open) {
-            panel.classList.add("w-xl")
-            panel.classList.add("h-[800px]")
+            document.getElementById('diary-modal').classList.remove('hidden')
+            panel.classList.add("xl:w-xl")
+            panel.classList.add("xl:h-[1100px]")
         }
         else {
-            panel.classList.remove("w-xl")
-            panel.classList.remove("h-[800px]")
+            document.getElementById('diary-modal').classList.add('hidden')
+            panel.classList.remove("xl:w-xl")
+            panel.classList.remove("xl:h-[1100px]")
         }
     });
 }
@@ -211,6 +213,7 @@ function generateThisWeekEntries(e) {
 
     for(let i = 0; i < weekDays.length; i++) {
         const div = document.createElement('div')
+        div.classList.add("text-gray-900")
 
         let highlight = false;
 
@@ -219,8 +222,11 @@ function generateThisWeekEntries(e) {
         }
 
         if(highlight) {
+            div.classList.add("flex", "group", "bg-brand-red", "shadow-lg", "dark-shadow", "rounded-full", "mx-1", "cursor-pointer", "justify-center", "relative", "w-16");
+
+            div.today = true;
+
             div.innerHTML = `
-            <div class='flex group bg-brand-red shadow-lg dark-shadow rounded-full mx-1 cursor-pointer justify-center relative  w-16'>
             <span class="flex h-2 w-2 absolute bottom-1.5 ">
               <span class="animate-ping absolute group-hover:opacity-75 opacity-0 inline-flex h-full w-full rounded-full bg-brand-red "></span>
               <span class="relative inline-flex rounded-full h- w-3 bg-purple-100"></span>
@@ -231,24 +237,54 @@ function generateThisWeekEntries(e) {
                      <p class='text-gray-100  mt-3 font-bold'> ${weekDays[i].date} </p>
                   </div>
               </div>
-          </div>
             `
         }
         else {
+            div.classList.add("not-today", "flex", "group", "hover:bg-brand-red", "hover:shadow-lg", "hover-dark-shadow", "rounded-full", "mx-1", "cursor-pointer", "transition-all", "duration-300", "justify-center", "w-16")
+
             div.innerHTML = `
-            <div class='flex group hover:bg-brand-red hover:shadow-lg hover-dark-shadow rounded-full mx-1 transition-all duration-300 cursor-pointer justify-center  w-16'>
-                <div class='flex items-center px-4 py-4'>
-                    <div class='text-center'>
-                        <p class='text-gray-900 group-hover:text-gray-100 text-sm transition-all  group-hover:font-semibold duration-300'> ${weekDays[i].weekday} </p>
-                        <p class='text-gray-900 group-hover:text-gray-100 mt-3 group-hover:font-bold transition-all	duration-300'> ${weekDays[i].date} </p>
-                    </div>
+            <div class='flex items-center px-4 py-4'>
+                <div class='text-center'>
+                    <p class='group-hover:text-gray-100 text-sm transition-all group-hover:font-semibold duration-300'> ${weekDays[i].weekday} </p>
+                    <p class='group-hover:text-gray-100 mt-3 group-hover:font-bold transition-all duration-300'> ${weekDays[i].date} </p>
                 </div>
             </div>
             `
         }
 
+        const close = (div) => {
+            if(!div.today) {
+                div.classList.add("text-gray-900");
+                div.classList.remove("text-gray-100");
+                div.classList.remove("bg-brand-red");
+            }
+        } 
+
         div.addEventListener('click', (e) => {
-            openImportDiaryEntry(i);
+            if(div.open) {
+                div.open = false
+
+                close(div);
+
+                toggleDiary();
+            }
+            else {                              
+                div.classList.remove("text-gray-900");
+                div.classList.add("text-gray-100");
+                div.classList.add("bg-brand-red");
+
+                div.open = true;
+
+                openImportDiaryEntry(i);
+            }
+
+            for (let child of widget.children) {
+                if(child.classList.contains("not-today") && child != div) {
+                    close(child);
+                    child.open = false;
+                }
+            }
+
         });
 
         widget.appendChild(div);
@@ -283,5 +319,4 @@ function getWeekDays() {
 //document.getElementById("submit-diary").addEventListener("click", postOrUpdateEntry);
 Chart.register(annotationPlugin);
 
-document.getElementById("diary-toggle").addEventListener("click", toggleDiary);
 addEventListener('userdata', onPageLoad)
