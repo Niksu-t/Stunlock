@@ -58,16 +58,33 @@ async function toggleDiary() {
     });
 }
 
-async function postOrUpdateEntry(e) {
-    let id;
-    const stress = 10;
-    const pain = 5;
-    const stiffness = 5;
-    const sleep = 5;
-    const notes = "some other notes";
+async function saveDiaryEntry(e) {
+    e.preventDefault();
 
-    // e.preventDefault();
+    const pain_points_id = ["neck", "jaw", "shoulder", "spine", "lowerback", "elbow", "hips", "hand", "knees", "ankle", "feet"];
+    let pain_points_values = [];
+
+    pain_points_id.forEach(pain_point => {
+        pain_points_values.push(document.getElementById(pain_point).checked);
+    });
+
+    // TODO: Take value from date picker
     const today = new Date('2025-12-26').toISOString().slice(0, 10);
+
+    postOrUpdateEntry(
+        today,
+        pain_points_values,
+        document.getElementById("stress").value,
+        document.getElementById("pain").value,
+        document.getElementById("stiffness").value,
+        document.getElementById("sleep").value,
+        document.getElementById("notes").value
+    )
+}
+
+
+async function postOrUpdateEntry(date, pain_points, stress, pain, stiffness, sleep, notes) {
+    let id;
 
     const entries = await getDiary();
 
@@ -75,7 +92,7 @@ async function postOrUpdateEntry(e) {
         const rawDate = entry.entry_date;
         const formatted = dayjs(rawDate).format('YYYY-MM-DD');
 
-        if(formatted == today) {
+        if(formatted == date) {
             id = entry.entry_id;
             console.log("already found");
             break;
@@ -100,7 +117,7 @@ async function postOrUpdateEntry(e) {
             stiffness,
             sleep,
             notes,
-            today
+            date
         )
     }
 }
@@ -320,3 +337,5 @@ function getWeekDays() {
 Chart.register(annotationPlugin);
 
 addEventListener('userdata', onPageLoad)
+
+document.getElementById("diaryentry").addEventListener("submit", saveDiaryEntry);
