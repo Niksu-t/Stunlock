@@ -27,16 +27,14 @@ function isOnWeeksAgo(dateStr, num_of_weeks = 0) {
 }
 
 export const getAllResults = async (req, res) => {
-  console.log("Kubios token: ", req.authorization);
+  console.log("Kubios token: ", req.headers["authorization"]);
 
   const token = req.headers["authorization"];
 
   try {
     const result = await resultSelf(token);
-    console.log("Kubios result: ", result);
 
     // TODO: Remove nested results in model
-
     // Filters 
     const week_result = result.results
       .filter(item => isOnWeeksAgo(new Date(item.daily_result), 0))
@@ -45,7 +43,6 @@ export const getAllResults = async (req, res) => {
         rmssd_ms: item.result.rmssd_ms 
     }));;
 
-    console.log("This week:", week_result);
 
     return res.status(201).json({ Data: week_result });
   } catch (err) {

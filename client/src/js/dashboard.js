@@ -9,31 +9,25 @@ let state = {
     average_rmssd: 0,
 }
 
-function getThisWeeksWeekdays() {
-    const now = new Date();
-    const day = now.getDay();
-    const diffToMonday = day === 0 ? -6 : 1 - day;
-  
-    const monday = new Date(now);
-    monday.setDate(now.getDate() + diffToMonday);
-  
-    const weekdays = [];
-  
-    for (let i = 0; i < 7; i++) {
-      const date = new Date(monday);
-      date.setDate(monday.getDate() + i);
-      weekdays.push(date.toISOString().slice(0, 10)); // 'YYYY-MM-DD'
-    }
-  
-    return weekdays;
+let current_diary = {
+    id: null,
 }
 
 let open = false;
 
-function openImportDiaryEntry(entry) {
-    console.log(entry);
+function openImportDiaryEntry(data) {
+    current_diary.id = null
 
-    const diaryContent = document.getElementById("diary-content")
+    if(data.id) {
+        current_diary.id = data.id
+    }
+
+    document.getElementById("date-picker").value = data.date
+    document.getElementById("stress").value = data.stress
+    document.getElementById("pain").value = data.pain
+    document.getElementById("stiffness").value = data.stiffness
+    document.getElementById("sleep").value = data.sleep
+    document.getElementById("notes").value = data.notes
 
     if(!open) {
         toggleDiary();
@@ -48,12 +42,12 @@ async function toggleDiary() {
         if(open) {
             document.getElementById('diary-modal').classList.remove('hidden')
             panel.classList.add("xl:w-xl")
-            panel.classList.add("xl:h-[1100px]")
+            panel.classList.add("xl:h-[970px]")
         }
         else {
             document.getElementById('diary-modal').classList.add('hidden')
             panel.classList.remove("xl:w-xl")
-            panel.classList.remove("xl:h-[1100px]")
+            panel.classList.remove("xl:h-[970px]")
         }
     });
 }
@@ -68,56 +62,24 @@ async function saveDiaryEntry(e) {
         pain_points_values.push(document.getElementById(pain_point).checked);
     });
 
-    // TODO: Take value from date picker
-    const today = new Date('2025-12-26').toISOString().slice(0, 10);
-
-    postOrUpdateEntry(
-        today,
-        pain_points_values,
-        document.getElementById("stress").value,
-        document.getElementById("pain").value,
-        document.getElementById("stiffness").value,
-        document.getElementById("sleep").value,
-        document.getElementById("notes").value
-    )
-}
-
-
-async function postOrUpdateEntry(date, pain_points, stress, pain, stiffness, sleep, notes) {
-    let id;
-
-    const entries = await getDiary();
-
-    for(const entry of entries) {
-        const rawDate = entry.entry_date;
-        const formatted = dayjs(rawDate).format('YYYY-MM-DD');
-
-        if(formatted == date) {
-            id = entry.entry_id;
-            console.log("already found");
-            break;
-        }
-    }
-
-    let result;
-    if(id) {
-        result = await updateDiary(
-            id,
-            stress,
-            pain,
-            stiffness,
-            sleep,
-            notes,
+    if(current_diary.id) {
+        await updateDiary(
+            current_diary.id,
+            document.getElementById("stress").value,
+            document.getElementById("pain").value,
+            document.getElementById("stiffness").value,
+            document.getElementById("sleep").value,
+            document.getElementById("notes").value
         )
     }
     else {
-        result = await postDiary(
-            stress,
-            pain,
-            stiffness,
-            sleep,
-            notes,
-            date
+        await postDiary(
+            document.getElementById("stress").value,
+            document.getElementById("pain").value,
+            document.getElementById("stiffness").value,
+            document.getElementById("sleep").value,
+            document.getElementById("notes").value,
+            document.getElementById("date-picker").value,
         )
     }
 }
@@ -150,8 +112,6 @@ async function generateThisWeekGraph() {
             }
         }
     });
-
-    console.log(chart_data);
 
     const sum = (total, number) => total + number;
     const average = chart_data.reduce(sum) / chart_data.length;
@@ -218,19 +178,65 @@ async function generateThisWeekGraph() {
     });
 }
 
-function generateThisWeekEntries(e) {
+function getThisWeeksWeekdays() {
+    const now = new Date();
+    const day = now.getDay();
+    const diffToMonday = day === 0 ? -6 : 1 - day;
+  
+    const monday = new Date(now);
+    monday.setDate(now.getDate() + diffToMonday);
+  
+    const weekdays = [];
+  
+    for (let i = 0; i < 7; i++) {
+      const date = new Date(monday);
+      date.setDate(monday.getDate() + i);
+      weekdays.push(date.toISOString().slice(0, 10)); // 'YYYY-MM-DD'
+    }
+  
+    return weekdays;
+}
+
+async function generateThisWeekEntries(e) {
+    const entries = await getDiary();
+
     const weekDays = getWeekDays();
     let today = new Date().getDay();
 
     // Convert to managable index
     if(today == 0)
-        today = 6;
+        today = 7;
 
     const widget = document.getElementById("week-calendar");
-
     for(let i = 0; i < weekDays.length; i++) {
         const div = document.createElement('div')
         div.classList.add("text-gray-900")
+
+        const found_entry = entries.find(entry => {
+            return entry.entry_date == weekDays[i].full_date
+        });
+
+        let data = {
+            date: weekDays[i].full_date,
+            pain: 5,
+            stress: 5,
+            stiffness: 5,
+            sleep: 5,
+            notes: "",
+        };
+
+        if(found_entry) {
+            data = {
+                date: found_entry.entry_date,
+                pain: found_entry.pain_gauge,
+                stress: found_entry.stress_gauge,
+                stiffness: found_entry.stiffness_gauge,
+                sleep: found_entry.sleep_gauge,
+                notes: found_entry.notes,
+
+                id: found_entry.entry_id
+            }
+        }
 
         let highlight = false;
 
@@ -292,7 +298,7 @@ function generateThisWeekEntries(e) {
 
                 div.open = true;
 
-                openImportDiaryEntry(i);
+                openImportDiaryEntry(data);
             }
 
             for (let child of widget.children) {
@@ -325,8 +331,9 @@ function getWeekDays() {
   
       const weekday = weekdaysFI[day.getDay()];
       const date = day.getDate(); // just the day number
+      const full_date = day.toISOString().slice(0, 10)
   
-      week.push({ weekday, date });
+      week.push({ weekday, date, full_date});
     }
   
     return week;

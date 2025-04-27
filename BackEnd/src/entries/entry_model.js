@@ -56,7 +56,6 @@ export const insertEntry = async (user, body) => {
     if(body.entry_date)
         entry_date = body.entry_date;
 
-    console.log(entry_date);
     const params = [user.user_id, entry_date, body.stress, body.pain, body.stiffness, body.sleep, body.notes]
 
     try {
