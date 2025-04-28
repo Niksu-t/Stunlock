@@ -133,6 +133,8 @@ export async function getAllKubiosResults(token) {
             return response.json();
         })
 
+    console.log(data)
+
     return data;
 }
 

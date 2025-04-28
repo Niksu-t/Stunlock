@@ -14,6 +14,7 @@ Activate virtual enviornment and install dependencies:
 
 ```shell
 pip install -r requirements.txt
+rfbrowser init
 ```
 
 Run tests:
@@ -26,15 +27,22 @@ Optionally, use the ```-d``` option to set an output directory.
 
 # List of tests
 
+## login.robot
+
 ### Register with Kubios and Careteam
 
 Test registers new user with Kubios user and Careteam
 
-1. Agent clicks on "Liity nyt."
-2. Agent fills in related fields and presses "Jatka.".
-3. Agent chooses Kuopion Yliopistollinen sairaala as care team and presses "Jatka.".
-4. Agent links Kubios-account and presses "Luo käyttäjä.".
-5. Agent waits to be redirected to user dashboard.
+1. Agent fills in related fields and presses "Jatka.".
+2. Agent chooses Kuopion Yliopistollinen sairaala as care team and presses "Jatka.".
+3. Agent links Kubios-account and presses "Luo käyttäjä.".
+4. Agent waits to be redirected to user dashboard.
+
+### Register with duplicate email
+
+1. Agent fills in related fields and presses "Jatka.".
+2. Agent skips careteam and Kubios
+4. Agent attempts to register account and checks for error message 
 
 ### Register without Kubios and Careteam
 

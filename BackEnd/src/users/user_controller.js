@@ -1,8 +1,12 @@
+import jwt from "jsonwebtoken";
+import "dotenv/config";
+
 import { linkKubios } from "../authentication/auth_controller.js";
 import {
   getUserById,
   createUser,
   RegisterResult,
+  selectUserByEmail
 } from "./user_model.js";
 import bcrpyt from "bcryptjs";
 
@@ -44,8 +48,7 @@ export const postUser = async (req, res) => {
       req.body.lname,
       hashed_password,
       req.body.email,
-      kubios_user.email,
-      kubios_user.uuid
+      kubios_user
     );
 
     // Handle registration result
@@ -57,6 +60,20 @@ export const postUser = async (req, res) => {
       if(kubios_user) {
         return_json.kubios_token = kubios_user.id_token;
       }
+
+      const user = await selectUserByEmail(req.body.email);
+
+      const token = jwt.sign(user, process.env.JWT_SECRET, {
+        expiresIn: "24h",
+      });
+
+      res.cookie("auth_token", token, {
+        httpOnly: true,
+        sameSite: "None",
+        secure: true,
+        maxAge: 24 * 60 * 60 * 1000,
+        partitioned: true,
+      })
 
       return res
         .status(201)

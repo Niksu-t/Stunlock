@@ -97,9 +97,11 @@ async function onPageLoad(e) {
 
 async function generateThisWeekGraph() {
     const data = await getAllKubiosResults(localStorage.getItem("kubios_token"));
+    console.log(data)
     let chart_data = [];
 
     const weekdays = getThisWeeksWeekdays();
+    console.log(weekdays)
 
     const ctx = document.getElementById('weekdayChart');
 
@@ -112,6 +114,8 @@ async function generateThisWeekGraph() {
             }
         }
     });
+
+    console.log(chart_data)
 
     const sum = (total, number) => total + number;
     const average = chart_data.reduce(sum) / chart_data.length;
@@ -178,10 +182,10 @@ async function generateThisWeekGraph() {
     });
 }
 
-function getThisWeeksWeekdays() {
+function getThisWeeksWeekdays(weeks_ago = 0) {
     const now = new Date();
     const day = now.getDay();
-    const diffToMonday = day === 0 ? -6 : 1 - day;
+    const diffToMonday = day === 0 ? -6 : 1 - day - weeks_ago * 7;
   
     const monday = new Date(now);
     monday.setDate(now.getDate() + diffToMonday);
