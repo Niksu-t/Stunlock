@@ -113,7 +113,10 @@ export const getMe = async (req, res) => {
     let response = req.user;
     delete response.password;
 
-    res.json({ user: response });
+    return res
+      .status(200)
+      .contentType("application/json")
+      .json({ user: response });
   } else {
     res.sendStatus(401);
   }
@@ -193,6 +196,8 @@ export const logOut = async (req, res) => {
 
   res.clearCookie("auth_token");
 
-  console.log("Log out successfull");
-
+  return res
+    .status(200)
+    .contentType("application/json")
+    .json("Logout successfull");
 };
