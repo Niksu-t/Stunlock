@@ -192,9 +192,14 @@ export const linkKubios = async (email, password) => {
 
 export const logOut = async (req, res) => {
   
-  console.log("Loggin user out");
+  console.log("logOut request");
 
-  res.clearCookie("auth_token");
+  res.clearCookie("auth_token", {
+    httpOnly: true,
+    sameSite: "None",
+    secure: true,
+    partitioned: true,
+  });
 
   return res
     .status(200)

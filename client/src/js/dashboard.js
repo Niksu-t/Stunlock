@@ -249,42 +249,39 @@ async function generateThisWeekEntries(e) {
         }
 
         if(highlight) {
-            div.classList.add("flex", "group", "bg-brand-red", "shadow-lg", "dark-shadow", "rounded-full", "mx-1", "cursor-pointer", "justify-center", "relative", "w-16");
-
-            div.today = true;
+            div.classList.add("text-white","flex", "group", "text-gray-100", "hover:bg-brand-red", "bg-brand-red", "rounded-full", "mx-1", "cursor-pointer", "justify-center", "relative", "w-16", "shadow-offset-4", "transition-all", "duration-200");
 
             div.innerHTML = `
             <span class="flex h-2 w-2 absolute bottom-1.5 ">
-              <span class="animate-ping absolute group-hover:opacity-75 opacity-0 inline-flex h-full w-full rounded-full bg-brand-red "></span>
-              <span class="relative inline-flex rounded-full h- w-3 bg-purple-100"></span>
+            <span class="animate-ping absolute group-hover:opacity-75 opacity-0 inline-flex h-full w-full rounded-full bg-brand-red "></span>
+            <span class="relative inline-flex rounded-full h- w-3 bg-brand-dark"></span>
             </span>
-              <div class='flex items-center px-4 my-2 py-4'>
-                  <div class='text-center'>
-                     <p class='text-gray-100 text-sm font-semibold'> ${weekDays[i].weekday} </p>
-                     <p class='text-gray-100  mt-3 font-bold'> ${weekDays[i].date} </p>
-                  </div>
-              </div>
+            <div class='flex items-center px-4 my-2 py-4'>
+                <div class='text-center'>
+                    <p class='group-hover:text-gray-100 text-xl transition-all group-hover:font-semibold duration-200'> ${weekDays[i].date} </p>
+                    <p class='group-hover:text-gray-100 mt-3 group-hover:font-bold transition-all duration-200'> ${weekDays[i].weekday} </p>
+                </div>
+            </div>
             `
         }
         else {
-            div.classList.add("not-today", "flex", "group", "hover:bg-brand-red", "hover:shadow-lg", "hover-dark-shadow", "rounded-full", "mx-1", "cursor-pointer", "transition-all", "duration-300", "justify-center", "w-16")
+            div.classList.add("bg-white", "flex", "group", "hover:bg-brand-red", "hover:shadow-lg", "hover-dark-shadow", "rounded-full", "mx-1", "cursor-pointer", "transition-all", "duration-200", "justify-center", "w-16", "shadow-offset-4")
 
             div.innerHTML = `
             <div class='flex items-center px-4 py-4'>
                 <div class='text-center'>
-                    <p class='group-hover:text-gray-100 text-sm transition-all group-hover:font-semibold duration-300'> ${weekDays[i].weekday} </p>
-                    <p class='group-hover:text-gray-100 mt-3 group-hover:font-bold transition-all duration-300'> ${weekDays[i].date} </p>
+                    <p class='group-hover:text-gray-100 font-semibold text-xl group-hover:font-bold transition-all duration-300'> ${weekDays[i].date} </p>
+                    <p class='group-hover:text-gray-100 mt-3 transition-all group-hover:font-semibold duration-300'> ${weekDays[i].weekday} </p>
                 </div>
             </div>
             `
         }
 
         const close = (div) => {
-            if(!div.today) {
-                div.classList.add("text-gray-900");
-                div.classList.remove("text-gray-100");
-                div.classList.remove("bg-brand-red");
-            }
+            div.classList.add("bg-white");
+            div.classList.add("text-gray-900");
+            div.classList.remove("text-white");
+            div.classList.remove("bg-brand-red");
         } 
 
         div.addEventListener('click', (e) => {
@@ -297,7 +294,8 @@ async function generateThisWeekEntries(e) {
             }
             else {                              
                 div.classList.remove("text-gray-900");
-                div.classList.add("text-gray-100");
+                div.classList.remove("bg-white");
+                div.classList.add("text-white");
                 div.classList.add("bg-brand-red");
 
                 div.open = true;
@@ -306,12 +304,11 @@ async function generateThisWeekEntries(e) {
             }
 
             for (let child of widget.children) {
-                if(child.classList.contains("not-today") && child != div) {
+                if(child != div) {
                     close(child);
                     child.open = false;
                 }
             }
-
         });
 
         widget.appendChild(div);

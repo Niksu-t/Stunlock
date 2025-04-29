@@ -32,7 +32,7 @@ non_protected_routes.forEach(page => {
   });
 });
 
-const login_protected_routes = ["dashboard"];
+const login_protected_routes = ["dashboard", "settings"];
 
 login_protected_routes.forEach(page => {
   app.get(`/${page}`, async (req, res) => {
