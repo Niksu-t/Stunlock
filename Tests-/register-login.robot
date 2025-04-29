@@ -48,3 +48,13 @@ Duplicate User Registration
     # TODO: Make error messages
 
     Log    Registration not successfull due to duplicate email, test passed.
+
+Successfull Login
+    New Browser    chromium    headless=No
+    New Page    ${BASE_URL}/login
+    Type Text    [id="email"]    ${EMAIL}    delay=0.1 s
+    Type Secret    [id="password"]    $PASSWORD    delay=0.1 s
+    Click With Options    submit    delay=2 s
+
+    Wait For Navigation    ${BASE_URL}/dashboard    timeout=10 s
+    Log    Login successful, test passed.
