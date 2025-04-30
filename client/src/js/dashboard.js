@@ -1,7 +1,5 @@
-import Chart from 'chart.js/auto';
-import annotationPlugin from 'chartjs-plugin-annotation';
-import dayjs from 'dayjs';
-
+import { getWeekDays } from './utils';
+import { generateThisWeekGraph } from './graphs';
 import { postDiary, getDiary, updateDiary, getAllKubiosResults } from "./fetch-api";
 
 let state = {
@@ -48,6 +46,8 @@ async function toggleDiary() {
             document.getElementById('diary-modal').classList.add('hidden')
             panel.classList.remove("xl:w-xl")
             panel.classList.remove("xl:h-[970px]")
+
+            onDiaryClose(null)
         }
     });
 }
@@ -82,6 +82,8 @@ async function saveDiaryEntry(e) {
             document.getElementById("date-picker").value,
         )
     }
+
+    toggleDiary();
 }
 
 async function onPageLoad(e) {
@@ -90,115 +92,32 @@ async function onPageLoad(e) {
     welcome_text.innerHTML = `${localStorage.getItem("user_fname")}`;
 
     generateThisWeekEntries(e)
-    await generateThisWeekGraph();
+
+    const data = await getAllKubiosResults(localStorage.getItem("kubios_token"))
+    const graph_result = await generateThisWeekGraph(state, document.getElementById('weekdayChart'), data);
 
     document.getElementById("weekly-avg").innerHTML = state.average_rmssd.toFixed(1);
 }
 
-async function generateThisWeekGraph() {
-    const data = await getAllKubiosResults(localStorage.getItem("kubios_token"));
-    console.log(data)
-    let chart_data = [];
-
-    const weekdays = getThisWeeksWeekdays();
-    console.log(weekdays)
-
-    const ctx = document.getElementById('weekdayChart');
-
-    let i = 0;
-    weekdays.forEach(date => {
-        if(data.Data[i]) {
-            if(date == data.Data[i].date) {
-                chart_data.push(data.Data[i].rmssd_ms);
-                i++;
-            }
-        }
-    });
-
-    console.log(chart_data)
-
-    const sum = (total, number) => total + number;
-    const average = chart_data.reduce(sum) / chart_data.length;
-
-    state.average_rmssd = average;
 
 
-    const annotation = {
-        type: 'line',
-        borderColor: 'rgba(109, 186, 161, 1)',
-        borderDash: [6, 6],
-        borderDashOffset: 0,
-        borderWidth: 3,
-        label: {
-          enabled: true,
-          content: null,
-          position: 'end'
-        },
-        scaleID: 'y',
-        value: average
-      };
 
-    new Chart(ctx, {
-        type: 'bar',
-        data: {
-        labels: ['ma', 'ti', 'ke', 'to', 'pe', 'la', 'su'],
-        datasets: [{
-            label: 'RMSSD',
-            data: chart_data,
-            backgroundColor: 'rgba(247, 108, 94, 1)',
-            fill: true,
-            tension: 0.3,
-            pointRadius: 5,
-            pointHoverRadius: 7
-        }]
-        },
-        options: {
-            maintainAspectRatio: false,
-
-            plugins: {
-                legend: {
-                display: false
-                },
-                tooltip: {
-                mode: 'index',
-                intersect: false
-                },
-
-                annotation: {
-                    annotations: {
-                      annotation
-                    }
-                  }
-            },
-
-            scales: {
-                x: {
-                    grid: {
-                        display: false
-                    }
-                }
-            }
-        }
-    });
+function resetDiaryWidget(div) {
+    div.classList.add("bg-white");
+    div.classList.add("text-gray-900");
+    div.classList.remove("text-white");
+    div.classList.remove("bg-brand-red");
 }
 
-function getThisWeeksWeekdays(weeks_ago = 0) {
-    const now = new Date();
-    const day = now.getDay();
-    const diffToMonday = day === 0 ? -6 : 1 - day - weeks_ago * 7;
-  
-    const monday = new Date(now);
-    monday.setDate(now.getDate() + diffToMonday);
-  
-    const weekdays = [];
-  
-    for (let i = 0; i < 7; i++) {
-      const date = new Date(monday);
-      date.setDate(monday.getDate() + i);
-      weekdays.push(date.toISOString().slice(0, 10)); // 'YYYY-MM-DD'
+function onDiaryClose(currently_active) {
+    const widget = document.getElementById("week-calendar");
+
+    for (let child of widget.children) {
+        if(child != currently_active) {
+            resetDiaryWidget(child);
+            child.open = false;
+        }
     }
-  
-    return weekdays;
 }
 
 async function generateThisWeekEntries(e) {
@@ -277,18 +196,11 @@ async function generateThisWeekEntries(e) {
             `
         }
 
-        const close = (div) => {
-            div.classList.add("bg-white");
-            div.classList.add("text-gray-900");
-            div.classList.remove("text-white");
-            div.classList.remove("bg-brand-red");
-        } 
-
         div.addEventListener('click', (e) => {
             if(div.open) {
                 div.open = false
 
-                close(div);
+                resetDiaryWidget(div);
 
                 toggleDiary();
             }
@@ -303,47 +215,14 @@ async function generateThisWeekEntries(e) {
                 openImportDiaryEntry(data);
             }
 
-            for (let child of widget.children) {
-                if(child != div) {
-                    close(child);
-                    child.open = false;
-                }
-            }
+            onDiaryClose(div);
         });
 
         widget.appendChild(div);
     }
 }
 
-function getWeekDays() {
-    const today = new Date();
-    const dayOfWeek = today.getDay(); // 0 = Sunday
-    const monday = new Date(today);
-    const diffToMonday = (dayOfWeek + 6) % 7;
-    monday.setDate(today.getDate() - diffToMonday);
-  
-    const weekdaysFI = ['su', 'ma', 'ti', 'ke', 'to', 'pe', 'la'];
-  
-    const week = [];
-  
-    for (let i = 0; i < 7; i++) {
-      const day = new Date(monday);
-      day.setDate(monday.getDate() + i);
-  
-      const weekday = weekdaysFI[day.getDay()];
-      const date = day.getDate(); // just the day number
-      const full_date = day.toISOString().slice(0, 10)
-  
-      week.push({ weekday, date, full_date});
-    }
-  
-    return week;
-}
-
-// TODO: Add entry widget
-//document.getElementById("submit-diary").addEventListener("click", postOrUpdateEntry);
-Chart.register(annotationPlugin);
-
 addEventListener('userdata', onPageLoad)
 
 document.getElementById("diaryentry").addEventListener("submit", saveDiaryEntry);
+document.getElementById("close-diary").addEventListener("click", toggleDiary)

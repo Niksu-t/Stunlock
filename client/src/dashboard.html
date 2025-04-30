@@ -30,12 +30,12 @@
     <section class="bg-brand-green text-white pt-10 flex flex-col gap-5 relative overflow-x-hidden justify-center p-5
     xl:flex-row">
         <div id="diary-modal" class="fixed xl:static inset-0 xl:inset-auto bg-black/50 xl:bg-opacity-0 flex justify-center z-10 overflow-y-auto p-10
-        xl:block hidden xl:flex xl:items-start xl:justify-start xl:bg-transparent xl:p-0">
+        xl:block hidden xl:items-start xl:justify-start xl:bg-transparent xl:p-0">
             <div id="diary-entry" class="bg-white transition-all duration-300 w-xl h-[970px] rounded-2xl overflow-hidden text-brand-dark shadow-offset-4 max-w-fit
             xl:w-0 xl:h-0">
                 <div class="p-5 flex flex-col">
                     <div class="flex flex-row items-center">
-                        <img src="https://www.svgrepo.com/show/521481/arrow-prev-small.svg" class="w-10 cursor-pointer no-drag"/>
+                        <img id="close-diary" src="https://www.svgrepo.com/show/521481/arrow-prev-small.svg" class="w-10 cursor-pointer no-drag"/>
                         <h1 class="text-brand-dark text-xl rounded-4xl p-1 px-4 max-w-fit shadow-offset-4">Päiväkirja.</h1>
                         <input type="date" id="date-picker" class="ml-auto"/>
                     </div>
@@ -148,7 +148,7 @@
                                 <!--notes-->
                                 <label for="notes">Muistiinpanot.</label>
                                 <textarea class="w-full min-h-[80px] py-2 resize-none p-4 bg-transparent placeholder:text-slate-400 text-slate-600 text-sm border border-slate-200 rounded-md transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow" placeholder="Miten päiväsi on mennyt?" type="text" id="notes" name="notes"></textarea>
-                                <input class="bg-brand-red text-white rounded-4xl p-2 px-4 shadow-offset-4" type="submit" value="Tallenna">
+                                <input class="bg-brand-red text-white rounded-4xl p-2 px-4 shadow-offset-4 cursor-pointer" type="submit" value="Tallenna">
                             </div>
                         </div>                
                     </form>
