@@ -26,7 +26,7 @@ export async function generateThisWeekGraph(state, data, ctx) {
     });
 
     if(!chart_data.length) {
-        return
+        return EmptyDataset
     }
 
     const sum = (total, number) => total + number;

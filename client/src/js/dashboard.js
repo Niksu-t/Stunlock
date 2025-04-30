@@ -94,7 +94,7 @@ async function onPageLoad(e) {
     generateThisWeekEntries(e)
 
     const data = await getAllKubiosResults(localStorage.getItem("kubios_token"))
-    const graph_result = await generateThisWeekGraph(state, document.getElementById('weekdayChart'), data);
+    const graph_result = await generateThisWeekGraph(state, data, document.getElementById('weekdayChart'));
 
     document.getElementById("weekly-avg").innerHTML = state.average_rmssd.toFixed(1);
 }
