@@ -4,6 +4,7 @@ import {v4} from 'uuid';
 
 import { resultSelf } from "./kubios_model.js";
 import { customError } from "../utils/error.js";
+import { linkKubios } from "../authentication/auth_controller.js";
 
 
 function isOnWeeksAgo(dateStr, num_of_weeks = 0) {
@@ -25,6 +26,23 @@ function isOnWeeksAgo(dateStr, num_of_weeks = 0) {
 
   return dateStr >= startOfTargetWeek && dateStr <= endOfTargetWeek;
 }
+
+export const validateKubios = async (req, res) => {
+  const login_result = await linkKubios(req.body.kubios_email, req.body.kubios_password);
+
+  if(!login_result) {
+    return res
+      .status(400)
+      .contentType("application/json")
+      .json({ message: "Login failed" });
+  }
+
+  return res
+    .status(200)
+    .contentType("application/json")
+    .json({ message: "Kubios account found" })
+
+} 
 
 export const getAllResults = async (req, res) => {
   console.log("Kubios token: ", req.headers["authorization"]);

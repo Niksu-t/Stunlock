@@ -11,10 +11,16 @@ import {
 import bcrpyt from "bcryptjs";
 
 export const validateInput = async (req, res, next) => {
-  const user = selectUserByEmail(req.body.email);
+  const user = await selectUserByEmail(req.body.email);
+
   if(user) {
-    next(new Error("Email already in use"));
+    return next(new Error("Email already in use"));
   }
+
+  return res
+    .status(200)
+    .contentType("application/json")
+    .json({ message: "Validation successfull" });
 }
 
 export const getUser = async (req, res) => {

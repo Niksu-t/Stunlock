@@ -1,6 +1,5 @@
 import Chart from 'chart.js/auto';
 import annotationPlugin from 'chartjs-plugin-annotation';
-import dayjs from 'dayjs';
 
 import { getThisWeeksWeekdays } from "./utils";
 import { getAllKubiosResults } from "./fetch-api";

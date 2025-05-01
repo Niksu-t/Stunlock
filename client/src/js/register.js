@@ -1,8 +1,8 @@
-import { renderPage } from './register-router';
-import { postRegisterUser, postValidateRegister } from './fetch-api';
-import { Register } from './views/register-view';
+import { renderPage } from './register-router.js';
+import { postRegisterUser, postValidateRegister } from './fetch-api.js';
+import { Register } from './views/register-view.js';
 
-let state = {
+export const state = {
     currentPage: null,
     fname: "",
     lname: "",
@@ -10,6 +10,27 @@ let state = {
     password: "",
     kubios_email: "",
     kubios_password: ""
+}
+
+export function reset_error(key) {
+    const error_message = document.getElementById(`${key}-error`);
+    error_message.classList.add("invisible")
+
+    const widget = document.getElementById(key);
+    widget.classList.remove("border-brand-red");
+    widget.classList.add("border-transparent");
+}
+
+export function set_error(key, error) {
+    if(error) {
+        const error_message = document.getElementById(`${key}-error`);
+        error_message.classList.remove("invisible")
+        error_message.innerHTML = error
+    }
+
+    const widget = document.getElementById(key);
+    widget.classList.add("border-brand-red")
+    widget.classList.remove("border-transparent");
 }
 
 /**
@@ -36,38 +57,22 @@ export async function registerUser(event) {
     }
 }
 
-export async function tryRenderPage(next_page, current_page) {
+export async function tryRenderPage(next_page, current_page, validateCallback) {
     current_page.SaveState(state);
 
-    if(!current_page.validateInput(state)) {
+    if(!current_page.ValidateInput(state)) {
         return false
     }
 
-    const response = await postValidateRegister(
-        state.fname,
-        state.lname,
-        state.email,
-        state.password,
-        state.kubios_email,
-        state.kubios_password
-    )
+    const response = await validateCallback(state)
+
+    if(response.ok) {
+        renderPage(next_page);
+    }
+    else {
+        const json = await response.json();
+        current_page.ServerSideValidation(json.errors);
+    }
 }
 
 renderPage(Register, state);
-
-
-
-// SPA router things
-
-// Listen to browser navigation events
-window.addEventListener('popstate', () => {
-    renderPage(window.location.pathname);
-  });
-  
-// Handle client-side navigation
-window.renderPage = function(event, page) {
-event.preventDefault();
-renderPage(page, state);
-};
-
-

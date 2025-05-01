@@ -1,5 +1,9 @@
+import { tryRenderPage } from "../register";
 import { Careteam } from "./careteam-view";
 import { Summary } from "./summary-view";
+import { renderPage } from "../register-router";
+import { postValidateKubios } from "../fetch-api";
+import { set_error, reset_error } from "../register";
 
 export const Kubios = {
     Render(state) {
@@ -15,12 +19,15 @@ export const Kubios = {
             <div class="flex flex-col gap-8">
                 <div>
                     <label for="email">Kubios sähköposti.</label><br>
-                    <input class="inset-shadow-2xs bg-gray-100 rounded p-2 w-full mt-2" type="text" id="email" name="email" value="${state.kubios_email}">
+                    <input class="inset-shadow-2xs bg-gray-100 rounded p-2 w-full mt-2 border-transparent border-4 border-solid" type="text" id="email" name="email" value="${state.kubios_email}">
+
                 </div>
                 <div>
                     <label for="password">Kubios salasana.</label><br>
-                    <input class="inset-shadow-2xs bg-gray-100 rounded p-2 w-full mt-2" type="password" id="password" name="password" value="${state.kubios_password}">
+                    <input class="inset-shadow-2xs bg-gray-100 rounded p-2 w-full mt-2 border-transparent border-4 border-solid" type="password" id="password" name="password" value="${state.kubios_password}">
                 </div>
+                <p class="text-brand-red invisible h-5" id="error">-</p>
+
             </div>
             <div class="flex flex-row gap-2">
                 <button id="nav-careteam" class="bg-brand-red text-white rounded-4xl p-2 px-4 shadow-offset-4 cursor-pointer">Takaisin.</button>
@@ -40,20 +47,38 @@ export const Kubios = {
         const skip = document.getElementById('skip');
 
         nav_careteam.addEventListener("click", (e) => {
-            renderPage(e, Careteam)
+            renderPage(Careteam)
         });
 
         nav_summary.addEventListener("click", (e) => {
-            renderPage(e, Summary)
+            tryRenderPage(Summary, this, postValidateKubios)
         });
 
         skip.addEventListener("click", (e) => {
-            renderPage(e, Summary)
+            renderPage(Summary)
         });
     },
 
-    OnPageChange(state) {
+    ValidateInput(state) {
+        return true
+    },
+
+    ServerSideValidation(errors) {
+        const error_message = document.getElementById("error");
+        error_message.classList.remove("invisible")
+
+        set_error("email")
+        set_error("password")
+
+        error_message.innerHTML = "Kubios tilin kirjautuminen epäonnistui."
+    },
+
+    SaveState(state) {
         state.kubios_email = document.getElementById("email").value.trim();
         state.kubios_password = document.getElementById("password").value.trim();
+    },
+
+    OnPageChange(state) {
+
     }
 };

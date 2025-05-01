@@ -1,5 +1,6 @@
 import { Register } from "./register-view";
 import { Kubios } from "./kubios-view";
+import { renderPage } from "../register-router";
 
 export const Careteam = {
     Render(state) {
@@ -39,18 +40,18 @@ export const Careteam = {
         nav_register.addEventListener("click", (e) => {
             e.preventDefault();
 
-            renderPage(e, Register)
+            renderPage(Register)
         });
         nav_link_api.addEventListener("click", (e) => {
             e.preventDefault();
 
-            renderPage(e, Kubios)
+            renderPage(Kubios)
         });
 
         skip.addEventListener("click", (e) => {
             e.preventDefault();
 
-            renderPage(e, Kubios)
+            renderPage(Kubios)
         })
 
 

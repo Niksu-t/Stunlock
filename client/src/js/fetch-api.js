@@ -17,34 +17,50 @@ export async function postRegisterUser(fname, lname, email, password, kubios_ema
         })
     })
     .then((response) => {
-        if(!response.ok) {
-            throw new Error("Connection error")
-        }
         return response.json();
     })
 
     return response;
 }
 
-export async function postValidateRegister(fname, lname, email, password, kubios_email, kubios_password) {
-    console.log(fname, lname, email, password);
+export async function postValidateRegister(state) {
     const response = await fetch("api/users/validate", {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-            fname,
-            lname,
-            email,
-            password,
-            kubios_email,
-            kubios_password
+            fname: state.fname,
+            lname: state.lname,
+            email: state.email,
+            password: state.password,
         })
     })
     .then((response) => {
-        if(!response.ok) {
-            throw new Error("Connection error")
-        }
-        return response.json();
+        return response;
+    })
+
+    return response;
+}
+
+export async function getLogout() {
+    const response = await fetch("api/auth/logout")
+    .then((response) => {
+        return response;
+    })
+
+    return response;
+}
+
+export async function postValidateKubios(state) {
+    const response = await fetch("api/kubios/validate", {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            kubios_email: state.kubios_email,
+            kubios_password: state.kubios_password,
+        })
+    })
+    .then((response) => {
+        return response;
     })
 
     return response;

@@ -1,4 +1,6 @@
-export function renderPage(path, state) {
+import { state } from "./register";
+
+export function renderPage(path) {
     // Save current page register state
     if(state.currentPage) {
         state.currentPage.OnPageChange(state);

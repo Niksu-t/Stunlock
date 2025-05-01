@@ -86,12 +86,14 @@ async function saveDiaryEntry(e) {
     toggleDiary();
 }
 
-async function onPageLoad(e) {
+async function onPageLoad() {
+    console.log("loaded")
+
     const welcome_text = document.getElementById("welcome-text");
 
     welcome_text.innerHTML = `${localStorage.getItem("user_fname")}`;
 
-    generateThisWeekEntries(e)
+    generateThisWeekEntries()
 
     const data = await getAllKubiosResults(localStorage.getItem("kubios_token"))
     const graph_result = await generateThisWeekGraph(state, data, document.getElementById('weekdayChart'));
@@ -120,7 +122,7 @@ function onDiaryClose(currently_active) {
     }
 }
 
-async function generateThisWeekEntries(e) {
+async function generateThisWeekEntries() {
     const entries = await getDiary();
 
     const weekDays = getWeekDays();

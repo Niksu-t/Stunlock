@@ -1,5 +1,6 @@
 import { Kubios } from "./kubios-view";
 import { registerUser } from "../register";
+import { renderPage } from "../register-router";
 
 export const Summary = {
     Render(state) {
@@ -28,7 +29,7 @@ export const Summary = {
         const nav_link_api = document.getElementById('nav-link-api');
 
         nav_link_api.addEventListener("click", (e) => {
-            renderPage(e, Kubios)
+            renderPage(Kubios)
         });
 
         document.getElementById("register")
@@ -37,7 +38,7 @@ export const Summary = {
         const register = document.getElementById('register');
 
         register.addEventListener("click", (e) => {
-
+            registerUser(e);
         });
     },
 

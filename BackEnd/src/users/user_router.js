@@ -1,11 +1,9 @@
 import express from "express";
 import { body } from "express-validator";
 
+import { selectUserByEmail } from "./user_model.js";
 import { postUser, getUser, validateInput } from "./user_controller.js";
-import {
-  authenticateToken,
-  authorizeUser,
-} from "../authentication/auth_middleware.js";
+import { authenticateToken, authorizeUser } from "../authentication/auth_middleware.js";
 import { validationErrorHandler } from "../utils/error.js";
 
 export const userRouter = express.Router();
@@ -55,7 +53,15 @@ userRouter
       .trim()
       .isLength({ min: 8, max: 128 })
       .isEmail()
-      .normalizeEmail(),
+      .normalizeEmail()
+      .custom(async (email) => {
+        const user = await selectUserByEmail(email);
+      
+        if(user) {
+          throw new Error("Email already in use");
+        }
+        return true;
+      }),
     body("role").optional(),
     body("careteam").optional(),
     validationErrorHandler,
