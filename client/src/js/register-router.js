@@ -1,7 +1,3 @@
-import { Register } from "./views/register-view.js";
-import { Careteam } from "./views/careteam-view.js";
-
-
 export function renderPage(path, state) {
     // Save current page register state
     if(state.currentPage) {

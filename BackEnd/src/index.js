@@ -22,10 +22,22 @@ APP.use(express.static("dist"));
 // For documentation of server
 APP.use("/docs", express.static("docs"));
 
+const allowedOrigins = [
+  "http://localhost:5173",
+  "http://localhost:3001",
+];
+
 APP.use(express.json())
   .use(
     cors({
-      origin: "http://localhost:5173",
+      origin: (origin, callback) => {
+        // Allow requests with no origin (like mobile apps or curl requests)
+        if (!origin || allowedOrigins.includes(origin)) {
+          callback(null, true);
+        } else {
+          callback(new Error("Not allowed by CORS"));
+        }
+      },
       credentials: true,
     })
   )

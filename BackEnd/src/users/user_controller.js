@@ -10,6 +10,13 @@ import {
 } from "./user_model.js";
 import bcrpyt from "bcryptjs";
 
+export const validateInput = async (req, res, next) => {
+  const user = selectUserByEmail(req.body.email);
+  if(user) {
+    next(new Error("Email already in use"));
+  }
+}
+
 export const getUser = async (req, res) => {
   console.log("getUsers request: ", req.params.id);
 

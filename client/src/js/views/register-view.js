@@ -1,3 +1,4 @@
+import { tryRenderPage } from "../register";
 import { Careteam } from "./careteam-view";
 
 export const Register = {
@@ -31,6 +32,7 @@ export const Register = {
             <div class="flex flex-row gap-2">
                 <button id="nav-button" class="bg-brand-red text-white rounded-4xl p-2 px-4 shadow-offset-4 cursor-pointer">Jatka</button>
             </div>
+            <p id="error"></p>
     
             <div class="text-center">
                 <p>Onko jo käyttäjä? <a href="/login" class="text-brand-red underline">Kirjaudu</a>.</p>
@@ -41,15 +43,34 @@ export const Register = {
 
     AfterRender() {
         const nav_button = document.getElementById("nav-button");
-        nav_button.addEventListener("click", (e) => {
-            renderPage(e, Careteam)
+        nav_button.addEventListener("click", async (e) => {
+            const validation_result = await tryRenderPage(Careteam, this);
         })
+    },
+
+    validateInput(state) {
+        const keys = ["fname", "lname", "email", "password"]
+
+        // TODO: Make this validation work 
+        keys.forEach(key => {
+            console.log(state[key])
+        }); 
+
+        document.getElementById("error").innerHTML = "Error";
+        return false
+    },
+
+    SaveState(state) {
+        state.fname = document.getElementById("fname").value.trim();
+        state.lname = document.getElementById("lname").value.trim();
+        state.email = document.getElementById("email").value.trim();
+        state.password = document.getElementById("password").value.trim(); 
     },
 
     OnPageChange(state) {
         state.fname = document.getElementById("fname").value.trim();
         state.lname = document.getElementById("lname").value.trim();
         state.email = document.getElementById("email").value.trim();
-        state.password = document.getElementById("password").value.trim();        
+        state.password = document.getElementById("password").value.trim();   
     }
 }

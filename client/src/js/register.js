@@ -1,5 +1,5 @@
 import { renderPage } from './register-router';
-import { postRegisterUser } from './fetch-api';
+import { postRegisterUser, postValidateRegister } from './fetch-api';
 import { Register } from './views/register-view';
 
 let state = {
@@ -34,6 +34,23 @@ export async function registerUser(event) {
     if(response) {
         window.location.href = "/dashboard";
     }
+}
+
+export async function tryRenderPage(next_page, current_page) {
+    current_page.SaveState(state);
+
+    if(!current_page.validateInput(state)) {
+        return false
+    }
+
+    const response = await postValidateRegister(
+        state.fname,
+        state.lname,
+        state.email,
+        state.password,
+        state.kubios_email,
+        state.kubios_password
+    )
 }
 
 renderPage(Register, state);

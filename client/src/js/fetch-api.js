@@ -26,6 +26,30 @@ export async function postRegisterUser(fname, lname, email, password, kubios_ema
     return response;
 }
 
+export async function postValidateRegister(fname, lname, email, password, kubios_email, kubios_password) {
+    console.log(fname, lname, email, password);
+    const response = await fetch("api/users/validate", {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            fname,
+            lname,
+            email,
+            password,
+            kubios_email,
+            kubios_password
+        })
+    })
+    .then((response) => {
+        if(!response.ok) {
+            throw new Error("Connection error")
+        }
+        return response.json();
+    })
+
+    return response;
+}
+
 export async function postLoginUser(email, password, remember_me) {
     const response = await fetch("api/auth/login", {
         method: 'POST',
