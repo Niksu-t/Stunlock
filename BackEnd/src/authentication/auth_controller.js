@@ -158,17 +158,14 @@ export const linkKubios = async (email, password) => {
     response = await fetch(process.env.AUTH_URL, options);
   } catch (err) {
     console.error('Kubios login error', err);
-    throw customError('Login with Kubios failed', 500);
+    return 0;
   }
 
   const location = response.headers.raw().location[0];
-  // console.log(location);
+  // console.log(location
   // If login fails, location contains 'login?null'
   if (location.includes('login?null')) {
-    throw customError(
-      'Login with Kubios failed due bad username/password',
-      401,
-    );
+    return 0
   }
 
   const regex = /id_token=(.*)&access_token=(.*)&expires_in=(.*)/;

@@ -32,9 +32,6 @@ export const Summary = {
             renderPage(Kubios)
         });
 
-        document.getElementById("register")
-            .addEventListener("click", registerUser);
-
         const register = document.getElementById('register');
 
         register.addEventListener("click", (e) => {

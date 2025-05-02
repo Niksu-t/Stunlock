@@ -20,8 +20,8 @@ export const createUser = async (
   let params = [];
 
   if(kubios_user) {
-    query = `INSERT INTO Users (fname, lname, password, email, kubios_email, kubios_uuid) VALUES (?, ?, ?, ?, ?, ?)`;
-    params = [fname, lname, password, email, kubios_user.email, kubios_user.uuid]
+    query = `INSERT INTO Users (fname, lname, password, email, kubios_email, kubios_uuid, kubios_token) VALUES (?, ?, ?, ?, ?, ?, ?)`;
+    params = [fname, lname, password, email, kubios_user.email, kubios_user.uuid, kubios_user.id_token]
   }
   else {
     query = `INSERT INTO Users (fname, lname, password, email) VALUES (?, ?, ?, ?)`;
@@ -36,6 +36,8 @@ export const createUser = async (
     return RegisterResult.Success;
 
   } catch(error) {
+    console.log(error)
+
     // Handle register errors
     switch(error.code) {
       // Duplicate email error

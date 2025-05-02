@@ -21,7 +21,10 @@ async function loginUser(event) {
         true
     );
 
+    console.log(response)
+
     if(response.status == 200) {
+        localStorage.setItem("kubios_token", response.kubios_token)
         window.location.href = "/dashboard";
     }
     else {
