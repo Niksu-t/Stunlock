@@ -1,6 +1,6 @@
 import { tryRenderPage } from "../register";
 import { Careteam } from "./careteam-view";
-import { set_error, reset_error } from "../register";
+import { set_error, reset_error } from "../utils";
 import { postValidateRegister } from "../fetch-api";
 
 export const Register = {

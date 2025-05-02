@@ -3,7 +3,7 @@ import { Careteam } from "./careteam-view";
 import { Summary } from "./summary-view";
 import { renderPage } from "../register-router";
 import { postValidateKubios } from "../fetch-api";
-import { set_error, reset_error } from "../register";
+import { reset_error, set_error } from "../utils";
 
 export const Kubios = {
     Render(state) {

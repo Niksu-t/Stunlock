@@ -20,11 +20,13 @@
                 <form class="flex flex-col gap-8" id="login-form">
                     <div>
                         <label for="email">Sähköposti.</label><br>
-                        <input class="inset-shadow-2xs bg-gray-100 rounded p-2 w-full mt-2" type="text" id="email" name="email" value="">
+                        <input class="inset-shadow-2xs bg-gray-100 rounded p-2 w-full mt-2 border-transparent border-4 border-solid" type="text" id="email" name="email" value="">
+                        <p class="text-brand-red invisible h-5" id="email-error">-</p>
                     </div>
                     <div>
                         <label for="password">Salasana.</label><br>
-                        <input class="inset-shadow-2xs bg-gray-100 rounded p-2 w-full mt-2" type="password" id="password" name="password" value="">
+                        <input class="inset-shadow-2xs bg-gray-100 rounded p-2 w-full mt-2 border-transparent border-4 border-solid" type="password" id="password" name="password" value="">
+                        <p class="text-brand-red invisible h-5" id="password-error">-</p>
                     </div>
 
                     <div>

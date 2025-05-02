@@ -66,7 +66,7 @@ export async function postValidateKubios(state) {
     return response;
 }
 
-export async function postLoginUser(email, password, remember_me) {
+export async function postLoginUser(email, password, remember_me, json = false) {
     const response = await fetch("api/auth/login", {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -77,10 +77,10 @@ export async function postLoginUser(email, password, remember_me) {
         })
     })
     .then((response) => {
-        if(!response.ok) {
-            throw new Error("Connection error")
+        if(json) {
+            return response.json();
         }
-        return response.json();
+        return response;
     })
     
     return response;

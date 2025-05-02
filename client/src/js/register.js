@@ -12,27 +12,6 @@ export const state = {
     kubios_password: ""
 }
 
-export function reset_error(key) {
-    const error_message = document.getElementById(`${key}-error`);
-    error_message.classList.add("invisible")
-
-    const widget = document.getElementById(key);
-    widget.classList.remove("border-brand-red");
-    widget.classList.add("border-transparent");
-}
-
-export function set_error(key, error) {
-    if(error) {
-        const error_message = document.getElementById(`${key}-error`);
-        error_message.classList.remove("invisible")
-        error_message.innerHTML = error
-    }
-
-    const widget = document.getElementById(key);
-    widget.classList.add("border-brand-red")
-    widget.classList.remove("border-transparent");
-}
-
 /**
  * Handles form input and sends POST request to server.
  */

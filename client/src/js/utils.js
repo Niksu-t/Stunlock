@@ -41,3 +41,39 @@ export function getWeekDays() {
   
     return week;
 }
+
+export function loop_required_fields(keys, object, message) {
+  let error_found = false;
+
+  keys.forEach(key => {
+    reset_error(key);
+
+    if(object[key].length == 0) {
+        error_found = true;
+        set_error(key, message)
+    }
+
+  return error_found;
+}); 
+}
+
+export function reset_error(key) {
+    const error_message = document.getElementById(`${key}-error`);
+    error_message.classList.add("invisible")
+
+    const widget = document.getElementById(key);
+    widget.classList.remove("border-brand-red");
+    widget.classList.add("border-transparent");
+}
+
+export function set_error(key, error) {
+    if(error) {
+        const error_message = document.getElementById(`${key}-error`);
+        error_message.classList.remove("invisible")
+        error_message.innerHTML = error
+    }
+
+    const widget = document.getElementById(key);
+    widget.classList.add("border-brand-red")
+    widget.classList.remove("border-transparent");
+}

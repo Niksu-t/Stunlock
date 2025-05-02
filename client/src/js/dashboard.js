@@ -83,7 +83,44 @@ async function saveDiaryEntry(e) {
         )
     }
 
+    spawnStatusBar("Päiväkirjamerkintä tallennettu!", "bg-brand-green", "text-white", false);
+
     toggleDiary();
+}
+
+function spawnStatusBar(text, background, text_color, persistent) {
+    const status_bar = document.getElementById('statusBar');
+    status_bar.className = status_bar.className
+        .split(' ')
+        .filter(cls => !cls.startsWith('bg-'))
+        .join(' ');
+
+    status_bar.classList.remove('top-[-70px]');
+    status_bar.classList.add('top-0', background);
+
+    const status_bar_text = document.getElementById("status-bar-text")
+
+    status_bar_text.className = status_bar_text.className
+        .split(' ')
+        .filter(cls => !cls.startsWith('bg-') && !cls.startsWith('text-'))
+        .join(' ');
+   
+    status_bar_text.innerHTML = text
+    status_bar_text.classList.add(text_color)
+
+    // Hide after 5 seconds
+    if(!persistent) {
+        setTimeout(() => {
+            closeStatusBar()
+        }, 5000);
+    }
+}
+
+function closeStatusBar() {
+    const status_bar = document.getElementById('statusBar');
+
+    status_bar.classList.remove('top-0');
+    status_bar.classList.add('top-[-70px]');
 }
 
 async function onPageLoad() {
@@ -100,8 +137,6 @@ async function onPageLoad() {
 
     document.getElementById("weekly-avg").innerHTML = state.average_rmssd.toFixed(1);
 }
-
-
 
 
 function resetDiaryWidget(div) {
@@ -126,7 +161,22 @@ async function generateThisWeekEntries() {
     const entries = await getDiary();
 
     const weekDays = getWeekDays();
+
     let today = new Date().getDay();
+    let today_iso = new Date()
+        .toISOString()
+        .slice(0, 10)
+
+    let found_today = false
+    entries.map((entry) => {
+        if(entry.entry_date == today_iso) {
+            found_today = true;
+        }
+    })
+
+    if(!found_today) {
+        spawnStatusBar("Et ole täyttänyt päiväkirjaa tänään!", "bg-brand-red", "text-white", true);
+    }
 
     // Convert to managable index
     if(today == 0)
@@ -143,10 +193,10 @@ async function generateThisWeekEntries() {
 
         let data = {
             date: weekDays[i].full_date,
-            pain: 5,
-            stress: 5,
-            stiffness: 5,
-            sleep: 5,
+            pain: 0,
+            stress: 0,
+            stiffness: 0,
+            sleep: 0,
             notes: "",
         };
 
@@ -227,4 +277,7 @@ async function generateThisWeekEntries() {
 addEventListener('userdata', onPageLoad)
 
 document.getElementById("diaryentry").addEventListener("submit", saveDiaryEntry);
-document.getElementById("close-diary").addEventListener("click", toggleDiary)
+document.getElementById("close-diary").addEventListener("click", toggleDiary);
+
+const close_button = document.getElementById("close-status-bar");
+close_button.addEventListener("click", closeStatusBar);

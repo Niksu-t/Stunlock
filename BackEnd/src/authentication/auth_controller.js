@@ -67,7 +67,10 @@ export const postLogin = async (req, res, next) => {
       return res
         .status(200)
         .contentType("application/json")
-        .json({ ...user});
+        .json({
+          ...user,
+          status: 200
+          });
     }
   }
   return next(customError("Internal serverl error", 500));
