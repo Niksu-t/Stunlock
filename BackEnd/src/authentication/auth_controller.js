@@ -36,6 +36,9 @@ export const postLogin = async (req, res, next) => {
     }
 
     const user = await selectUserByEmail(req.body.email);
+    delete user.password;
+    delete user.kubios_token;
+
     if (user) {
       console.log(user);
       const token = jwt.sign(user, process.env.JWT_SECRET, {
@@ -111,10 +114,8 @@ export const refreshToken = async (req, res, next) => {
 };
 
 export const getMe = async (req, res) => {
-  console.log("getMe request", req.user);
   if (req.user) {
     let response = req.user;
-    delete response.password;
 
     return res
       .status(200)

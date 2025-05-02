@@ -5,6 +5,7 @@ import {v4} from 'uuid';
 import { resultSelf } from "./kubios_model.js";
 import { customError } from "../utils/error.js";
 import { linkKubios } from "../authentication/auth_controller.js";
+import { modifyKubiosToken } from "../users/user_model.js";
 
 
 function isOnWeeksAgo(dateStr, num_of_weeks = 0) {
@@ -75,8 +76,6 @@ export const postLoginKubios = async (req, res, next) => {
   headers.append('Cookie', `XSRF-TOKEN=${csrf}`);
   headers.append("User-Agent", process.env.KUBIOS_USER_AGENT);
 
-  console.log(req.user);
-
   const params = new URLSearchParams({
     username: req.user.kubios_email,
     password: req.body.password,
@@ -121,9 +120,10 @@ export const postLoginKubios = async (req, res, next) => {
   const match = location.match(regex);
   const idToken = match[1];
 
+  await modifyKubiosToken(idToken, req.user.user_id)
+
   return res
     .status(200)
     .contentType("application/json")
     .json({ token: idToken });
-
 } 

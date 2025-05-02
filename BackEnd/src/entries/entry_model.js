@@ -1,9 +1,5 @@
 import promisePool from "../utils/database.js";
-
-export const QueryResult = {
-    Success: "success",
-    Fail: "fail"
-};
+import { QueryResult } from "../utils/database.js";
 
 export const getEntryById = async (entry_id) => {
     console.log(entry_id)

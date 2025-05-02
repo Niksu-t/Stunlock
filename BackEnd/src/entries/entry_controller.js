@@ -4,9 +4,10 @@ import {
   getAllEntries,
   insertEntry,
   updateEntryById,
-  QueryResult,
   deleteEntryById,
 } from "./entry_model.js";
+
+import { QueryResult } from "../utils/database.js";
 
 export const getEntry = async (req, res) => {
   console.log("getEntryById request: ", req.params.id);

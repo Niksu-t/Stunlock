@@ -1,5 +1,6 @@
 import { param } from "express-validator";
 import promisePool from "../utils/database.js";
+import { QueryResult } from "../utils/database.js";
 
 export const getUserById = async (id) => {
   const query = `SELECT * FROM Users WHERE user_id = ${id}`;
@@ -7,6 +8,21 @@ export const getUserById = async (id) => {
 
   return row[0];
 };
+
+export const modifyKubiosToken = async (token, user_id) => {
+
+  const query = `UPDATE users SET kubios_token = ? WHERE user_id = ?`
+  const params = [token, user_id]
+
+  try {
+    const rows = await promisePool.query(query, params);
+    return QueryResult.Success;
+  }
+  catch(err) {
+      console.log(err);
+      return QueryResult.Fail;
+  }
+}
 
 export const createUser = async (
   fname,

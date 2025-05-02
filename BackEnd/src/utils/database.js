@@ -14,3 +14,8 @@ const pool = mysql.createPool({
 
 const promisePool = pool.promise();
 export default promisePool;
+
+export const QueryResult = {
+  Success: "success",
+  Fail: "fail"
+};
