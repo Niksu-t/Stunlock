@@ -21,6 +21,7 @@ CREATE TABLE Users (
     kubios_email VARCHAR(100),
     kubios_uuid VARCHAR(100),
     kubios_token VARCHAR(2000),
+    kubios_expires_at VARCHAR(100),
     role VARCHAR(10) DEFAULT 'patient',
     care_team INT,
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,

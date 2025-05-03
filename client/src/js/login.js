@@ -1,5 +1,5 @@
 import { postLoginUser } from "./fetch-api";
-import { loop_required_fields, set_error } from "./utils";
+import { HandleResponseKubios, loop_required_fields, set_error } from "./utils";
 
 async function loginUser(event) {
     event.preventDefault();
@@ -24,7 +24,7 @@ async function loginUser(event) {
     console.log(response)
 
     if(response.status == 200) {
-        localStorage.setItem("kubios_token", response.kubios_token)
+        HandleResponseKubios(response);
         window.location.href = "/dashboard";
     }
     else {

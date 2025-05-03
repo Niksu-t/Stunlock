@@ -3,7 +3,6 @@
  * @returns The request response
  */
 export async function postRegisterUser(fname, lname, email, password, kubios_email, kubios_password) {
-    console.log(fname, lname, email, password);
     const response = await fetch("api/users/", {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -172,8 +171,6 @@ export async function getAllKubiosResults(token) {
             }
             return response.json();
         })
-
-    console.log(data)
 
     return data;
 }

@@ -1,6 +1,7 @@
 import { renderPage } from './register-router.js';
 import { postRegisterUser, postValidateRegister } from './fetch-api.js';
 import { Register } from './views/register-view.js';
+import { HandleResponseKubios } from "./utils";
 
 export const state = {
     currentPage: null,
@@ -27,11 +28,8 @@ export async function registerUser(event) {
         state.kubios_password
     )
 
-    if(response.kubios_token) {
-        localStorage.setItem("kubios_token", response.kubios_token);
-    }
-
     if(response) {
+        HandleResponseKubios(response)
         window.location.href = "/dashboard";
     }
 }

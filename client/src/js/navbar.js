@@ -1,9 +1,7 @@
 import { getLogout } from "./fetch-api"
 
 function init() {
-    console.log("testing")
-
-    const fname = localStorage.getItem("user_fname")
+    const fname = JSON.parse(localStorage.getItem("user")).fname;
 
     const headerRight = document.getElementById("header-right")
 

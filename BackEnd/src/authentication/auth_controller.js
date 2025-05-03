@@ -10,6 +10,7 @@ import {
   selectUserByEmail,
 } from "../users/user_model.js";
 import { customError } from "../utils/error.js";
+import { AppendKubiosFields } from "../kubios/kubios_controller.js";
 
 // TODO: Add results and return correct code
 
@@ -37,10 +38,8 @@ export const postLogin = async (req, res, next) => {
 
     const user = await selectUserByEmail(req.body.email);
     delete user.password;
-    delete user.kubios_token;
 
     if (user) {
-      console.log(user);
       const token = jwt.sign(user, process.env.JWT_SECRET, {
         expiresIn: "24h",
       });
@@ -67,13 +66,17 @@ export const postLogin = async (req, res, next) => {
         partitioned: true,
       })
 
+      const return_json = {
+        ...user,
+        status: 200
+      }
+
+      AppendKubiosFields(return_json, user)
+
       return res
         .status(200)
         .contentType("application/json")
-        .json({
-          ...user,
-          status: 200
-          });
+        .json(return_json);
     }
   }
   return next(customError("Internal serverl error", 500));
@@ -169,9 +172,13 @@ export const linkKubios = async (email, password) => {
     return 0
   }
 
-  const regex = /id_token=(.*)&access_token=(.*)&expires_in=(.*)/;
+  const regex = /id_token=(.*)&access_token=(.*)&expires_in=(.*)&/;
   const match = location.match(regex);
   const idToken = match[1];
+  
+  const expires_in = match[3];
+  const received_at = Date.now();
+  const expires_at = received_at + expires_in * 1000; // convert seconds to ms
 
   const headers2 = new Headers();
   headers2.append('User-Agent', process.env.USER_AGENT);
@@ -183,11 +190,12 @@ export const linkKubios = async (email, password) => {
   });
 
   const responseJson = await response2.json();
-  
+
   return {
     id_token: idToken,
     email: responseJson.user.email,
-    uuid: responseJson.user.sub
+    uuid: responseJson.user.sub,
+    expires_at,
   }
 }
 

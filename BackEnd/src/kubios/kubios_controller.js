@@ -56,7 +56,6 @@ export const getAllResults = async (req, res) => {
     // TODO: Remove nested results in model
     // Filters 
     const week_result = result.results
-      .filter(item => isOnWeeksAgo(new Date(item.daily_result), 0))
       .map(item => ({ 
         date: item.daily_result,
         rmssd_ms: item.result.rmssd_ms 
@@ -116,14 +115,31 @@ export const postLoginKubios = async (req, res, next) => {
     ));
   }
 
-  const regex = /id_token=(.*)&access_token=(.*)&expires_in=(.*)/;
+  const regex = /id_token=(.*)&access_token=(.*)&expires_in=(.*)&/;
   const match = location.match(regex);
   const idToken = match[1];
 
-  await modifyKubiosToken(idToken, req.user.user_id)
+  const expires_in = match[3];
+  const received_at = Date.now();
+  const expires_at = received_at + expires_in * 1000; // convert seconds to ms
+
+  await modifyKubiosToken(idToken, expires_at, req.user.user_id)
 
   return res
     .status(200)
     .contentType("application/json")
-    .json({ token: idToken });
-} 
+    .json({ 
+      kubios_token: idToken,
+      kubios_expires_at: expires_at 
+     });
+}
+
+export function AppendKubiosFields(json, user) {
+  if(user.kubios_email) {
+    json.kubios_token = user.kubios_token;
+    json.kubios_expires_at = user.kubios_expires_at;
+  }
+
+  delete user.kubios_token;
+  delete user.kubios_expires_at;
+}

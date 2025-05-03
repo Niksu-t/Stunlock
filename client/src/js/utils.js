@@ -67,13 +67,33 @@ export function reset_error(key) {
 }
 
 export function set_error(key, error) {
-    if(error) {
-        const error_message = document.getElementById(`${key}-error`);
-        error_message.classList.remove("invisible")
-        error_message.innerHTML = error
-    }
+  if(error) {
+      const error_message = document.getElementById(`${key}-error`);
+      error_message.classList.remove("invisible")
+      error_message.innerHTML = error
+  }
 
-    const widget = document.getElementById(key);
-    widget.classList.add("border-brand-red")
-    widget.classList.remove("border-transparent");
+  const widget = document.getElementById(key);
+  widget.classList.add("border-brand-red")
+  widget.classList.remove("border-transparent");
+}
+
+export function KubiosIsLoggedIn() {
+  return localStorage.getItem("kubios_token") ? true : false;
+}
+
+export function KubiosTokenExpired() {
+  const expires_at = localStorage.getItem("kubios_expires_at")
+  const now = Date.now();
+
+  return expires_at < now + 3200 * 1000;
+}
+
+export function HandleResponseKubios(response) {
+  console.log(response);
+
+  if(response.kubios_token) {
+    localStorage.setItem("kubios_token", response.kubios_token);
+    localStorage.setItem("kubios_expires_at", response.kubios_expires_at);
+  }
 }

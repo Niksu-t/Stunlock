@@ -9,10 +9,10 @@ export const getUserById = async (id) => {
   return row[0];
 };
 
-export const modifyKubiosToken = async (token, user_id) => {
+export const modifyKubiosToken = async (token, expires_at, user_id) => {
 
-  const query = `UPDATE users SET kubios_token = ? WHERE user_id = ?`
-  const params = [token, user_id]
+  const query = `UPDATE users SET kubios_token = ?, kubios_expires_at = ? WHERE user_id = ?`
+  const params = [token, expires_at, user_id]
 
   try {
     const rows = await promisePool.query(query, params);
@@ -36,8 +36,8 @@ export const createUser = async (
   let params = [];
 
   if(kubios_user) {
-    query = `INSERT INTO Users (fname, lname, password, email, kubios_email, kubios_uuid, kubios_token) VALUES (?, ?, ?, ?, ?, ?, ?)`;
-    params = [fname, lname, password, email, kubios_user.email, kubios_user.uuid, kubios_user.id_token]
+    query = `INSERT INTO Users (fname, lname, password, email, kubios_email, kubios_uuid, kubios_token, kubios_expires_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+    params = [fname, lname, password, email, kubios_user.email, kubios_user.uuid, kubios_user.id_token, kubios_user.expires_at]
   }
   else {
     query = `INSERT INTO Users (fname, lname, password, email) VALUES (?, ?, ?, ?)`;

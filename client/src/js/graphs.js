@@ -9,29 +9,19 @@ export const ChartResult = {
     Success: "Success"
 }
 
-export async function generateThisWeekGraph(state, data, ctx) {
-    let chart_data = [];
+export async function drawRmssdGraph(data, ctx, labels) {
+    const return_value = {
+        average_rmssd: 0
+    }
 
-    const weekdays = getThisWeeksWeekdays();
-
-    let i = 0;
-    weekdays.forEach(date => {
-        if(data.Data[i]) {
-            if(date == data.Data[i].date) {
-                chart_data.push(data.Data[i].rmssd_ms);
-                i++;
-            }
-        }
-    });
-
-    if(!chart_data.length) {
+    if(!data.length) {
         return EmptyDataset
     }
 
     const sum = (total, number) => total + number;
-    const average = chart_data.reduce(sum) / chart_data.length;
+    const average = data.reduce(sum) / data.reduce((count, num) => num > 0 ? count + 1 : count, 0);
 
-    state.average_rmssd = average;
+    return_value.average_rmssd = average;
 
 
     const annotation = {
@@ -52,16 +42,16 @@ export async function generateThisWeekGraph(state, data, ctx) {
     new Chart(ctx, {
         type: 'bar',
         data: {
-        labels: ['ma', 'ti', 'ke', 'to', 'pe', 'la', 'su'],
-        datasets: [{
-            label: 'RMSSD',
-            data: chart_data,
-            backgroundColor: 'rgba(247, 108, 94, 1)',
-            fill: true,
-            tension: 0.3,
-            pointRadius: 5,
-            pointHoverRadius: 7
-        }]
+            labels: labels,
+            datasets: [{
+                label: 'RMSSD',
+                data: data,
+                backgroundColor: 'rgba(247, 108, 94, 1)',
+                fill: true,
+                tension: 0.3,
+                pointRadius: 5,
+                pointHoverRadius: 7
+            }]
         },
         options: {
             maintainAspectRatio: false,
@@ -91,6 +81,8 @@ export async function generateThisWeekGraph(state, data, ctx) {
             }
         }
     });
+
+    return return_value;
 }
 
 Chart.register(annotationPlugin);

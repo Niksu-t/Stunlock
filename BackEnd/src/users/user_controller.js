@@ -9,6 +9,7 @@ import {
   selectUserByEmail
 } from "./user_model.js";
 import bcrpyt from "bcryptjs";
+import { AppendKubiosFields } from "../kubios/kubios_controller.js";
 
 export const validateInput = async (req, res, next) => {
   const user = await selectUserByEmail(req.body.email);
@@ -70,11 +71,8 @@ export const postUser = async (req, res) => {
         message: `Resource successfully added.`
       };
 
-      if(kubios_user) {
-        return_json.kubios_token = kubios_user.id_token;
-      }
-
       const user = await selectUserByEmail(req.body.email);
+      AppendKubiosFields(return_json, user)
 
       const token = jwt.sign(user, process.env.JWT_SECRET, {
         expiresIn: "24h",
@@ -92,6 +90,7 @@ export const postUser = async (req, res) => {
         .status(201)
         .contentType("application/json")
         .json(return_json);
+        
     } else {
       return res
         .status(500)
