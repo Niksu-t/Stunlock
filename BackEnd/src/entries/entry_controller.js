@@ -15,7 +15,9 @@ export const getEntry = async (req, res) => {
     const entry = await getEntryById(req.params.id);
 
     if (entry) {
-      return res.status(201).contentType("application/json").json(entry);
+      const pain_points_json = painpointsToJson(entry.pain_points);
+      const new_entry = newEntry(entry, pain_points_json)
+      return res.status(201).contentType("application/json").json(new_entry);
     } else {
       return next(customError("Resource not found", 404));
     }
@@ -47,7 +49,9 @@ export const updateEntry = async (req, res, next) => {
   console.log("updateEntry request: ", req.body);
 
   if (req.params.id) {
-    const entry = await updateEntryById(req.params.id, req.body);
+    const pain_points = painpointsToBinary(req.body.pain_points);
+    const new_entry = newEntry(req.body, pain_points);
+    const entry = await updateEntryById(req.params.id, new_entry);
 
     if (entry == QueryResult.Success) {
       return res
@@ -68,7 +72,13 @@ export const getEntries = async (req, res) => {
   const entries = await getAllEntries(req.user.user_id);
 
   if (entries) {
-    return res.status(201).contentType("application/json").json(entries);
+    let new_entries = {}
+    for (let entry in entries) {
+      const pain_points = painpointsToJson(pain_points);
+      const new_entry = newEntry(entry, pain_points);
+      new_entries.append(new_entry);
+    }
+    return res.status(201).contentType("application/json").json(new_entries);
   } else {
     return next(customError("Resource not found", 404));
   }
@@ -77,7 +87,10 @@ export const getEntries = async (req, res) => {
 export const postEntry = async (req, res) => {
   console.log("postEntry request: ", req.body);
 
-  const entry_id = await insertEntry(req.user, req.body);
+  const pain_points = painpointsToBinary(req.body.pain_points)
+  const new_entry = newEntry(req.body, pain_points);
+
+  const entry_id = await insertEntry(req.user, new_entry);
 
   if (entry_id) {
     return res
@@ -106,4 +119,55 @@ export const getEntriesAdmin = async (req, res) => {
   }
 
   return next(customError("Request is missing 'id' parameter", 400));
+};
+
+const painpointsToBinary = (pain_points) => {
+  let binary = "";
+
+  for (let x in pain_points) {
+    if (pain_points[x]) {
+      binary += "1";
+    } else {
+      binary += "0";
+    }
+  }
+  return binary;
+};
+
+const painpointsToJson = (binary) => {
+  let pain_points = {
+    TMJ: false,
+    Cervical_Spine: false,
+    Shoulder: false,
+    Thoraic_Spine: false,
+    Elbow: false,
+    Lower_back_and_SI_Joints: false,
+    Hands_fingers_and_wrist: false,
+    Knees: false,
+    Ankles: false,
+    Feet_and_toes: false,
+  };
+  const str = binary;
+  const arr = str.split("");
+  for (let i = 0; i < 9; i++) {
+    if (arr[i] === 1) {
+      pain_points[i] = true;
+    }
+  }
+  return pain_points;
+};
+
+const newEntry = (entry, pain_points) => {
+  const data = {
+    entry_id: entry.entry_id,
+    pain_points: pain_points,
+    user_id: entry.user_id,
+    entry_date: entry.entry_date,
+    stress_gauge: entry.stress_gauge,
+    pain_gauge: entry.pain_gauge,
+    stiffness_gauge: entry.stiffness_gauge,
+    sleep_gauge: entry.sleep_gauge,
+    notes: entry.notes,
+  };
+  return data;
 };

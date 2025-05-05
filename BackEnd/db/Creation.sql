@@ -30,6 +30,7 @@ CREATE TABLE Users (
 
 CREATE TABLE diary_entries(
     entry_id INT AUTO_INCREMENT PRIMARY KEY,
+    pain_points VARCHAR(10) NOT NULL,
     user_id INT NOT NULL,
     entry_date DATE NOT NULL,
     stress_gauge INT DEFAULT 0,
