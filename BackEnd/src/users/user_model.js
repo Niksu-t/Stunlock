@@ -11,7 +11,7 @@ export const getUserById = async (id) => {
 
 export const modifyKubiosToken = async (token, expires_at, user_id) => {
 
-  const query = `UPDATE users SET kubios_token = ?, kubios_expires_at = ? WHERE user_id = ?`
+  const query = `UPDATE Users SET kubios_token = ?, kubios_expires_at = ? WHERE user_id = ?`
   const params = [token, expires_at, user_id]
 
   try {
