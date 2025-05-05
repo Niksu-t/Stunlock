@@ -25,6 +25,7 @@ APP.use("/docs", express.static("docs"));
 const allowedOrigins = [
   "http://localhost:5173",
   "http://localhost:3001",
+  "https://stunlock.northeurope.cloudapp.azure.com"
 ];
 
 APP.use(express.json())
