@@ -11,17 +11,21 @@ export const ChartResult = {
 
 export async function drawRmssdGraph(data, ctx, labels) {
     const return_value = {
-        average_rmssd: 0
+        average_rmssd: 0,
+        empty: false
     }
 
-    if(!data.length) {
-        return EmptyDataset
+    console.log(data)
+    let average = 0;
+
+    if(data.length) {
+        const sum = (total, number) => total + number;
+        const average = data.reduce(sum) / data.reduce((count, num) => num > 0 ? count + 1 : count, 0);
+        return_value.average_rmssd = average;
     }
-
-    const sum = (total, number) => total + number;
-    const average = data.reduce(sum) / data.reduce((count, num) => num > 0 ? count + 1 : count, 0);
-
-    return_value.average_rmssd = average;
+    else {
+        return_value.empty = true;
+    }
 
 
     const annotation = {

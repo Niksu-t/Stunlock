@@ -166,9 +166,6 @@ export async function getAllKubiosResults(token) {
 
     const data = await fetch(`api/kubios/`, options)
         .then((response) => {
-            if(!response.ok) {
-                throw new Error("Connection error")
-            }
             return response.json();
         })
 

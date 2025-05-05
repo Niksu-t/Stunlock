@@ -16,6 +16,16 @@ let current_diary = {
 let open = false;
 
 async function onPageLoad() {
+    const data = await getAllKubiosResults(localStorage.getItem("kubios_token"))
+
+    if(data.Data) {
+        HandleGraphWidgets(data.Data);
+    }
+
+    generateThisWeekEntries()
+}
+
+async function HandleGraphWidgets(data) {
     const get_average_percent = (average, target_average) => {
         let decrease = false
         let dif = target_average - average;
@@ -34,24 +44,22 @@ async function onPageLoad() {
         document.getElementById(`${target}-percent`).innerHTML = `${percent.toFixed(1)}${text}`;
         document.getElementById(target).innerHTML = average.toFixed(1);
     }
-
-    const today = new Date();
-    const data = await getAllKubiosResults(localStorage.getItem("kubios_token"))
-
+    
     const sum = (total, number) => total + number;
 
-    const average = data.Data
+    const today = new Date();
+
+    const average = data
         .map(item => item.rmssd_ms)
-        .reduce(sum) / data.Data.length;
+        .reduce(sum) / data.length;
     console.log(average)
 
-    const this_week = data.Data.filter(item => isOnWeeksAgo(new Date(item.date), 0))
-    const weekdays = getThisWeeksWeekdays();
+    const weeks_ago = 0
+    const this_week = data.filter(item => isOnWeeksAgo(new Date(item.date), weeks_ago))
+    const weekdays = getThisWeeksWeekdays(weeks_ago);
 
     const welcome_text = document.getElementById("welcome-text");
     welcome_text.innerHTML = `${JSON.parse(localStorage.getItem("user")).fname}`;
-
-    generateThisWeekEntries()
 
     let week_chart_data = [];
     const fi_weekdays = ["ma", "ti", "ke", "to", "pe", "la", "su"]
@@ -67,20 +75,26 @@ async function onPageLoad() {
             }
         }
     });
+    console.log(week_chart_data);
 
     const graph_result = await drawRmssdGraph(week_chart_data, document.getElementById('weekdayChart'), fi_weekdays);
-    state.average_rmssd = graph_result.average_rmssd;
 
-    let average_result = get_average_percent(average, state.average_rmssd)
+    if(!graph_result.empty) {
+        state.average_rmssd = graph_result.average_rmssd;
 
-    set_widget_text(
-        "weekly-avg",
-        average_result.decrease ? "% perustason alapuolella." : "% perustason yläpuolella.",
-        state.average_rmssd,
-        average_result.average
-    )
+        let average_result = get_average_percent(average, state.average_rmssd)
 
-    const this_month = data.Data.filter(item => isOnMonth(new Date(item.date), new Date(), 1))
+        set_widget_text(
+            "weekly-avg",
+            average_result.decrease ? "% perustason alapuolella." : "% perustason yläpuolella.",
+            state.average_rmssd,
+            average_result.average
+        )
+    } else {
+        document.getElementById("weekly-text").innerHTML = "<h1 class='text-brand-green text-3xl font-semibold'>Ei mittauksia!</h1>"
+    }
+
+    const this_month = data.filter(item => isOnMonth(new Date(item.date), new Date()))
     let month_chart_data = [];
     let month_chart_labels = [];
     const days_this_month = getDaysInMonth(today.getFullYear(), today.getMonth());
@@ -102,16 +116,21 @@ async function onPageLoad() {
     }
 
     const month_graph_result = await drawRmssdGraph(month_chart_data, document.getElementById('month-chart'), month_chart_labels);
-    state.month_average_rmssd = month_graph_result.average_rmssd;
+    if(!month_graph_result.empty) {
+        state.month_average_rmssd = month_graph_result.average_rmssd;
 
-    let month_average_result = get_average_percent(average, state.month_average_rmssd)
+        let month_average_result = get_average_percent(average, state.month_average_rmssd)
 
-    set_widget_text(
-        "monthly-avg",
-        month_average_result.decrease ? "% perustason alapuolella." : "% perustason yläpuolella.",
-        state.month_average_rmssd,
-        month_average_result.average
-    )
+        set_widget_text(
+            "monthly-avg",
+            month_average_result.decrease ? "% perustason alapuolella." : "% perustason yläpuolella.",
+            state.month_average_rmssd,
+            month_average_result.average
+        )
+    }
+    else {
+        document.getElementById("monthly-text").innerHTML = "<h1 class='text-brand-green text-3xl font-semibold'>Ei mittauksia!</h1>"
+    }
 }
 
 function isOnWeeksAgo(dateStr, num_of_weeks = 0) {
