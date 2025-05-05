@@ -1,4 +1,4 @@
-import express from "express";
+import express, { json } from "express";
 import { body } from "express-validator";
 
 import {
@@ -23,6 +23,7 @@ entryRouter
   .put(
     authenticateToken,
     authorizeEntry,
+    body("pain_points").notEmpty(),
     body("stress").trim().notEmpty().isInt({ min: 0, max: 10 }),
     body("pain").trim().notEmpty().isInt({ min: 0, max: 10 }),
     body("stiffness").trim().notEmpty().isInt({ min: 0, max: 10 }),
