@@ -1,6 +1,6 @@
 # Tests
 
-Tests are ran automatically by the CI/CD pipeline. Tests are user acceptance tests built with the Robot framework.
+Tests are ran automatically by the CI/CD pipeline (not implemented). Tests are user acceptance and unit tests made with the Robot framework.
 
 # How to run
 
@@ -27,7 +27,7 @@ Optionally, use the ```-d``` option to set an output directory.
 
 ## .env file
 
-Some tests require the use of a .env file with the following constants:
+Some tests require the use of a .env file with the following contents:
 
 - FNAME
 - LNAME

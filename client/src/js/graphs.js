@@ -20,13 +20,17 @@ export async function drawRmssdGraph(data, ctx, labels) {
 
     if(data.length) {
         const sum = (total, number) => total + number;
-        const average = data.reduce(sum) / data.reduce((count, num) => num > 0 ? count + 1 : count, 0);
-        return_value.average_rmssd = average;
-    }
-    else {
-        return_value.empty = true;
-    }
+        const n =  data.reduce((count, num) => num > 0 ? count + 1 : count, 0)
+        
+        average = data.reduce(sum) / n;
+        console.log(average)
 
+        return_value.average_rmssd = average;
+
+        if(!n) {
+            return_value.empty = true;
+        }
+    }
 
     const annotation = {
         type: 'line',
@@ -54,7 +58,8 @@ export async function drawRmssdGraph(data, ctx, labels) {
                 fill: true,
                 tension: 0.3,
                 pointRadius: 5,
-                pointHoverRadius: 7
+                pointHoverRadius: 7,
+                spanGaps: false,
             }]
         },
         options: {

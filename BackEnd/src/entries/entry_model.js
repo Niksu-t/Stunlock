@@ -55,7 +55,7 @@ export const getAllEntries = async (user_id) => {
 };
 
 export const insertEntry = async (user, body) => {
-  const query = `INSERT INTO diary_entries (user_id, entry_date, pain_points, stress_gauge, pain_gauge, stiffness_gauge, sleep_gauge, notes) VALUES (?, ?, ?, ?, ?, ?, ?)`;
+  const query = `INSERT INTO diary_entries (user_id, entry_date, pain_points, stress_gauge, pain_gauge, stiffness_gauge, sleep_gauge, notes) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
 
   let entry_date = new Date().toISOString().slice(0, 10);
 

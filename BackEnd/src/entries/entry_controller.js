@@ -72,12 +72,14 @@ export const getEntries = async (req, res) => {
   const entries = await getAllEntries(req.user.user_id);
 
   if (entries) {
-    let new_entries = {}
-    for (let entry in entries) {
-      const pain_points = painpointsToJson(pain_points);
+    let new_entries = []
+    entries.forEach((entry) => {
+      console.log(entry.pain_points)
+      const pain_points = painpointsToJson(entry.pain_points);
       const new_entry = newEntry(entry, pain_points);
-      new_entries.append(new_entry);
-    }
+      new_entries.push(new_entry);
+    }) 
+
     return res.status(201).contentType("application/json").json(new_entries);
   } else {
     return next(customError("Resource not found", 404));

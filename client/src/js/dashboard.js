@@ -1,3 +1,5 @@
+import dayjs from 'dayjs';
+
 import { getWeekDays } from './utils';
 import { drawRmssdGraph } from './graphs';
 import { postDiary, getDiary, updateDiary, getAllKubiosResults } from "./fetch-api";
@@ -22,7 +24,10 @@ async function onPageLoad() {
         HandleGraphWidgets(data.Data);
     }
 
-    generateThisWeekEntries()
+    const welcome_text = document.getElementById("welcome-text");
+    welcome_text.innerHTML = `${JSON.parse(localStorage.getItem("user")).fname}`;
+
+    await generateThisWeekEntries()
 }
 
 async function HandleGraphWidgets(data) {
@@ -52,30 +57,19 @@ async function HandleGraphWidgets(data) {
     const average = data
         .map(item => item.rmssd_ms)
         .reduce(sum) / data.length;
-    console.log(average)
 
     const weeks_ago = 0
     const this_week = data.filter(item => isOnWeeksAgo(new Date(item.date), weeks_ago))
+    const value_map = new Map(this_week.map(d => [d.date, d.rmssd_ms]));
+
     const weekdays = getThisWeeksWeekdays(weeks_ago);
 
-    const welcome_text = document.getElementById("welcome-text");
-    welcome_text.innerHTML = `${JSON.parse(localStorage.getItem("user")).fname}`;
-
-    let week_chart_data = [];
     const fi_weekdays = ["ma", "ti", "ke", "to", "pe", "la", "su"]
 
     let i = 0;
-    weekdays.forEach(date => {
-        if(this_week[i]) {
-            if(date == this_week[i].date) {
-                week_chart_data.push(this_week[i].rmssd_ms);
-                i++;
-            } else {
-                week_chart_data.push(0)
-            }
-        }
+    const week_chart_data = weekdays.map(day => {
+        return value_map.get(day) ?? 0
     });
-    console.log(week_chart_data);
 
     const graph_result = await drawRmssdGraph(week_chart_data, document.getElementById('weekdayChart'), fi_weekdays);
 
@@ -95,32 +89,16 @@ async function HandleGraphWidgets(data) {
     }
 
     const this_month = data.filter(item => isOnMonth(new Date(item.date), new Date()))
-    let month_chart_data = [];
-    let month_chart_labels = [];
-    const days_this_month = getDaysInMonth(today.getFullYear(), today.getMonth());
+    
+    const month_range = generateDateRange(today.getFullYear(), today.getMonth())
+    const month_value_map = new Map(this_month.map(d => [dayjs(d.date).format("D"), d.rmssd_ms]));
+    const month_values = month_range.map(date => month_value_map.get(date) ?? 0);
 
-    let month_index = 0
-    for(let i = 1; i < days_this_month; i++) {
-        const day = new Date();
-        day.setDate(i)
-
-        if(this_month[month_index]) {
-            if(day.toISOString().slice(8, 10) == this_month[month_index].date.slice(8, 10)) {
-                month_chart_data.push(this_month[month_index].rmssd_ms);
-                month_index++;
-            } else {
-                month_chart_data.push(0)
-            }
-        }
-        month_chart_labels.push(i);
-    }
-
-    const month_graph_result = await drawRmssdGraph(month_chart_data, document.getElementById('month-chart'), month_chart_labels);
+    const month_graph_result = await drawRmssdGraph(month_values, document.getElementById('month-chart'), month_range);
     if(!month_graph_result.empty) {
         state.month_average_rmssd = month_graph_result.average_rmssd;
 
         let month_average_result = get_average_percent(average, state.month_average_rmssd)
-
         set_widget_text(
             "monthly-avg",
             month_average_result.decrease ? "% perustason alapuolella." : "% perustason yläpuolella.",
@@ -159,8 +137,13 @@ function isOnMonth(date_str, today, months_ago = 0) {
         && date_str.getFullYear() === start_of_month.getFullYear();
 }
 
-function getDaysInMonth(year, target_month) {
-    return new Date(year, target_month + 1, 0).getDate();
+function generateDateRange(year, month) {
+    const start = dayjs(`${year}-${String(month+1)}-01`);
+    const daysInMonth = start.daysInMonth();
+
+    return Array.from({ length: daysInMonth }, (_, i) =>
+        start.add(i, 'day').format('D')
+    );
 }
 
 function openImportDiaryEntry(data) {
