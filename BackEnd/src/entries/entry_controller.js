@@ -16,7 +16,7 @@ export const getEntry = async (req, res) => {
 
     if (entry) {
       const pain_points_json = painpointsToJson(entry.pain_points);
-      const new_entry = newEntry(entry, pain_points_json)
+      const new_entry = SerializeReply(entry, pain_points_json)
       return res.status(201).contentType("application/json").json(new_entry);
     } else {
       return next(customError("Resource not found", 404));
@@ -50,7 +50,7 @@ export const updateEntry = async (req, res, next) => {
 
   if (req.params.id) {
     const pain_points = painpointsToBinary(req.body.pain_points);
-    const new_entry = newEntry(req.body, pain_points);
+    const new_entry = newBody(req.body, pain_points);
     const entry = await updateEntryById(req.params.id, new_entry);
 
     if (entry == QueryResult.Success) {
@@ -74,9 +74,8 @@ export const getEntries = async (req, res) => {
   if (entries) {
     let new_entries = []
     entries.forEach((entry) => {
-      console.log(entry.pain_points)
       const pain_points = painpointsToJson(entry.pain_points);
-      const new_entry = newEntry(entry, pain_points);
+      const new_entry = SerializeReply(entry, pain_points);
       new_entries.push(new_entry);
     }) 
 
@@ -90,8 +89,8 @@ export const postEntry = async (req, res) => {
   console.log("postEntry request: ", req.body);
 
   const pain_points = painpointsToBinary(req.body.pain_points)
-  const new_entry = newEntry(req.body, pain_points);
-
+  const new_entry = newBody(req.body, pain_points);
+  
   const entry_id = await insertEntry(req.user, new_entry);
 
   if (entry_id) {
@@ -159,7 +158,14 @@ const painpointsToJson = (binary) => {
   return pain_points;
 };
 
-const newEntry = (entry, pain_points) => {
+const newBody = (entry, pain_points) => {
+  entry.pain_points = pain_points
+
+  return entry;
+};
+
+
+const SerializeReply = (entry, pain_points) => {
   const data = {
     entry_id: entry.entry_id,
     pain_points: pain_points,

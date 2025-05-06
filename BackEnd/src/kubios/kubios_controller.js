@@ -53,8 +53,10 @@ export const getAllResults = async (req, res) => {
   try {
     const result = await resultSelf(token);
 
-    // TODO: Remove nested results in model
-    // Filters 
+    if(result.message) {
+      return res.status(403).json({ message: "Kubios unauthorized" })
+    }
+    
     const week_result = result.results
       .map(item => ({ 
         date: item.daily_result,
@@ -63,9 +65,14 @@ export const getAllResults = async (req, res) => {
 
 
     return res.status(201).json({ Data: week_result });
-  } catch (err) {
-    console.log("Error: ", err);
-    return res.status(500).json({ message: "internal server error" });
+  } catch ({name, error}) {
+    switch(name) {
+      case 'TypeError':
+        return res.status(201).json({ Data: []});
+        break;
+    }
+
+    return res.status(500).json({ message: "Internal server error" });
   }
 };
 

@@ -97,3 +97,8 @@ export function HandleResponseKubios(response) {
     localStorage.setItem("kubios_expires_at", response.kubios_expires_at);
   }
 }
+
+export function DayToFinnishString(index) {
+  const fi_weekdays = ["ma", "ti", "ke", "to", "pe", "la", "su"]
+  return fi_weekdays[index];
+}

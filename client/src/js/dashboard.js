@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 
-import { getWeekDays } from './utils';
+import { getWeekDays, DayToFinnishString, KubiosIsLoggedIn, KubiosTokenExpired } from './utils';
 import { drawRmssdGraph } from './graphs';
 import { postDiary, getDiary, updateDiary, getAllKubiosResults } from "./fetch-api";
 import { getThisWeeksWeekdays } from './utils';
@@ -8,11 +8,14 @@ import { getThisWeeksWeekdays } from './utils';
 let state = {
     average_percentage: 0,
     average_rmssd: 0,
-    month_average_rmssd: 0
+    month_average_rmssd: 0,
+
+    diary_entires: null,
 }
 
 let current_diary = {
     id: null,
+    div: null,
 }
 
 let open = false;
@@ -20,9 +23,8 @@ let open = false;
 async function onPageLoad() {
     const data = await getAllKubiosResults(localStorage.getItem("kubios_token"))
 
-    if(data.Data) {
-        HandleGraphWidgets(data.Data);
-    }
+    HandleGraphWidgets(data.Data);
+    
 
     const welcome_text = document.getElementById("welcome-text");
     welcome_text.innerHTML = `${JSON.parse(localStorage.getItem("user")).fname}`;
@@ -30,7 +32,33 @@ async function onPageLoad() {
     await generateThisWeekEntries()
 }
 
+function GraphsHandleKubiosErrors(id) {
+    if(!KubiosIsLoggedIn()) {
+        document.getElementById(id).innerHTML = `
+        <h1 class='text-brand-green text-xl font-semibold'>Liitä Kubios käyttäjä HRV-tiedon seurantaa varten!</h1>
+        <p>Liitä käyttäjä <a class='text-brand-red font-semibold' href='/settings'>asetuksissa.</a></p>
+        `;
+        return false
+    }
+    else if(KubiosTokenExpired()) {
+        document.getElementById(id).innerHTML = `
+        <h1 class='text-brand-green text-2xl font-semibold'>Kubios istunto päättynyt!</h1>
+        <p>Kirjaudu uudelleen <a class='text-brand-red font-semibold' href='/settings'>asetuksissa.</a></p>
+        `;
+        return false;
+    }
+
+    return true;
+}
+
 async function HandleGraphWidgets(data) {
+    if(!data) {
+        data = [{
+            rmssd_ms: 0
+
+        }]
+    }
+
     const get_average_percent = (average, target_average) => {
         let decrease = false
         let dif = target_average - average;
@@ -73,19 +101,24 @@ async function HandleGraphWidgets(data) {
 
     const graph_result = await drawRmssdGraph(week_chart_data, document.getElementById('weekdayChart'), fi_weekdays);
 
-    if(!graph_result.empty) {
-        state.average_rmssd = graph_result.average_rmssd;
+    const kubios_errors = GraphsHandleKubiosErrors("weekly-text");
 
-        let average_result = get_average_percent(average, state.average_rmssd)
+    if(kubios_errors) {
+        if(!graph_result.empty) {
+            state.average_rmssd = graph_result.average_rmssd;
 
-        set_widget_text(
-            "weekly-avg",
-            average_result.decrease ? "% perustason alapuolella." : "% perustason yläpuolella.",
-            state.average_rmssd,
-            average_result.average
-        )
-    } else {
-        document.getElementById("weekly-text").innerHTML = "<h1 class='text-brand-green text-3xl font-semibold'>Ei mittauksia!</h1>"
+            let average_result = get_average_percent(average, state.average_rmssd)
+
+            set_widget_text(
+                "weekly-avg",
+                average_result.decrease ? "% perustason alapuolella." : "% perustason yläpuolella.",
+                state.average_rmssd,
+                average_result.average
+            )
+        }
+        else {
+            document.getElementById("weekly-text").innerHTML = "<h1 class='text-brand-green text-2xl font-semibold'>Ei mittauksia tällä viikolla!</h1>"
+        }
     }
 
     const this_month = data.filter(item => isOnMonth(new Date(item.date), new Date()))
@@ -95,19 +128,24 @@ async function HandleGraphWidgets(data) {
     const month_values = month_range.map(date => month_value_map.get(date) ?? 0);
 
     const month_graph_result = await drawRmssdGraph(month_values, document.getElementById('month-chart'), month_range);
-    if(!month_graph_result.empty) {
-        state.month_average_rmssd = month_graph_result.average_rmssd;
 
-        let month_average_result = get_average_percent(average, state.month_average_rmssd)
-        set_widget_text(
-            "monthly-avg",
-            month_average_result.decrease ? "% perustason alapuolella." : "% perustason yläpuolella.",
-            state.month_average_rmssd,
-            month_average_result.average
-        )
-    }
-    else {
-        document.getElementById("monthly-text").innerHTML = "<h1 class='text-brand-green text-3xl font-semibold'>Ei mittauksia!</h1>"
+    const month_kubios_errors = GraphsHandleKubiosErrors("monthly-text");
+
+    if(month_kubios_errors) {
+        if(!month_graph_result.empty) {
+            state.month_average_rmssd = month_graph_result.average_rmssd;
+
+            let month_average_result = get_average_percent(average, state.month_average_rmssd)
+            set_widget_text(
+                "monthly-avg",
+                month_average_result.decrease ? "% perustason alapuolella." : "% perustason yläpuolella.",
+                state.month_average_rmssd,
+                month_average_result.average
+            )
+        }
+        else {
+            document.getElementById("monthly-text").innerHTML = "<h1 class='text-brand-green text-3xl font-semibold'>Ei mittauksia!</h1>"
+        }
     }
 }
 
@@ -153,12 +191,12 @@ function openImportDiaryEntry(data) {
         current_diary.id = data.id
     }
 
-    document.getElementById("date-picker").value = data.date
-    document.getElementById("stress").value = data.stress
-    document.getElementById("pain").value = data.pain
-    document.getElementById("stiffness").value = data.stiffness
-    document.getElementById("sleep").value = data.sleep
-    document.getElementById("notes").value = data.notes
+    document.getElementById("date-picker").value = data.entry.entry_date
+    document.getElementById("stress").value = data.entry.stress_gauge
+    document.getElementById("pain").value = data.entry.pain_gauge
+    document.getElementById("stiffness").value = data.entry.stiffness_gauge
+    document.getElementById("sleep").value = data.entry.sleep_gauge
+    document.getElementById("notes").value = data.entry.notes
 
     if(!open) {
         toggleDiary();
@@ -188,8 +226,20 @@ async function toggleDiary() {
 async function saveDiaryEntry(e) {
     e.preventDefault();
 
-    const pain_points_id = ["neck", "jaw", "shoulder", "spine", "lowerback", "elbow", "hips", "hand", "knees", "ankle", "feet"];
-    let pain_points_values = [];
+    let pain_points_id = [];
+
+    const pain_points = {
+        TMJ: false,
+        Cervical_Spine: false,
+        Shoulder: false,
+        Thoraic_Spine: false,
+        Elbow: false,
+        Lower_back_and_SI_Joints: false,
+        Hands_fingers_and_wrist: false,
+        Knees: false,
+        Ankles: false,
+        Feet_and_toes: false,
+      }
 
     pain_points_id.forEach(pain_point => {
         pain_points_values.push(document.getElementById(pain_point).checked);
@@ -198,15 +248,25 @@ async function saveDiaryEntry(e) {
     if(current_diary.id) {
         await updateDiary(
             current_diary.id,
+            pain_points,
             document.getElementById("stress").value,
             document.getElementById("pain").value,
             document.getElementById("stiffness").value,
             document.getElementById("sleep").value,
             document.getElementById("notes").value
         )
+
+        let found_entry = state.entries.find(entry => entry.entry_id == current_diary.id);
+        found_entry.pain_points = pain_points;
+        found_entry.stress_gauge = document.getElementById("stress").value
+        found_entry.pain_gauge = document.getElementById("pain").value
+        found_entry.stiffness_gauge = document.getElementById("stiffness").value
+        found_entry.sleep_gauge = document.getElementById("sleep").value
+        found_entry.notes = document.getElementById("notes").value
     }
     else {
-        await postDiary(
+        const response = await postDiary(
+            pain_points,
             document.getElementById("stress").value,
             document.getElementById("pain").value,
             document.getElementById("stiffness").value,
@@ -214,9 +274,28 @@ async function saveDiaryEntry(e) {
             document.getElementById("notes").value,
             document.getElementById("date-picker").value,
         )
+
+        state.entries.push({
+            entry_id: response.message,
+            entry_date: document.getElementById("date-picker").value,
+            pain_points: pain_points,
+            stress_gauge: document.getElementById("stress").value,
+            pain_gauge: document.getElementById("pain").value,
+            stiffness_gauge: document.getElementById("stiffness").value,
+            sleep_gauge: document.getElementById("sleep").value,
+            notes: document.getElementById("notes").value,
+        })
+
+        current_diary.id = response.message;
+    }
+
+    current_diary.div.data = {
+        entry: state.entries.find(entry => entry.entry_id == current_diary.id),
+        id: current_diary.id
     }
 
     spawnStatusBar("Päiväkirjamerkintä tallennettu!", "bg-brand-green", "text-white", false);
+    
 
     toggleDiary();
 }
@@ -256,88 +335,68 @@ function closeStatusBar() {
     status_bar.classList.add('top-[-70px]');
 }
 
-function resetDiaryWidget(div) {
-    div.classList.add("bg-white");
-    div.classList.add("text-gray-900");
-    div.classList.remove("text-white");
-    div.classList.remove("bg-brand-red");
-}
-
 function onDiaryClose(currently_active) {
-    const widget = document.getElementById("week-calendar");
-
-    for (let child of widget.children) {
-        if(child != currently_active) {
-            resetDiaryWidget(child);
-            child.open = false;
-        }
-    }
+    current_diary.div.reset();
 }
 
 async function generateThisWeekEntries() {
-    const entries = await getDiary();
+    state.entries = await getDiary();
+    let today = dayjs();
+    let fourteen_days_ago = today.subtract(14, "day");
 
-    const weekDays = getWeekDays();
-
-    let today = new Date().getDay();
     let today_iso = new Date()
         .toISOString()
         .slice(0, 10)
 
     let found_today = false
-    entries.map((entry) => {
+    state.entries.map((entry) => {
         if(entry.entry_date == today_iso) {
             found_today = true;
         }
     })
 
     if(!found_today) {
-        spawnStatusBar("Et ole täyttänyt päiväkirjaa tänään!", "bg-brand-red", "text-white", true);
+        spawnStatusBar("Et ole täyttänyt päiväkirjaa tänään!", "bg-brand-dark", "text-white", true);
     }
 
-    // Convert to managable index
-    if(today == 0)
-        today = 7;
-
     const widget = document.getElementById("week-calendar");
-    for(let i = 0; i < weekDays.length; i++) {
+    for(let i = 0; i <= 14 + 1; i++) {
+        const day = fourteen_days_ago.add(i, 'day');
+        let highlight = false;
+
         const div = document.createElement('div')
         div.classList.add("text-gray-900")
 
-        const found_entry = entries.find(entry => {
-            return entry.entry_date == weekDays[i].full_date
+        const found_entry = state.entries.find(entry => {
+            return entry.entry_date == day.format('YYYY-MM-DD')
         });
 
         let data = {
-            date: weekDays[i].full_date,
-            pain: 0,
-            stress: 0,
-            stiffness: 0,
-            sleep: 0,
-            notes: "",
+            entry: {
+                entry_date: day.format('YYYY-MM-DD'),
+                pain_gauge: 0,
+                stress_gauge: 0,
+                stiffness_gauge: 0,
+                sleep_gauge: 0,
+                notes: "",
+            }
         };
-
+        
         if(found_entry) {
             data = {
-                date: found_entry.entry_date,
-                pain: found_entry.pain_gauge,
-                stress: found_entry.stress_gauge,
-                stiffness: found_entry.stiffness_gauge,
-                sleep: found_entry.sleep_gauge,
-                notes: found_entry.notes,
-
+                entry: found_entry,
                 id: found_entry.entry_id
             }
         }
+        div.data = data;
 
-        let highlight = false;
-
-        if(i == today-1) {
+        if(data.entry.entry_date == today.format('YYYY-MM-DD')) {
             highlight = true;
         }
+        
 
         if(highlight) {
-            div.classList.add("text-white","flex", "group", "text-gray-100", "hover:bg-brand-red", "bg-brand-red", "rounded-full", "mx-1", "cursor-pointer", "justify-center", "relative", "w-16", "shadow-offset-4", "transition-all", "duration-200");
+            div.classList.add("text-white","flex", "group", "text-gray-100", "hover:bg-brand-red", "bg-brand-red", "rounded-full", "mx-1", "cursor-pointer", "justify-center", "relative", "min-w-20", "max-w-20", "shadow-offset-4", "transition-all", "duration-200");
 
             div.innerHTML = `
             <span class="flex h-2 w-2 absolute bottom-1.5 ">
@@ -346,20 +405,46 @@ async function generateThisWeekEntries() {
             </span>
             <div class='flex items-center px-4 my-2 py-4'>
                 <div class='text-center'>
-                    <p class='group-hover:text-gray-100 text-xl transition-all group-hover:font-semibold duration-200'> ${weekDays[i].date} </p>
-                    <p class='group-hover:text-gray-100 mt-3 group-hover:font-bold transition-all duration-200'> ${weekDays[i].weekday} </p>
+                    <p class='group-hover:text-gray-100 text-xl transition-all group-hover:font-semibold duration-200'> ${DayToFinnishString(day.day())} </p>
+                    <p class='group-hover:text-gray-100 mt-3 group-hover:font-bold transition-all duration-200'> ${day.date()} </p>
                 </div>
             </div>
             `
+            
+            div.reset = () => {}
+            div.set_active = () => {}
         }
         else {
-            div.classList.add("bg-white", "flex", "group", "hover:bg-brand-red", "hover:shadow-lg", "hover-dark-shadow", "rounded-full", "mx-1", "cursor-pointer", "transition-all", "duration-200", "justify-center", "w-16", "shadow-offset-4")
+            if(found_entry) {
+                div.classList.add("bg-white", "flex", "group", "hover:bg-brand-red", "hover:shadow-lg", "hover-dark-shadow", "rounded-full", "mx-1", "cursor-pointer", "transition-all", "duration-200", "justify-center", "min-w-20", "max-w-20", "shadow-offset-4")
+                div.reset = () => {
+                    div.classList.remove("bg-brand-red");
+                    div.classList.remove("text-white")
+                    div.classList.add("bg-white");
+                };
+                div.set_active = () => {
+                    div.classList.remove("bg-white");
+                    div.classList.add("text-white");
+                    div.classList.add("bg-brand-red");
+                };
+            }
+            else {
+                div.classList.add("bg-stone-600", "flex", "group", "hover:bg-brand-red", "hover:shadow-lg", "hover-dark-shadow", "rounded-full", "mx-1", "cursor-pointer", "transition-all", "duration-200", "justify-center", "min-w-20", "max-w-20", "shadow-offset-4")
+                div.reset = () => {
+                    div.classList.remove("bg-brand-red");
+                    div.classList.add("bg-stone-600");
+                }
+                div.set_active = () => {
+                    div.classList.add("bg-brand-red");
+                    div.classList.remove("bg-stone-600");
+                }
+            }
 
             div.innerHTML = `
             <div class='flex items-center px-4 py-4'>
                 <div class='text-center'>
-                    <p class='group-hover:text-gray-100 font-semibold text-xl group-hover:font-bold transition-all duration-300'> ${weekDays[i].date} </p>
-                    <p class='group-hover:text-gray-100 mt-3 transition-all group-hover:font-semibold duration-300'> ${weekDays[i].weekday} </p>
+                    <p class='group-hover:text-gray-100 font-semibold group-hover:font-bold transition-all duration-300'> ${DayToFinnishString(day.day())} </p>
+                    <p class='group-hover:text-gray-100 mt-3 transition-all group-hover:font-semibold duration-300'> ${day.date()} </p>
                 </div>
             </div>
             `
@@ -368,33 +453,61 @@ async function generateThisWeekEntries() {
         div.addEventListener('click', (e) => {
             if(div.open) {
                 div.open = false
-
-                resetDiaryWidget(div);
-
                 toggleDiary();
             }
-            else {                              
-                div.classList.remove("text-gray-900");
-                div.classList.remove("bg-white");
-                div.classList.add("text-white");
-                div.classList.add("bg-brand-red");
-
+            else {        
                 div.open = true;
 
-                openImportDiaryEntry(data);
-            }
+                div.set_active();
 
-            onDiaryClose(div);
+                if(current_diary.div)
+                    ResetDiary() 
+                
+                current_diary.div = div;
+                openImportDiaryEntry(div.data);
+            }
         });
 
         widget.appendChild(div);
     }
+
+    container.scrollLeft = container.scrollWidth;
+    targetScrollLeft = container.scrollWidth;
+}
+
+function ResetDiary() {
+    current_diary.div.reset()
+    current_diary.div.open = false;
 }
 
 addEventListener('userdata', onPageLoad)
 
+/// Diary and status bar event listeners (close, save etc)
+const close_button = document.getElementById("close-status-bar");
+close_button.addEventListener("click", closeStatusBar);
+
 document.getElementById("diaryentry").addEventListener("submit", saveDiaryEntry);
 document.getElementById("close-diary").addEventListener("click", toggleDiary);
 
-const close_button = document.getElementById("close-status-bar");
-close_button.addEventListener("click", closeStatusBar);
+
+// Scrollable diary-bar
+const container = document.getElementById('week-calendar');
+const scrollLeft = document.getElementById('diary-left');
+const scrollRight = document.getElementById('diary-right');
+
+const SCROLL_STEP = 88;
+let targetScrollLeft = container.scrollLeft;
+
+function scrollToTarget(offset) {
+    const maxScrollLeft = container.scrollWidth - container.clientWidth;
+    targetScrollLeft = Math.max(0, Math.min(targetScrollLeft + offset, maxScrollLeft));
+
+    container.scrollTo({
+      left: targetScrollLeft,
+      behavior: 'smooth'
+    });
+}
+
+scrollLeft.addEventListener('click', () => scrollToTarget(-SCROLL_STEP));
+
+scrollRight.addEventListener('click', () => scrollToTarget(SCROLL_STEP));

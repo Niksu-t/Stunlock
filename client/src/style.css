@@ -105,3 +105,12 @@ input[type="checkbox"].pain {
   -webkit-user-select: none;
   -ms-user-select: none;
 }
+
+#week-calendar::-webkit-scrollbar {
+  display: none;
+}
+
+#week-celendar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

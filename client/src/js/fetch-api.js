@@ -107,11 +107,12 @@ export async function getDiary() {
     return response;
 }
 
-export async function postDiary(stress, pain, stiffness, sleep, notes, entry_date) {
+export async function postDiary(pain_points, stress, pain, stiffness, sleep, notes, entry_date) {
     const response = await fetch("api/entries/", {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+            pain_points,
             stress,
             pain,
             stiffness,
@@ -130,11 +131,12 @@ export async function postDiary(stress, pain, stiffness, sleep, notes, entry_dat
     return response;
 }
 
-export async function updateDiary(id, stress, pain, stiffness, sleep, notes) {
+export async function updateDiary(id, pain_points, stress, pain, stiffness, sleep, notes) {
     const response = await fetch(`api/entries/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+            pain_points,
             stress,
             pain,
             stiffness,

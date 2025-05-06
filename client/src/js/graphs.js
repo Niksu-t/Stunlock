@@ -15,7 +15,6 @@ export async function drawRmssdGraph(data, ctx, labels) {
         empty: false
     }
 
-    console.log(data)
     let average = 0;
 
     if(data.length) {
@@ -23,7 +22,6 @@ export async function drawRmssdGraph(data, ctx, labels) {
         const n =  data.reduce((count, num) => num > 0 ? count + 1 : count, 0)
         
         average = data.reduce(sum) / n;
-        console.log(average)
 
         return_value.average_rmssd = average;
 
