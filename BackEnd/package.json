@@ -24,8 +24,8 @@
         "url": "https://api.example.com",
         "order": [
             "Authentication",
-            "User",
-            "Care group",
+            "Users",
+            "Caregroups",
             "Kubios",
             "Entries"
         ]
