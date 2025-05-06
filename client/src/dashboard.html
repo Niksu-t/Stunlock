@@ -180,7 +180,7 @@
                     <h1 class="text-3xl font-semibold">Päiväkirja.</h1>
                     <p class="text-xl">Muokkaa tai lisää päiväkirjamerkintöjä.</p>
                     <div class="rounded-2xl mt-5 flex flex-row">
-                        <div class="bg-white shadow-offset-4 rounded-xl px-6 w-fit justify-center flex">
+                        <div class="bg-white shadow-offset-4 rounded-xl px-6 w-full justify-center flex">
                             <img src="arrow-dark.svg" class="w-16 no-drag" id="diary-left">
                             <div id="week-calendar" class="flex items-center overflow-x-auto rounded-xl py-2 scroll-smooth w-[440px] pr-[88px]"></div>
                             <img src="arrow-dark.svg" class="w-20 rotate-180 no-drag" id="diary-right">
@@ -189,30 +189,50 @@
                 </div>
 
                 <div class="max-w-7xl mt-10">
-                    <h1 class="text-3xl font-semibold">Tämä viikko.</h1>
-                    <div class="flex flex-col text-brand-dark max-w-7xl bg-white p-8 gap-1 rounded-2xl shadow-offset-4 mt-5">
+                    <div class="flex flex-col mt-5
+                    md:flex-row">
+                        <h1 class="text-3xl font-semibold mb-5">Viikoittain.</h1> 
+                        <div class="flex flex-row ml-0 gap-10 bg-white rounded-t-xl text-brand-dark py-2 p-6 items-center justify-center
+                        md:ml-auto">
+                            <img src="arrow-white.svg" class="w-10 no-drag bg-brand-red shadow-offset-4 rounded-xl cursor-pointer" id="week-left">
+                            <h1 class="text-2xl font-semibold w-32 text-center" id="week-chart-text">1.2025</h1>
+                            <div class="bg-brand-red shadow-offset-4 rounded-xl cursor-pointer" id="week-right"><img src="arrow-white.svg" class="w-10 rotate-180 no-drag"></div>
+                        </div>
+                    </div>
+                    <div class="flex flex-col text-brand-dark max-w-7xl bg-white p-8 gap-1 rounded-2xl shadow-offset-4 rounded-tr-none rounded-tl-none
+                    md:rounded-tl-xl">
                         <div class="flex-col flex items-center gap-10
                         xl:flex-row">
-                            <div class="flex flex-col gap-2 max-w-56" id="weekly-text">
-                                <p id="weekly-avg-percent"></p>
-                                <h1 class="text-brand-green text-6xl font-semibold"><span id="weekly-avg"></span><span class="text-xl">ms</span></h1>
-                                <h1>RMSSD keskiarvo.</h1>
-                            </div>
-                            <div class="w-full h-52 max-w-[400px] relative
-                            md:w-[400px] md:h-[300px] md:max-w-none
-                            2xl:w-[700px] 2xl:h-[300px] 2xl:max-w-none">
-                                <canvas id="weekdayChart"></canvas>
+                            <div class="flex-col flex items-center gap-10
+                            xl:flex-row">
+                                <div class="flex flex-col gap-2 max-w-56" id="weekly-text">
+                                    <p id="weekly-avg-percent"></p>
+                                    <h1 class="text-brand-green text-6xl font-semibold"><span id="weekly-avg"></span><span class="text-xl">ms</span></h1>
+                                    <h1>RMSSD keskiarvo.</h1>
+                                </div>
+                                <div class="w-full h-52 max-w-[400px] relative
+                                md:w-[400px] md:h-[300px] md:max-w-none
+                                2xl:w-[700px] 2xl:h-[300px] 2xl:max-w-none">
+                                    <canvas id="weekdayChart"></canvas>
+                                </div>
                             </div>
                         </div>
-                        <div class="flex flex-col-reverse gap-10 items-center
-                        xl:flex-row">
-                            <p class="bg-brand-red text-white rounded-4xl p-1 px-4 max-w-fit shadow-offset-4 ">Ilmoita tulehdustilasta.</p>
-                        </div>
+                        <p class="bg-brand-red text-white rounded-4xl p-1 px-4 max-w-fit shadow-offset-4">Ilmoita tulehdustilasta.</p>
                     </div>
                 </div>
                 <div class="max-w-7xl mt-10">
-                    <h1 class="text-3xl font-semibold">Tämä kuukausi.</h1>
-                    <div class="flex flex-col text-brand-dark max-w-7xl bg-white p-8 gap-1 rounded-2xl shadow-offset-4 mt-5">
+                    <div class="flex flex-col mt-5
+                    md:flex-row">
+                        <h1 class="text-3xl font-semibold mb-5">Kuukausittain.</h1> 
+                        <div class="flex flex-row ml-0 gap-10 bg-white rounded-t-xl text-brand-dark py-2 p-6 items-center justify-center
+                        md:ml-auto">
+                            <img src="arrow-white.svg" class="w-10 no-drag bg-brand-red shadow-offset-4 rounded-xl cursor-pointer" id="month-left">
+                            <h1 class="text-2xl font-semibold w-32 text-center" id="month-chart-text">1.2025</h1>
+                            <div class="bg-brand-red shadow-offset-4 rounded-xl cursor-pointer" id="month-right"><img src="arrow-white.svg" class="w-10 rotate-180 no-drag"></div>
+                        </div>
+                    </div>
+                    <div class="flex flex-col text-brand-dark max-w-7xl bg-white p-8 gap-1 rounded-2xl shadow-offset-4 rounded-tr-none rounded-tl-none
+                    md:rounded-tl-xl">
                         <div class="flex-col flex items-center gap-10
                         xl:flex-row">
                             <div class="flex-col flex items-center gap-10

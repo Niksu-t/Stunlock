@@ -1,16 +1,29 @@
 import dayjs from 'dayjs';
 
-import { getWeekDays, DayToFinnishString, KubiosIsLoggedIn, KubiosTokenExpired } from './utils';
+import { DayToFinnishString, KubiosIsLoggedIn, KubiosTokenExpired } from './utils';
 import { drawRmssdGraph } from './graphs';
 import { postDiary, getDiary, updateDiary, getAllKubiosResults } from "./fetch-api";
 import { getThisWeeksWeekdays } from './utils';
 
+const MoveDirection = {
+    right: "right",
+    left: "left"
+}
+
 let state = {
     average_percentage: 0,
+    average_rmssd_week: 0,
     average_rmssd: 0,
     month_average_rmssd: 0,
 
+    month_chart_month: null,
+    week_chart_week: null,
+
     diary_entires: null,
+    kubios_data: null,
+
+    month_chart: null,
+    week_chart: null
 }
 
 let current_diary = {
@@ -22,8 +35,16 @@ let open = false;
 
 async function onPageLoad() {
     const data = await getAllKubiosResults(localStorage.getItem("kubios_token"))
+    
+    state.kubios_data = data.Data;
 
-    HandleGraphWidgets(data.Data);
+    if(!state.kubios_data) {
+        state.kubios_data = [{
+            rmssd_ms: 0
+        }]
+    }
+
+    HandleGraphWidgets(state.kubios_data);
     
 
     const welcome_text = document.getElementById("welcome-text");
@@ -51,46 +72,53 @@ function GraphsHandleKubiosErrors(id) {
     return true;
 }
 
+const get_average_percent = (average, target_average) => {
+    let decrease = false
+    let dif = target_average - average;
+    if(target_average < average) {
+        dif = average - target_average;
+        decrease = true;
+    }
+
+    return {
+        average: dif / average * 100,
+        decrease
+    }; 
+}
+
+const set_widget_text = (target, text, average, percent) => {
+    document.getElementById(`${target}-text`).innerHTML = `
+        <p id="weekly-avg-percent">${percent.toFixed(1)}${text}</p>
+        <h1 class="text-brand-green text-6xl font-semibold"><span id="weekly-avg">${average.toFixed(1)}</span><span class="text-xl">ms</span></h1>
+        <h1>RMSSD keskiarvo.</h1>`;
+}
+
+
 async function HandleGraphWidgets(data) {
-    if(!data) {
-        data = [{
-            rmssd_ms: 0
-
-        }]
-    }
-
-    const get_average_percent = (average, target_average) => {
-        let decrease = false
-        let dif = target_average - average;
-        if(target_average < average) {
-            dif = average - target_average;
-            decrease = true;
-        }
-
-        return {
-            average: dif / average * 100,
-            decrease
-        }; 
-    }
-
-    const set_widget_text = (target, text, average, percent) => {
-        document.getElementById(`${target}-percent`).innerHTML = `${percent.toFixed(1)}${text}`;
-        document.getElementById(target).innerHTML = average.toFixed(1);
-    }
-    
     const sum = (total, number) => total + number;
-
-    const today = new Date();
 
     const average = data
         .map(item => item.rmssd_ms)
         .reduce(sum) / data.length;
 
-    const weeks_ago = 0
-    const this_week = data.filter(item => isOnWeeksAgo(new Date(item.date), weeks_ago))
+    state.average_rmssd = average;
+
+    const today = new Date();
+    state.month_chart_month = today;
+    state.week_chart_week = getStartOfWeek(today)
+
+    DrawWeekGraph(state.week_chart_week);
+    DrawMonthGraph();
+}
+
+async function DrawWeekGraph(today) {
+    const this_week = state.kubios_data.filter(item => isOnWeek(new Date(item.date), today))
+
+    console.log(today)
+    console.log(this_week)
     const value_map = new Map(this_week.map(d => [d.date, d.rmssd_ms]));
 
-    const weekdays = getThisWeeksWeekdays(weeks_ago);
+    const weekdays = getThisWeeksWeekdays(today);
 
     const fi_weekdays = ["ma", "ti", "ke", "to", "pe", "la", "su"]
 
@@ -99,78 +127,100 @@ async function HandleGraphWidgets(data) {
         return value_map.get(day) ?? 0
     });
 
-    const graph_result = await drawRmssdGraph(week_chart_data, document.getElementById('weekdayChart'), fi_weekdays);
+    const graph_result = await drawRmssdGraph(week_chart_data, document.getElementById('weekdayChart'), fi_weekdays, state.week_chart);
+    state.week_chart = graph_result.chart;
 
     const kubios_errors = GraphsHandleKubiosErrors("weekly-text");
 
     if(kubios_errors) {
         if(!graph_result.empty) {
-            state.average_rmssd = graph_result.average_rmssd;
+            state.average_rmssd_week = graph_result.average_rmssd;
 
-            let average_result = get_average_percent(average, state.average_rmssd)
+            let average_result = get_average_percent(state.average_rmssd, state.average_rmssd_week)
 
             set_widget_text(
-                "weekly-avg",
+                "weekly",
                 average_result.decrease ? "% perustason alapuolella." : "% perustason yläpuolella.",
-                state.average_rmssd,
+                state.average_rmssd_week,
                 average_result.average
             )
         }
         else {
-            document.getElementById("weekly-text").innerHTML = "<h1 class='text-brand-green text-2xl font-semibold'>Ei mittauksia tällä viikolla!</h1>"
+            document.getElementById("weekly-text").innerHTML = `
+                <p id="weekly-avg-percent" class='text-brand-green text-2xl font-semibold'>Ei mittauksia!</p>
+                <h1 class="text-brand-green text-6xl font-semibold"><span id="weekly-avg"></span><span class="text-xl"></span></h1>`
         }
     }
 
-    const this_month = data.filter(item => isOnMonth(new Date(item.date), new Date()))
+    const end_of_week_date = new Date(state.week_chart_week);
+    end_of_week_date.setDate(end_of_week_date.getDate() + 7)
+
+    document.getElementById("week-chart-text").innerHTML = `${state.week_chart_week.getDate()}.${state.week_chart_week.getMonth() + 1} - ${end_of_week_date.getDate()}.${end_of_week_date.getMonth() + 1}`
+}
+
+function isOnWeek(date, target_week) {
+    const end_of_week = new Date(target_week);
+    end_of_week.setDate(target_week.getDate() + 6);
+  
+    const target = new Date(date);
+    target.setHours(0, 0, 0, 0);
+  
+    return target >= target_week && target <= end_of_week;
+}
+
+function getStartOfWeek(date) {
+    const result = new Date(date);
+    const day = result.getDay(); // 0 (Sun) to 6 (Sat)
+    const diff = (day === 0 ? -6 : 1 - day); // Shift Sunday (0) to previous Monday
+    result.setDate(result.getDate() + diff);
+    result.setHours(0, 0, 0, 0); // Optional: zero time
+    return result;
+}
+
+async function DrawMonthGraph(input_month = null) {
+    let today = new Date();
+
+    if(input_month) {
+        today = input_month;
+    }
+    
+    const this_month = state.kubios_data.filter(item => isOnMonth(new Date(item.date), today))
     
     const month_range = generateDateRange(today.getFullYear(), today.getMonth())
     const month_value_map = new Map(this_month.map(d => [dayjs(d.date).format("D"), d.rmssd_ms]));
     const month_values = month_range.map(date => month_value_map.get(date) ?? 0);
 
-    const month_graph_result = await drawRmssdGraph(month_values, document.getElementById('month-chart'), month_range);
+    const month_graph_result = await drawRmssdGraph(month_values, document.getElementById('month-chart'), month_range, state.month_chart);
 
     const month_kubios_errors = GraphsHandleKubiosErrors("monthly-text");
+
+    state.month_chart = month_graph_result.chart;
 
     if(month_kubios_errors) {
         if(!month_graph_result.empty) {
             state.month_average_rmssd = month_graph_result.average_rmssd;
 
-            let month_average_result = get_average_percent(average, state.month_average_rmssd)
+            let month_average_result = get_average_percent(state.average_rmssd, state.month_average_rmssd)
             set_widget_text(
-                "monthly-avg",
+                "monthly",
                 month_average_result.decrease ? "% perustason alapuolella." : "% perustason yläpuolella.",
                 state.month_average_rmssd,
                 month_average_result.average
             )
         }
         else {
-            document.getElementById("monthly-text").innerHTML = "<h1 class='text-brand-green text-3xl font-semibold'>Ei mittauksia!</h1>"
+            document.getElementById("monthly-text").innerHTML = `
+                <p id="monthly-avg-percent" class='text-brand-green text-2xl font-semibold'>Ei mittauksia!</p>
+                <h1 class="text-brand-green text-6xl font-semibold"><span id="monthly-avg"></span><span class="text-xl"></span></h1>
+            `
         }
     }
+
+    document.getElementById("month-chart-text").innerHTML = `${state.month_chart_month.getMonth() + 1}.${state.month_chart_month.getFullYear()}`
 }
 
-function isOnWeeksAgo(dateStr, num_of_weeks = 0) {
-    const now = new Date();
-  
-    const dayOfWeek = now.getDay(); // Sunday = 0
-    const diffToMonday = (dayOfWeek + 6) % 7;
-  
-    const startOfThisWeek = new Date(now);
-    startOfThisWeek.setDate(now.getDate() - diffToMonday);
-    startOfThisWeek.setHours(0, 0, 0, 0);
-  
-    const startOfTargetWeek = new Date(startOfThisWeek);
-    startOfTargetWeek.setDate(startOfThisWeek.getDate() - num_of_weeks * 7);
-  
-    const endOfTargetWeek = new Date(startOfTargetWeek);
-    endOfTargetWeek.setDate(startOfTargetWeek.getDate() + 6);
-    endOfTargetWeek.setHours(23, 59, 59, 999);
-  
-    return dateStr >= startOfTargetWeek && dateStr <= endOfTargetWeek;
-}
-
-function isOnMonth(date_str, today, months_ago = 0) {
-    const start_of_month = new Date(today.getFullYear(), today.getMonth() - months_ago, 1);
+function isOnMonth(date_str, day) {
+    const start_of_month = new Date(day.getFullYear(), day.getMonth(), 1);
     return date_str.getMonth() === start_of_month.getMonth() 
         && date_str.getFullYear() === start_of_month.getFullYear();
 }
@@ -480,6 +530,38 @@ function ResetDiary() {
     current_diary.div.open = false;
 }
 
+function monthMove(direction) {
+    if(state.month_chart) {
+        state.month_chart.destroy()
+        state.month_chart = null;
+    }
+
+    if(direction == MoveDirection.left) {
+        state.month_chart_month.setMonth(state.month_chart_month.getMonth() - 1);
+    }
+    else {
+        state.month_chart_month.setMonth(state.month_chart_month.getMonth() + 1);
+    }
+
+    DrawMonthGraph(state.month_chart_month)
+}
+
+function weekMove(direction) {
+    if(state.week_chart) {
+        state.week_chart.destroy()
+        state.week_chart = null;
+    }
+
+    if(direction == MoveDirection.left) {
+        state.week_chart_week.setDate(state.week_chart_week.getDate() - 7);
+    }
+    else {
+        state.week_chart_week.setDate(state.week_chart_week.getDate() + 7);
+    }
+
+    DrawWeekGraph(state.week_chart_week)
+}
+
 addEventListener('userdata', onPageLoad)
 
 /// Diary and status bar event listeners (close, save etc)
@@ -509,5 +591,10 @@ function scrollToTarget(offset) {
 }
 
 scrollLeft.addEventListener('click', () => scrollToTarget(-SCROLL_STEP));
-
 scrollRight.addEventListener('click', () => scrollToTarget(SCROLL_STEP));
+
+document.getElementById('month-left').addEventListener("click", () => monthMove(MoveDirection.left));
+document.getElementById('month-right').addEventListener("click", () => monthMove(MoveDirection.right));
+
+document.getElementById('week-left').addEventListener("click", () => weekMove(MoveDirection.left));
+document.getElementById('week-right').addEventListener("click", () => weekMove(MoveDirection.right));

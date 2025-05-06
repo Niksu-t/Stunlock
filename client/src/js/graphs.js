@@ -12,7 +12,8 @@ export const ChartResult = {
 export async function drawRmssdGraph(data, ctx, labels) {
     const return_value = {
         average_rmssd: 0,
-        empty: false
+        empty: false,
+        chart: null,
     }
 
     let average = 0;
@@ -45,7 +46,7 @@ export async function drawRmssdGraph(data, ctx, labels) {
         value: average
       };
 
-    new Chart(ctx, {
+    const chart = new Chart(ctx, {
         type: 'bar',
         data: {
             labels: labels,
@@ -88,6 +89,8 @@ export async function drawRmssdGraph(data, ctx, labels) {
             }
         }
     });
+
+    return_value.chart = chart;
 
     return return_value;
 }
