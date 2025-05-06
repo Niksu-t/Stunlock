@@ -1,8 +1,8 @@
 import jwt from "jsonwebtoken";
 import "dotenv/config";
 import bcrypt from "bcryptjs";
-import fetch from 'node-fetch';
-import {v4} from 'uuid';
+import fetch from "node-fetch";
+import { v4 } from "uuid";
 
 import {
   selectUserByNameAndPassword,
@@ -11,6 +11,7 @@ import {
 } from "../users/user_model.js";
 import { customError } from "../utils/error.js";
 import { AppendKubiosFields } from "../kubios/kubios_controller.js";
+import { application } from "express";
 
 // TODO: Add results and return correct code
 
@@ -48,7 +49,7 @@ export const postLogin = async (req, res, next) => {
         expiresIn: "30d",
       });
 
-      if(req.body.remember_me) {
+      if (req.body.remember_me) {
         res.cookie("jwt", refreshToken, {
           httpOnly: true,
           sameSite: "None",
@@ -64,19 +65,16 @@ export const postLogin = async (req, res, next) => {
         secure: true,
         maxAge: 24 * 60 * 60 * 1000,
         partitioned: true,
-      })
+      });
 
       const return_json = {
         ...user,
-        status: 200
-      }
+        status: 200,
+      };
 
-      AppendKubiosFields(return_json, user)
+      AppendKubiosFields(return_json, user);
 
-      return res
-        .status(200)
-        .contentType("application/json")
-        .json(return_json);
+      return res.status(200).contentType("application/json").json(return_json);
     }
   }
   return next(customError("Internal serverl error", 500));
@@ -130,12 +128,11 @@ export const getMe = async (req, res) => {
 };
 
 export const linkKubios = async (email, password) => {
-  if(!email || !password)
-    return;
+  if (!email || !password) return;
 
   const csrf = v4();
   const headers = new Headers();
-  headers.append('Cookie', `XSRF-TOKEN=${csrf}`);
+  headers.append("Cookie", `XSRF-TOKEN=${csrf}`);
   headers.append("User-Agent", process.env.KUBIOS_USER_AGENT);
 
   const params = new URLSearchParams({
@@ -143,16 +140,16 @@ export const linkKubios = async (email, password) => {
     password: password,
     client_id: process.env.CLIENT_ID,
     redirect_uri: process.env.REDIRECT_URI,
-    response_type: 'token',
+    response_type: "token",
     scope: "openid",
-    access_type: 'offline',
+    access_type: "offline",
     _csrf: csrf,
   });
 
   const options = {
-    method: 'POST',
+    method: "POST",
     headers: headers,
-    redirect: 'manual',
+    redirect: "manual",
     body: params,
   };
 
@@ -161,31 +158,31 @@ export const linkKubios = async (email, password) => {
   try {
     response = await fetch(process.env.AUTH_URL, options);
   } catch (err) {
-    console.error('Kubios login error', err);
+    console.error("Kubios login error", err);
     return 0;
   }
 
   const location = response.headers.raw().location[0];
   // console.log(location
   // If login fails, location contains 'login?null'
-  if (location.includes('login?null')) {
-    return 0
+  if (location.includes("login?null")) {
+    return 0;
   }
 
   const regex = /id_token=(.*)&access_token=(.*)&expires_in=(.*)&/;
   const match = location.match(regex);
   const idToken = match[1];
-  
+
   const expires_in = match[3];
   const received_at = Date.now();
   const expires_at = received_at + expires_in * 1000; // convert seconds to ms
 
   const headers2 = new Headers();
-  headers2.append('User-Agent', process.env.USER_AGENT);
-  headers2.append('Authorization', idToken);
+  headers2.append("User-Agent", process.env.USER_AGENT);
+  headers2.append("Authorization", idToken);
 
-  const response2 = await fetch(process.env.KUBIOS_API_URI + '/user/self', {
-    method: 'GET',
+  const response2 = await fetch(process.env.KUBIOS_API_URI + "/user/self", {
+    method: "GET",
     headers: headers2,
   });
 
@@ -196,22 +193,29 @@ export const linkKubios = async (email, password) => {
     email: responseJson.user.email,
     uuid: responseJson.user.sub,
     expires_at,
-  }
-}
+  };
+};
 
 export const logOut = async (req, res) => {
-  
   console.log("logOut request");
 
-  res.clearCookie("auth_token", {
-    httpOnly: true,
-    sameSite: "None",
-    secure: true,
-    partitioned: true,
-  });
+  try {
+    res.clearCookie("auth_token", {
+      httpOnly: true,
+      sameSite: "None",
+      secure: true,
+      partitioned: true,
+    });
 
-  return res
-    .status(200)
-    .contentType("application/json")
-    .json("Logout successfull");
+    return res
+      .status(200)
+      .contentType("application/json")
+      .json("Logout successfull");
+  } catch (err) {
+    console.log("Error: ", err);
+    return res
+      .status(500)
+      .contentType("application/json")
+      .json("Internal server error");
+  }
 };
