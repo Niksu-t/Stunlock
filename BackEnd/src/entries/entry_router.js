@@ -107,7 +107,7 @@ entryRouter
   .route("/")
 /**
 * @api {get} /entries Get all user entries
-* @apiName PutEntry
+* @apiName GetEntry
 * @apiGroup Entries
 * @apiPermission token
 *

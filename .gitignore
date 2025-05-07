@@ -133,3 +133,5 @@ dist
 .venv
 bin
 __pycache__
+
+docs/
