@@ -81,3 +81,24 @@ export const insertEntry = async (user, body) => {
     return 0;
   }
 };
+
+/**
+ * Returns users entries on a given date. Only to be used for error handling purposes.
+ * 
+ * @param {*} date Day
+ * @param {*} id 
+ */
+export const selectEntryByUserAndDate = async (date, id) => {
+  const query = `SELECT * FROM diary_entries WHERE user_id = ? AND entry_date = ?`;
+
+  try {
+    const params = [id, date];
+
+    const [rows] = await promisePool.query(query, params);
+
+    return rows;
+  } catch (e) {
+    console.log(e);
+    return 0;
+  }
+}

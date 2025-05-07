@@ -12,9 +12,10 @@ Create New User
     ${body}=    Create Dictionary    
     ...     fname=${FNAME}     
     ...     lname=${lname}    
-    ...     email=${EMAIL}    
+    ...     email=${API_EMAIL}    
     ...     password=${PASSWORD}    
-    ...     kubios_email=${KUBIOS_EMAIL}    
+    ...     kubios_email=${KUBIOS_EMAIL}
+    ...     kubios_passwrd=${KUBIOS_PASSWORD}
 
     ${response}=    POST On Session    Stunlock    /users/    json=${body}    headers=${headers}
     Should Be Equal As Integers    ${response.status_code}    201
@@ -23,7 +24,7 @@ Create New User
 Login As User 
     ${headers}=    Create Dictionary    Content-Type=application/json
     ${body}=    Create Dictionary    
-    ...     email=${EMAIL}    
+    ...     email=${API_EMAIL}    
     ...     password=${PASSWORD}    
 
     ${response}=    POST On Session    Stunlock    /auth/login    json=${body}    headers=${headers}

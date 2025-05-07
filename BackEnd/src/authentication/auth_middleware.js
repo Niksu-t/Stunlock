@@ -12,7 +12,7 @@ export const UserRole = {
  * Used to authenticate logged in user. Must be invoked before invoking functions requiring user authentication.
  */
 export const authenticateToken = (req, res, next) => {
-  console.log("authenticateToken request");
+  console.log("authenticateToken request:", req.cookies?.auth_token);
   const accessToken = req.cookies?.auth_token;
 
   try {

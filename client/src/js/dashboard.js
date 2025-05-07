@@ -113,16 +113,10 @@ async function HandleGraphWidgets(data) {
 
 async function DrawWeekGraph(today) {
     const this_week = state.kubios_data.filter(item => isOnWeek(new Date(item.date), today))
-
-    console.log(today)
-    console.log(this_week)
     const value_map = new Map(this_week.map(d => [d.date, d.rmssd_ms]));
-
     const weekdays = getThisWeeksWeekdays(today);
-
     const fi_weekdays = ["ma", "ti", "ke", "to", "pe", "la", "su"]
 
-    let i = 0;
     const week_chart_data = weekdays.map(day => {
         return value_map.get(day) ?? 0
     });
@@ -439,6 +433,7 @@ async function generateThisWeekEntries() {
             }
         }
         div.data = data;
+        div.id = day.format('YYYY-MM-DD');
 
         if(data.entry.entry_date == today.format('YYYY-MM-DD')) {
             highlight = true;
@@ -531,35 +526,47 @@ function ResetDiary() {
 }
 
 function monthMove(direction) {
-    if(state.month_chart) {
-        state.month_chart.destroy()
-        state.month_chart = null;
-    }
+    let can_draw = false
+    const today = new Date();
 
     if(direction == MoveDirection.left) {
         state.month_chart_month.setMonth(state.month_chart_month.getMonth() - 1);
+        can_draw = true
     }
-    else {
+    else if(!isOnMonth(today, state.month_chart_month)) {
         state.month_chart_month.setMonth(state.month_chart_month.getMonth() + 1);
+        can_draw = true
     }
 
-    DrawMonthGraph(state.month_chart_month)
+    if(can_draw){
+        if(state.month_chart) {
+            state.month_chart.destroy()
+            state.month_chart = null;
+        }
+        DrawMonthGraph(state.month_chart_month)
+    }
+  
 }
 
 function weekMove(direction) {
-    if(state.week_chart) {
-        state.week_chart.destroy()
-        state.week_chart = null;
-    }
+    let can_draw = false
 
     if(direction == MoveDirection.left) {
         state.week_chart_week.setDate(state.week_chart_week.getDate() - 7);
+        can_draw = true
     }
-    else {
+    else if (!isOnWeek(new Date(), state.week_chart_week)){
         state.week_chart_week.setDate(state.week_chart_week.getDate() + 7);
+        can_draw = true
     }
 
-    DrawWeekGraph(state.week_chart_week)
+    if(can_draw) {
+        if(state.week_chart) {
+            state.week_chart.destroy()
+            state.week_chart = null;
+        }
+        DrawWeekGraph(state.week_chart_week)
+    }
 }
 
 addEventListener('userdata', onPageLoad)

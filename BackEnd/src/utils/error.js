@@ -7,12 +7,12 @@ export const notFoundHandler = (req, res, next) => {
 };
 
 export const errorHandler = (err, req, res, next) => {
-  res.status(err.status || 500);
-  res.json({
-    message: err.message,
-    status: err.status || 500,
-    errors: err.errors,
-  });
+  return res
+    .status(err.status || 500)
+    .json({
+      message: err.message,
+      errors: err.errors,
+    });
 };
 
 export const validationErrorHandler = (req, res, next) => {

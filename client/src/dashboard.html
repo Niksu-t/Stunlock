@@ -3,7 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vite Vanilla</title>
+    <title>Työpöytä - Stunlock</title>
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+    <meta name="description" content="Stunlock - Track your inflammation, prevent pain." />
     <link rel="stylesheet" href="/style.css"/>
 </head>
 <body>
@@ -159,7 +167,7 @@
                                 <!--notes-->
                                 <label for="notes">Muistiinpanot.</label>
                                 <textarea class="w-full min-h-[80px] py-2 resize-none p-4 bg-transparent placeholder:text-slate-400 text-slate-600 text-sm border border-slate-200 rounded-md transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow" placeholder="Miten päiväsi on mennyt?" type="text" id="notes" name="notes"></textarea>
-                                <input class="bg-brand-red text-white rounded-4xl p-2 px-4 shadow-offset-4 cursor-pointer" type="submit" value="Tallenna">
+                                <input class="bg-brand-red text-white rounded-4xl p-2 px-4 shadow-offset-4 cursor-pointer" type="submit" value="Tallenna" id="save-diary">
                             </div>
                         </div>                
                     </form>
@@ -195,7 +203,7 @@
                         <div class="flex flex-row ml-0 gap-10 bg-white rounded-t-xl text-brand-dark py-2 p-6 items-center justify-center
                         md:ml-auto">
                             <img src="arrow-white.svg" class="w-10 no-drag bg-brand-red shadow-offset-4 rounded-xl cursor-pointer" id="week-left">
-                            <h1 class="text-2xl font-semibold w-32 text-center" id="week-chart-text">1.2025</h1>
+                            <h1 class="text-2xl font-semibold w-44 text-center" id="week-chart-text">1.2025</h1>
                             <div class="bg-brand-red shadow-offset-4 rounded-xl cursor-pointer" id="week-right"><img src="arrow-white.svg" class="w-10 rotate-180 no-drag"></div>
                         </div>
                     </div>
@@ -205,7 +213,7 @@
                         xl:flex-row">
                             <div class="flex-col flex items-center gap-10
                             xl:flex-row">
-                                <div class="flex flex-col gap-2 max-w-56" id="weekly-text">
+                                <div class="flex flex-col gap-2 max-w-72 min-h-32" id="weekly-text">
                                     <p id="weekly-avg-percent"></p>
                                     <h1 class="text-brand-green text-6xl font-semibold"><span id="weekly-avg"></span><span class="text-xl">ms</span></h1>
                                     <h1>RMSSD keskiarvo.</h1>
@@ -237,7 +245,7 @@
                         xl:flex-row">
                             <div class="flex-col flex items-center gap-10
                             xl:flex-row">
-                                <div class="flex flex-col gap-2 max-w-56" id="monthly-text">
+                                <div class="flex flex-col gap-2 max-w-72 min-h-32" id="monthly-text">
                                     <p id="monthly-avg-percent"></p>
                                     <h1 class="text-brand-green text-6xl font-semibold"><span id="monthly-avg"></span><span class="text-xl">ms</span></h1>
                                     <h1>RMSSD keskiarvo.</h1>

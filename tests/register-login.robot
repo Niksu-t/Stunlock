@@ -38,14 +38,7 @@ Duplicate User Registration
 
     Type Secret    [id="password"]    $PASSWORD    delay=0.1 s
     Click With Options    button    delay=2 s
-
-    Click With Options    [id="skip"]    delay=2 s
-
-    Click With Options    [id="skip"]    delay=2 s
-
-    Click With Options    [id="register"]    delay=2 s
-
-    # TODO: Make error messages
+    Get Text    id=email-error    ==    Email already in use
 
     Log    Registration not successfull due to duplicate email, test passed.
 
@@ -54,7 +47,7 @@ Successfull Login
     New Page    ${BASE_URL}/login
     Type Text    [id="email"]    ${EMAIL}    delay=0.1 s
     Type Secret    [id="password"]    $PASSWORD    delay=0.1 s
-    Click With Options    submit    delay=2 s
+    Click With Options    [id="login-submit"]    delay=2 s
 
     Wait For Navigation    ${BASE_URL}/dashboard    timeout=10 s
     Log    Login successful, test passed.

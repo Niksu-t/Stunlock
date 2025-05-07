@@ -55,8 +55,6 @@ With Stunlock the user can visualize HRV data and keep track of well-being by fi
 ### Responsiveness
 - The website has breakpoints for different screen sizes. All features are designed to be usable on both desktop and mobile devices. 
 
-## Images
-
 ## Deployments and links
 
 - [IaaS client deployment](https://stunlock.northeurope.cloudapp.azure.com)
@@ -74,3 +72,8 @@ See [tests/README.md](tests/README.md).
 - Express.js, Vite.js, http-proxy-middleware, KubiosCloud and Tailwind documentation.
 - ChatGPT.
 - Graphs are rendered by Chart.js.
+
+## Images
+
+![Dashboard](/assets/images/dashboard.png) ![Diary](/assets/images/diary.png) ![Settings](/assets/images/settings.png)
+![Landing](/assets/images/landing.png) ![Register](/assets/images/register.png)

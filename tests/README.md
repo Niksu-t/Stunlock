@@ -1,6 +1,8 @@
 # Tests
 
-Tests are ran automatically by the CI/CD pipeline (not implemented). Tests are user acceptance and unit tests made with the Robot framework.
+Tests are ran automatically by the CI/CD pipeline (not implemented). Tests are user acceptance and unit tests made with the Robot framework. 
+
+[Sample test report.](https://niksu-t.github.io/Stunlock/assets/sample-tests/test-1/report.html)
 
 # How to run
 
@@ -31,7 +33,6 @@ Some tests require the use of a .env file with the following contents:
 
 - FNAME
 - LNAME
-- EMAIL
 - PASSWORD
 - BASE_URL
 - KUBIOS_EMAIL

@@ -1,18 +1,10 @@
 import express, { json } from "express";
 import { body } from "express-validator";
 
-import {
-  deleteEntry,
-  getEntries,
-  getEntry,
-  postEntry,
-  updateEntry,
-} from "./entry_controller.js";
-import {
-  authenticateToken,
-  authorizeEntry,
-} from "../authentication/auth_middleware.js";
+import { deleteEntry, getEntries, getEntry, postEntry, updateEntry } from "./entry_controller.js";
+import { authenticateToken, authorizeEntry } from "../authentication/auth_middleware.js";
 import { validationErrorHandler } from "../utils/error.js";
+import { selectEntryByUserAndDate } from "./entry_model.js";
 
 export const entryRouter = express.Router();
 
@@ -191,6 +183,15 @@ entryRouter
     body("stiffness").trim().notEmpty().isInt({ min: 0, max: 10 }),
     body("sleep").trim().notEmpty().isInt({ min: 0, max: 10 }),
     body("notes").isLength({ min: 0, max: 1500 }).escape(),
+    body("entry_date").custom(async (date, {req}) => {
+      console.log(req.user.user_id);
+      const entry = await selectEntryByUserAndDate(date, req.user.user_id);
+      console.log(entry)
+      if(entry.length) {
+        throw new Error("Duplicate entry");
+      }
+      return true;
+    }),
     validationErrorHandler,
     postEntry
   );
