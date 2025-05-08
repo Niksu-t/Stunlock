@@ -59,7 +59,7 @@ With Stunlock the user can visualize HRV data and keep track of well-being by fi
 
 - [IaaS client deployment](https://stunlock.northeurope.cloudapp.azure.com)
 - [IaaS API deployment](https://stunlock.northeurope.cloudapp.azure.com/api/) (Same origin, web server acting as a reverse proxy)
-- [Apidoc](https://stunlock.northeurope.cloudapp.azure.com/api/docs)
+- [Apidoc](https://stunlock.northeurope.cloudapp.azure.com/api/docs/)
 - [Figma wireframe mockup](https://www.figma.com/design/k0gFv2LaYGmuexjPFx1isa/Stunlock?node-id=0-1&t=iIFvANdM0Ib9vnAS-1)
 
 ## Workflow
