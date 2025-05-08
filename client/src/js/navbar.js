@@ -8,7 +8,7 @@ function init() {
     headerRight.innerHTML = `
         <div class="flex flex-row items-center bg-brand-red text-white rounded-4xl p-1 px-6 shadow-offset-4 min-w-44" id="user-menu">
             <p class="font-semibold cursor-pointer inline-block">${fname}</p>
-            <img src="arrow-white.svg" class="w-8 cursor-pointer inline-block rotate-270 fill-white ml-auto"/>
+            <img alt="Open arrow" src="arrow-white.svg" class="w-8 cursor-pointer inline-block rotate-270 fill-white ml-auto"/>
         </div>
         <div
             id="dropdownMenu"

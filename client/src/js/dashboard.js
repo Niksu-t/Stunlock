@@ -235,6 +235,11 @@ function openImportDiaryEntry(data) {
         current_diary.id = data.id
     }
 
+    Object.keys(data.entry.pain_points).forEach(pain_point => {
+        const checkbox = document.getElementById(pain_point);
+        checkbox.checked = data.entry.pain_points[pain_point];
+    });
+
     document.getElementById("date-picker").value = data.entry.entry_date
     document.getElementById("stress").value = data.entry.stress_gauge
     document.getElementById("pain").value = data.entry.pain_gauge
@@ -270,8 +275,6 @@ async function toggleDiary() {
 async function saveDiaryEntry(e) {
     e.preventDefault();
 
-    let pain_points_id = [];
-
     const pain_points = {
         TMJ: false,
         Cervical_Spine: false,
@@ -280,14 +283,19 @@ async function saveDiaryEntry(e) {
         Elbow: false,
         Lower_back_and_SI_Joints: false,
         Hands_fingers_and_wrist: false,
+        Hips: false,
         Knees: false,
         Ankles: false,
         Feet_and_toes: false,
-      }
+    }
 
-    pain_points_id.forEach(pain_point => {
-        pain_points_values.push(document.getElementById(pain_point).checked);
+    Object.keys(pain_points).forEach(pain_point => {
+        const checkbox = document.getElementById(pain_point);
+        const isChecked = checkbox ? checkbox.checked : false;
+        pain_points[pain_point] = isChecked;        
     });
+
+    console.log(pain_points)
 
     if(current_diary.id) {
         await updateDiary(
@@ -417,6 +425,19 @@ async function generateThisWeekEntries() {
 
         let data = {
             entry: {
+                pain_points: {
+                    TMJ: false,
+                    Cervical_Spine: false,
+                    Shoulder: false,
+                    Thoraic_Spine: false,
+                    Elbow: false,
+                    Lower_back_and_SI_Joints: false,
+                    Hands_fingers_and_wrist: false,
+                    Hips: false,
+                    Knees: false,
+                    Ankles: false,
+                    Feet_and_toes: false,
+                },
                 entry_date: day.format('YYYY-MM-DD'),
                 pain_gauge: 0,
                 stress_gauge: 0,

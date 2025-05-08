@@ -136,6 +136,7 @@ const painpointsToBinary = (pain_points) => {
 };
 
 const painpointsToJson = (binary) => {
+  console.log(binary)
   let pain_points = {
     TMJ: false,
     Cervical_Spine: false,
@@ -144,17 +145,23 @@ const painpointsToJson = (binary) => {
     Elbow: false,
     Lower_back_and_SI_Joints: false,
     Hands_fingers_and_wrist: false,
+    Hips: false,
     Knees: false,
     Ankles: false,
     Feet_and_toes: false,
   };
+
   const str = binary;
   const arr = str.split("");
-  for (let i = 0; i < 9; i++) {
-    if (arr[i] === 1) {
-      pain_points[i] = true;
-    }
-  }
+
+  let i = 0;
+  Object.keys(pain_points).forEach(pain_point => {
+    pain_points[pain_point] = arr[i] == "0" ? false : true;
+    i++
+});
+
+
+  console.log(pain_points)
   return pain_points;
 };
 

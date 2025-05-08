@@ -21,7 +21,7 @@
             <div class="flex-1"></div>
             <p class="text-center font-semibold" id="status-bar-text"></p>
             <div class="flex-1 flex justify-end">
-                <img id="close-status-bar" class="h-8 w-8 fill-white cursor-pointer" src="close-white.svg"/>
+                <img alt="Close arrow" id="close-status-bar" class="h-8 w-8 fill-white cursor-pointer" src="close-white.svg"/>
             </div>
         </div>
     </div>
@@ -44,7 +44,7 @@
             </div>
         </div>
     </nav>
-    <img src="./green-wave.svg" class="no-drag" />
+    <img src="./green-wave.svg" class="no-drag" alt="wave-svg"/>
 
     <section class="bg-brand-green text-white pt-10 flex flex-col gap-5 relative overflow-x-hidden justify-center p-5
     xl:flex-row">
@@ -54,7 +54,7 @@
             xl:w-0 xl:h-0">
                 <div class="p-5 flex flex-col">
                     <div class="flex flex-row items-center">
-                        <img id="close-diary" src="https://www.svgrepo.com/show/521481/arrow-prev-small.svg" class="w-10 cursor-pointer no-drag"/>
+                        <img alt="Close arrow" id="close-diary" src="https://www.svgrepo.com/show/521481/arrow-prev-small.svg" class="w-10 cursor-pointer no-drag"/>
                         <h1 class="text-brand-dark text-xl rounded-4xl p-1 px-4 max-w-fit shadow-offset-4">Päiväkirja.</h1>
                         <input type="date" id="date-picker" class="ml-auto"/>
                     </div>
@@ -67,50 +67,50 @@
                             </div>
                             <!--pain areas-->
                             <div class="w-2/3 relative inline-block">
-                                <img draggable="false" (dragstart)="false;" src="skeleton.jpg" alt="skeleton" width="280px" class="z-0 select-none">
+                                <img alt="Skeleton" draggable="false" src="skeleton.jpg" alt="skeleton" width="280px" class="z-0 select-none">
                                 
                                 <div class="absolute top-14 left-28">
-                                    <input id="neck" type="checkbox" value="spine cervical" class="w-4 h-4 pain">
+                                    <input type="checkbox" id="TMJ" value="spine cervical" class="w-4 h-4 pain">
                                     <span class="checkmark"></span>
                                 </div>
                                 <div class="absolute top-8 left-32">
-                                    <input id="jaw" type="checkbox" value="temporomandibular joint" class="w-4 h-4 pain">
+                                    <input type="checkbox" id="Cervical_Spine" value="temporomandibular joint" class="w-4 h-4 pain">
                                     <span class="checkmark"></span>
                                 </div>
                                 <div class="absolute top-18 left-37">
-                                    <input id="shoulder" type="checkbox" value="shoulder" class="w-4 h-4 pain">
+                                    <input type="checkbox" id="Shoulder" value="shoulder" class="w-4 h-4 pain">
                                     <span class="checkmark"></span>
                                 </div>
                                 <div class="absolute top-28 left-28">
-                                    <input id="spine" type="checkbox" value="spine thoracic" class="w-4 h-4 pain">
+                                    <input type="checkbox" id="Thoraic_Spine" value="spine thoracic" class="w-4 h-4 pain">
                                     <span class="checkmark"></span>
                                 </div>
                                 <div class="absolute top-40 left-28">
-                                    <input id="lowerback" type="checkbox" value="spine lumbar" class="w-4 h-4 pain">
+                                    <input type="checkbox" id="Lower_back_and_SI_Joints" value="spine lumbar" class="w-4 h-4 pain">
                                     <span class="checkmark"></span>
                                 </div>
                                 <div class="absolute top-32 left-17">
-                                    <input id="elbow" type="checkbox" value="wlbow" class="w-4 h-4 pain">
+                                    <input type="checkbox" id="Elbow" value="wlbow" class="w-4 h-4 pain">
                                     <span class="checkmark"></span>
                                 </div>
                                 <div class="absolute top-50 left-21">
-                                    <input id="hips" type="checkbox" value="hips" class="w-4 h-4 pain">
+                                    <input id="Hips" type="checkbox" value="hips" class="w-4 h-4 pain">
                                     <span class="checkmark"></span>
                                 </div>
                                 <div class="absolute top-49 left-43">
-                                    <input id="hand" type="checkbox" value="hands" class="w-4 h-4 pain">
+                                    <input type="checkbox" id="Hands_fingers_and_wrist" value="hands" class="w-4 h-4 pain">
                                     <span class="checkmark"></span>
                                 </div>
                                 <div class="absolute top-70 left-33">
-                                    <input id="knees" type="checkbox" value="" class="w-4 h-4 pain">
+                                    <input type="checkbox" id="Ankles" value="ankles" class="w-4 h-4 pain">
                                     <span class="checkmark"></span>
                                 </div>
                                 <div class="absolute top-90 left-24">
-                                    <input id="ankle" type="checkbox" value="knees" class="w-4 h-4 pain">
+                                    <input type="checkbox" id="Knees" value="knees" class="w-4 h-4 pain">
                                     <span class="checkmark"></span>
                                 </div>
                                 <div class="absolute top-94 left-34">
-                                    <input id="feet" type="checkbox" value="feet" class="w-4 h-4 pain">
+                                    <input type="checkbox" id="Feet_and_toes" value="feet" class="w-4 h-4 pain">
                                     <span class="checkmark"></span>
                                 </div>
                             </div>
@@ -166,7 +166,7 @@
                             <div class="flex flex-col gap-3">
                                 <!--notes-->
                                 <label for="notes">Muistiinpanot.</label>
-                                <textarea class="w-full min-h-[80px] py-2 resize-none p-4 bg-transparent placeholder:text-slate-400 text-slate-600 text-sm border border-slate-200 rounded-md transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow" placeholder="Miten päiväsi on mennyt?" type="text" id="notes" name="notes"></textarea>
+                                <textarea class="w-full min-h-[80px] py-2 resize-none p-4 bg-transparent placeholder:text-slate-400 text-slate-600 text-sm border border-slate-200 rounded-md transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow" placeholder="Miten päiväsi on mennyt?" id="notes" name="notes"></textarea>
                                 <input class="bg-brand-red text-white rounded-4xl p-2 px-4 shadow-offset-4 cursor-pointer" type="submit" value="Tallenna" id="save-diary">
                             </div>
                         </div>                
@@ -189,9 +189,9 @@
                     <p class="text-xl">Muokkaa tai lisää päiväkirjamerkintöjä.</p>
                     <div class="rounded-2xl mt-5 flex flex-row">
                         <div class="bg-white shadow-offset-4 rounded-xl px-6 w-full justify-center flex">
-                            <img src="arrow-dark.svg" class="w-16 no-drag" id="diary-left">
+                            <img alt="Close arrow" src="arrow-dark.svg" class="w-16 no-drag" id="diary-left">
                             <div id="week-calendar" class="flex items-center overflow-x-auto rounded-xl py-2 scroll-smooth w-[440px] pr-[88px]"></div>
-                            <img src="arrow-dark.svg" class="w-20 rotate-180 no-drag" id="diary-right">
+                            <img alt="Close arrow" src="arrow-dark.svg" class="w-20 rotate-180 no-drag" id="diary-right">
                         </div>
                     </div>
                 </div>
@@ -202,9 +202,9 @@
                         <h1 class="text-3xl font-semibold mb-5">Viikoittain.</h1> 
                         <div class="flex flex-row ml-0 gap-10 bg-white rounded-t-xl text-brand-dark py-2 p-6 items-center justify-center
                         md:ml-auto">
-                            <img src="arrow-white.svg" class="w-10 no-drag bg-brand-red shadow-offset-4 rounded-xl cursor-pointer" id="week-left">
+                            <img alt="Close arrow" src="arrow-white.svg" class="w-10 no-drag bg-brand-red shadow-offset-4 rounded-xl cursor-pointer" id="week-left">
                             <h1 class="text-2xl font-semibold w-44 text-center" id="week-chart-text">1.2025</h1>
-                            <div class="bg-brand-red shadow-offset-4 rounded-xl cursor-pointer" id="week-right"><img src="arrow-white.svg" class="w-10 rotate-180 no-drag"></div>
+                            <div class="bg-brand-red shadow-offset-4 rounded-xl cursor-pointer" id="week-right"><img alt="Arrow right" src="arrow-white.svg" class="w-10 rotate-180 no-drag"></div>
                         </div>
                     </div>
                     <div class="flex flex-col text-brand-dark max-w-7xl bg-white p-8 gap-1 rounded-2xl shadow-offset-4 rounded-tr-none rounded-tl-none
@@ -214,9 +214,7 @@
                             <div class="flex-col flex items-center gap-10
                             xl:flex-row">
                                 <div class="flex flex-col gap-2 max-w-72 min-h-32" id="weekly-text">
-                                    <p id="weekly-avg-percent"></p>
-                                    <h1 class="text-brand-green text-6xl font-semibold"><span id="weekly-avg"></span><span class="text-xl">ms</span></h1>
-                                    <h1>RMSSD keskiarvo.</h1>
+
                                 </div>
                                 <div class="w-full h-52 max-w-[400px] relative
                                 md:w-[400px] md:h-[300px] md:max-w-none
@@ -234,9 +232,9 @@
                         <h1 class="text-3xl font-semibold mb-5">Kuukausittain.</h1> 
                         <div class="flex flex-row ml-0 gap-10 bg-white rounded-t-xl text-brand-dark py-2 p-6 items-center justify-center
                         md:ml-auto">
-                            <img src="arrow-white.svg" class="w-10 no-drag bg-brand-red shadow-offset-4 rounded-xl cursor-pointer" id="month-left">
+                            <img alt="Arrow left" src="arrow-white.svg" class="w-10 no-drag bg-brand-red shadow-offset-4 rounded-xl cursor-pointer" id="month-left">
                             <h1 class="text-2xl font-semibold w-32 text-center" id="month-chart-text">1.2025</h1>
-                            <div class="bg-brand-red shadow-offset-4 rounded-xl cursor-pointer" id="month-right"><img src="arrow-white.svg" class="w-10 rotate-180 no-drag"></div>
+                            <div class="bg-brand-red shadow-offset-4 rounded-xl cursor-pointer" id="month-right"><img alt="Right arrow" src="arrow-white.svg" class="w-10 rotate-180 no-drag"></div>
                         </div>
                     </div>
                     <div class="flex flex-col text-brand-dark max-w-7xl bg-white p-8 gap-1 rounded-2xl shadow-offset-4 rounded-tr-none rounded-tl-none
@@ -246,9 +244,7 @@
                             <div class="flex-col flex items-center gap-10
                             xl:flex-row">
                                 <div class="flex flex-col gap-2 max-w-72 min-h-32" id="monthly-text">
-                                    <p id="monthly-avg-percent"></p>
-                                    <h1 class="text-brand-green text-6xl font-semibold"><span id="monthly-avg"></span><span class="text-xl">ms</span></h1>
-                                    <h1>RMSSD keskiarvo.</h1>
+
                                 </div>
                                 <div class="w-full h-52 max-w-[400px] relative
                                 md:w-[400px] md:h-[300px] md:max-w-none
@@ -264,7 +260,7 @@
         </div>
     </section>
     
-    <img src="./white-wave-green-bg.svg"/>
+    <img src="./white-wave-green-bg.svg" alt="Wave svg"/>
     <footer class="z-20 relative bg-white text-brand-dark pb-28 pt-24 flex flex-col items-center">
         <div>
             <div class="flex flex-col gap-16
